@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   multiplexingPseudoCode.c++                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/03 12:16:52 by verdant           #+#    #+#             */
-/*   Updated: 2023/07/03 13:21:00 by verdant          ###   ########.fr       */
+/*   Updated: 2023/07/03 15:24:06 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,10 +43,9 @@ using namespace std;
  * @return int 
  */
 
-int pError(char *str)
-
+int pError(string str)
 {
-	perror(str);
+	perror(str.c_str());
 	return 1;
 }
 
@@ -107,9 +106,9 @@ void handleNewConnection( int serverSocket, int kq )
 	// 1. Accept the connection
 	
 	struct sockaddr_in clientAddress;
-	socklen_t clientAddressSize = sizeof(clientAddress);
+	socklen_t clientAddressLength = sizeof(clientAddress);
 	
-	int clientSocket = accept(serverSocket, (struct sockaddr *)&clientAddress, &clientAddressSize);
+	int clientSocket = accept(serverSocket, (struct sockaddr *)&clientAddress, &clientAddressLength);
 	if (clientSocket == -1)
 		pError("accept");
 	// 2. Set the client socket to non-blocking mode
@@ -123,7 +122,7 @@ void handleNewConnection( int serverSocket, int kq )
 	// 3. Add the client socket to the kqueue
 	
 	struct kevent clientEvent;
-	EV_SET(&clientEvent, EVFILT_READ, EV_ADD, 0, 0, NULL);
+	EV_SET(&clientEvent, clientSocket, EVFILT_READ, EV_ADD, 0, 0, NULL);
 	
 	if (kevent(kq, &clientEvent, 1, NULL, 0, NULL) == -1)
 		pError("kevent");
@@ -136,11 +135,36 @@ void handleNewConnection( int serverSocket, int kq )
  * @param fd 
  * @note It's important to note that in handleIncomingData, you are not immediately sending data. You are processing the received data and making decisions based on it.
  */
-void handleIncomingData( int fd )
+void handleIncomingData( int fd , int kq )
 {
 	cout << "Incoming data from the client" << endl;
-	// 1. Read incoming data
 
+	char buffer[1024];
+
+	// 1. Read incoming data
+	ssize_t bytesRead = recv(fd, buffer, sizeof(buffer) - 1, 0);
+
+	if (bytesRead == 0)
+	{
+		cout << "Client disconnected" << endl;
+		// 1. Remove the client socket from the kqueue.
+		struct kevent clientEvent;
+		EV_SET(&clientEvent, fd, EVFILT_READ, EV_DELETE, 0, 0, NULL);
+		if (kevent(kq, &clientEvent, 1, NULL, 0, NULL) == -1)
+			pError("kevent");
+		// 2. Close the client socket.
+		close(fd);
+		// 3. Remove the client from any channels it is part of.
+		return ;
+	}
+	if (bytesRead == -1)
+	{
+		perror("recv");
+		return ;
+	}
+	buffer[bytesRead] = '\0';
+	cout << "Received: " << buffer << endl;
+	
 	// 2. Parse the data to understand what it represents (e.g., a message, a command, etc.).
 
 	// 3. Process the data accordingly. For example, if it's a message intended for a channel, store it temporarily in a data structure for later distribution to all clients in the channel.
@@ -188,7 +212,7 @@ void multiplexing( int serverSocket )
 			if (fd == serverSocket && filter == EVFILT_READ)
 				handleNewConnection(serverSocket, kq);
 			if (fd != serverSocket && filter == EVFILT_READ)
-				handleIncomingData(fd);
+				handleIncomingData(fd, kq);
 			// EVFILTER_WRITE is set when a socket is ready to write
 			if (fd != serverSocket && filter == EVFILT_WRITE)
 				handleOutgoingData(fd);
