@@ -3,22 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 18:20:10 by verdant           #+#    #+#             */
-/*   Updated: 2023/07/07 18:50:59 by verdant          ###   ########.fr       */
+/*   Updated: 2023/07/08 14:16:27 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "server.hpp"
+#include "../inc/server.hpp"
 
 ServerReactor::ServerReactor(int port, int maxClients, string connectionPassword)
 	: _serverSocket(setupServerSocket(port)), _maxClients(maxClients), _connectionPassword(connectionPassword)
 {
-	_serverSocket = setupServerSocket(port);
 	_isShutdown = false;
 	// Setup kqueue
 	_kq = kqueue();
+	if (_kq == -1)
 		this->writeError("kqueue", "Failed to create kqueue");
 	// Add server socket to kqueue
 	struct kevent evSet;
@@ -26,20 +26,19 @@ ServerReactor::ServerReactor(int port, int maxClients, string connectionPassword
 	if (kevent(_kq, &evSet, 1, NULL, 0, NULL) == -1)
 		this->writeError("kevent", "Failed to add server socket to kqueue");
 	// Setup client manager
-	_clientManager = ClientManager();
+	// _clientManager = ClientManager();
 	// Setup channel manager
-	_channelManager = ChannelManager();
+	// _channelManager = ChannelManager();
 }
 
 int	ServerReactor::setupServerSocket( int port )
 {
-	int serverSocket = socket(AF_INET, SOCK_STREAM, 0);
+	struct sockaddr_in	serverAddress;
+	int									serverSocket;
+	
+	serverSocket = socket(AF_INET, SOCK_STREAM, 0);
 	if (serverSocket == -1)
-	{
-		std::cerr << "Error: socket() failed" << std::endl;
-		return (-1);
-	}
-	struct sockaddr_in serverAddress;
+		this->writeError("socket", "Failed to create socket");
 	serverAddress.sin_family = AF_INET;
 	serverAddress.sin_port = htons(port);
 	serverAddress.sin_addr.s_addr = INADDR_ANY;
@@ -65,7 +64,9 @@ void	ServerReactor::writeError( string functionName, string errorMessage )
 
 void ServerReactor::setBlocking( int socketFD )
 {
-	int	flags = fcntl(socketFD, F_GETFL, 0);
+	int	flags;
+
+	flags = fcntl(socketFD, F_GETFL, 0);
 	if (flags == -1)
 		this->writeError("fcntl", "Failed getting flags");
 	flags |= O_NONBLOCK;
@@ -89,10 +90,10 @@ void	ServerReactor::run( void )
 			filter = evList[i].filter;
 			if (fd == _serverSocket && filter == EVFILT_READ)
 				this->acceptNewClient();
-			if (fd != _serverSocket && filter == EVFILT_READ)
-				this->handleIncomingMessage(fd);
-			if (fd != _serverSocket && filter == EVFILT_WRITE)
-				this->handleOutgoingMessage(fd);
+			// if (fd != _serverSocket && filter == EVFILT_READ)
+			// 	this->handleIncomingMessage(fd);
+			// if (fd != _serverSocket && filter == EVFILT_WRITE)
+			// 	this->handleOutgoingMessage(fd);
 		}
 	}
 }
@@ -109,10 +110,11 @@ void	ServerReactor::acceptNewClient( void )
 	if (clientSocket == -1)
 		this->writeError("accept", "Failed to accept new client");
 	this->setBlocking(clientSocket);
-	EV_SET(&clientEvent, clientSocket, EVFILT_READ, EV_ADD, 0, 0, NULL);
+	EV_SET(&clientEvent, clientSocket, EVFILT_READ, EV_ADD, 0, 0, NULL); // Adding client to kqueue
 	if (kevent(_kq, &clientEvent, 1, NULL, 0, NULL) == -1)
 		this->writeError("kevent", "Failed to add client to kqueue");
-	// _clientManager.addClient(clientSocket, clientAddress);
+	_clientManager.addClient(clientSocket, ClientData(clientSocket));
+	cout << "New client connected" << endl;
 }
 
 // void	ServerReactor::handleIncomingMessage()

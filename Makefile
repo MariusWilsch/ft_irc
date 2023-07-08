@@ -1,5 +1,5 @@
 CXX := clang++
-CXXFLAGS := -std=c++98 -Wall -Wextra -Werror 
+CXXFLAGS := -std=c++98 # -Wall -Wextra -Werror 
 INC := -Iinc/
 
 TARGET := ft_irc
