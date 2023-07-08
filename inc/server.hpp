@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 18:18:42 by verdant           #+#    #+#             */
-/*   Updated: 2023/07/08 14:10:07 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/07/08 14:37:16 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@
 # include <unistd.h>
 # include <fcntl.h>
 
-
 using std::string;
 using std::set;
 using std::map;
@@ -41,6 +40,7 @@ class	ServerReactor {
 		ClientManager				_clientManager;
 		// ChannelManager			_channelManager;
 	public:
+		ServerReactor();
 		ServerReactor(int port, int maxClients, string connectionPassword);
 		~ServerReactor();
 		int		setupServerSocket( int port );

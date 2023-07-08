@@ -6,16 +6,24 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 18:20:10 by verdant           #+#    #+#             */
-/*   Updated: 2023/07/08 14:16:27 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/07/08 14:32:32 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/server.hpp"
 
+ServerReactor::ServerReactor()
+{
+	_isShutdown = false;
+	// Setup client manager
+	_clientManager = ClientManager();
+	// Setup channel manager
+	// _channelManager = ChannelManager();
+}
+
 ServerReactor::ServerReactor(int port, int maxClients, string connectionPassword)
 	: _serverSocket(setupServerSocket(port)), _maxClients(maxClients), _connectionPassword(connectionPassword)
 {
-	_isShutdown = false;
 	// Setup kqueue
 	_kq = kqueue();
 	if (_kq == -1)
@@ -25,10 +33,7 @@ ServerReactor::ServerReactor(int port, int maxClients, string connectionPassword
 	EV_SET(&evSet, _serverSocket, EVFILT_READ, EV_ADD, 0, 0, NULL);
 	if (kevent(_kq, &evSet, 1, NULL, 0, NULL) == -1)
 		this->writeError("kevent", "Failed to add server socket to kqueue");
-	// Setup client manager
-	// _clientManager = ClientManager();
-	// Setup channel manager
-	// _channelManager = ChannelManager();
+
 }
 
 int	ServerReactor::setupServerSocket( int port )
@@ -113,7 +118,7 @@ void	ServerReactor::acceptNewClient( void )
 	EV_SET(&clientEvent, clientSocket, EVFILT_READ, EV_ADD, 0, 0, NULL); // Adding client to kqueue
 	if (kevent(_kq, &clientEvent, 1, NULL, 0, NULL) == -1)
 		this->writeError("kevent", "Failed to add client to kqueue");
-	_clientManager.addClient(clientSocket, ClientData(clientSocket));
+	// _clientManager.addClient(clientSocket, ClientData(clientSocket));
 	cout << "New client connected" << endl;
 }
 
