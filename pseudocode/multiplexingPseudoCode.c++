@@ -6,21 +6,10 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/03 12:16:52 by verdant           #+#    #+#             */
-/*   Updated: 2023/07/03 15:24:06 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/07/08 18:18:35 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   socketPseudoCode.c++                               :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/02 14:15:45 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/07/02 15:24:48 by mwilsch          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #include <iostream>
 #include <string>
@@ -164,6 +153,13 @@ void handleIncomingData( int fd , int kq )
 	}
 	buffer[bytesRead] = '\0';
 	cout << "Received: " << buffer << endl;
+	string message = buffer;
+	size_t found = message.find("\r\n");
+	if (found != std::string::npos) {
+    std::cout << "\\r\\n found at index: " << found << '\n';
+	} else {
+    std::cout << "\\r\\n not found\n";
+	}
 	
 	// 2. Parse the data to understand what it represents (e.g., a message, a command, etc.).
 

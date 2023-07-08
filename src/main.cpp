@@ -3,17 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 18:20:12 by verdant           #+#    #+#             */
-/*   Updated: 2023/07/07 18:53:36 by verdant          ###   ########.fr       */
+/*   Updated: 2023/07/08 14:46:51 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "server.hpp"
 
 // Test with: telnet localhost <port>
-
 
 int	main(int argc, char **argv)
 {

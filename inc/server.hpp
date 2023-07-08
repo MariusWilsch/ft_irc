@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 18:18:42 by verdant           #+#    #+#             */
-/*   Updated: 2023/07/08 14:37:16 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/07/08 18:43:45 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # include <sys/time.h>
 # include <unistd.h>
 # include <fcntl.h>
+# include <cerrno>
 
 using std::string;
 using std::set;
@@ -46,7 +47,7 @@ class	ServerReactor {
 		int		setupServerSocket( int port );
 		void	setBlocking(int fd);
 		void	acceptNewClient();
-		// void	handleIncomingMessage(int clientSocket);
+		void	handleIncomingMessage(int clientSocket);
 		// void	handleOutgoingMessage(int clientSocket);
 		void	writeError(string functionName, string errorMessage);
 		void	run();
