@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 17:50:23 by verdant           #+#    #+#             */
-/*   Updated: 2023/07/08 18:32:31 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/07/09 16:11:24 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,8 @@
 # include <string>
 # include <set>
 # include <map>
-# include <vector>
+# include <unistd.h>
+
 
 using std::cout;
 using std::endl;
@@ -31,7 +32,6 @@ class ClientData {
 		int									_clientSocket;
 		string							_nickname;
 		string							_username;
-		string							_password;
 		enum								Role {USER, OPERATOR};
 		Role								_role;
 		// set 	_	<string> channels; // how do I want to store the client's channels?
@@ -55,12 +55,17 @@ class	ClientManager {
 		map <string, ClientData>	_inactiveClientsByNickname;
 	public:
 		ClientManager( void );
-		void	printActiveClients() const;
 		void	addClient(int clientSocket, const ClientData &clientData);
 		void	removeClient(int clientSocket);
+		void	processMessage(int clientSocket, string message);
+		// void	printActiveClients() const;
 		// void	addMessageToBuffer(int clientSocket, char buffer[]);
 		// void	authenticateClient(int clientSocket, string nickname, string username);
 		// Addtional methods, i.e forward messages, etc.
 };
 
 #endif
+
+socket;
+
+// send(socket, ":sender_nickname PRIVMSG #channel :message\r\n", 79, 0);

@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 18:20:10 by verdant           #+#    #+#             */
-/*   Updated: 2023/07/08 18:48:12 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/07/09 14:37:34 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,12 +70,6 @@ ServerReactor::~ServerReactor()
 	close(_serverSocket);
 }
 
-void	ServerReactor::writeError( string functionName, string errorMessage )
-{
-	std::cerr << "Error: " << functionName << ": " << errorMessage << std::endl;
-	exit(1);
-}
-
 void ServerReactor::setBlocking( int socket )
 {
 	int	flags;
@@ -133,13 +127,14 @@ void	ServerReactor::acceptNewClient( void )
 	cout << "New client connected" << endl;
 }
 
-void	ServerReactor::handleIncomingMessage(int clientSocket )
+void	ServerReactor::handleIncomingMessage( int clientSocket )
 {
 	char		buffer[1024];
 	int			nBytes;
-	string	tempMessage;
+	string	tempBuffer;
 	size_t	pos;
 
+	pos = 0;
 	while (pos != string::npos)
 	{
 		nBytes = recv(clientSocket, &buffer, 1023, 0);
@@ -150,14 +145,53 @@ void	ServerReactor::handleIncomingMessage(int clientSocket )
 			else
 				this->writeError("recv", "Failed to receive message");
 		}
-		if (nBytes == 0)
-			return (_clientManager.removeClient(clientSocket));
+		if (nBytes == 0) // Client disconnected
+		{
+			this->updateMoinitoring(clientSocket, EVFILT_READ, EV_DELETE);
+			this->_clientManager.removeClient(clientSocket);
+			return ;
+		}
 		buffer[nBytes] = '\0';
-		tempMessage += buffer;
-		pos = tempMessage.find("\r\n");
+		tempBuffer.append(buffer);
+		cout << "Received: " << tempBuffer << endl;
+		pos = tempBuffer.find("\r\n");
+		memset(buffer, 0, 1024);
 	}
-	tempMessage.substr(0, pos); // Remove \r\n sequence
-	cout << "Complete message: " << tempMessage << endl;
-	memset(buffer, 0, sizeof(buffer)); // Clear buffer
+	this->_clientManager.processMessage(clientSocket, tempBuffer);
 }
+// void	ServerReactor::handleIncomingMessage(int clientSocket )
+// {
+// 	char		buffer[1024];
+// 	int			nBytes;
+// 	string	tempMessage;
+// 	size_t	pos;
+
+// 	// nBytes = 0;
+// 	pos = 0;
+// 	while (pos != string::npos)
+// 	{
+// 		nBytes = recv(clientSocket, &buffer, 1023, 0);
+// 		if (nBytes == -1)
+// 		{
+// 			if (errno == EAGAIN || errno == EWOULDBLOCK)
+// 				break ;
+// 			else
+// 				this->writeError("recv", "Failed to receive message");
+// 		}
+// 		if (nBytes == 0)
+// 		{
+// 			_clientManager.removeClient(clientSocket);
+// 			return ;
+// 		}
+// 		buffer[nBytes] = '\0';
+// 		tempMessage += buffer;
+// 		pos = tempMessage.find("\r\n");
+// 	}
+// 	tempMessage.substr(0, pos); // Remove \r\n sequence
+// 	cout << "Complete message: " << tempMessage << endl;
+// 	memset(buffer, 0, sizeof(buffer)); // Clear buffer
+// }
+
+
+
 // void	ServerReactor::handleOutgoingMessage()

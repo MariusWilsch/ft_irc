@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 18:18:42 by verdant           #+#    #+#             */
-/*   Updated: 2023/07/08 18:43:45 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/07/09 13:11:58 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@
 # include <sys/types.h>
 # include <sys/event.h>
 # include <sys/time.h>
-# include <unistd.h>
 # include <fcntl.h>
 # include <cerrno>
 
@@ -30,6 +29,7 @@ using std::set;
 using std::map;
 using std::cout;
 using std::endl;
+using std::cerr;
 
 class	ServerReactor {
 	private:
@@ -50,6 +50,8 @@ class	ServerReactor {
 		void	handleIncomingMessage(int clientSocket);
 		// void	handleOutgoingMessage(int clientSocket);
 		void	writeError(string functionName, string errorMessage);
+		// void 	writeError(string functionName, string errorMessage, int errorNumber);
+		void	updateMoinitoring(int clientSocket, int filter, int flags);
 		void	run();
 		// void	shutdown();	
 };

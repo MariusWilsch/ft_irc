@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/08 12:41:54 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/07/08 18:37:59 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/07/09 14:14:35 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,9 @@ ClientManager::ClientManager( void ) {
 // }
 
 void	ClientManager::removeClient(int clientSocket) {
-	cout << "Deleting client with socket: " << clientSocket << endl;
 	_activeClientsBySocket.erase(clientSocket); // Is this all I need to do?
+	close(clientSocket);
+	cout << "Client removed" << endl;
 }
 
 

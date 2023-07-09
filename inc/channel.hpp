@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 17:50:48 by verdant           #+#    #+#             */
-/*   Updated: 2023/07/07 17:52:36 by verdant          ###   ########.fr       */
+/*   Updated: 2023/07/09 15:16:45 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ class	ChannelManager {
 	public:
 		void	addChannel(string name, const ChannelData &channelData);
 		void	removeChannel(string name);
+		void	forwardMessage(string channelName, string message);
 		// Additional methods, i.e addClient, removeClient, etc.
 };
 
