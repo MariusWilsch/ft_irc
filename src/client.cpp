@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/08 12:41:54 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/07/09 14:14:35 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/07/10 12:53:04 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ ClientData::ClientData( void ) {
 	_clientSocket = -1;
 	_nickname = "default";
 	_username = "default";
-	_password = "default";
 	_role = USER;
 	_isAuthenticated = false;
 }

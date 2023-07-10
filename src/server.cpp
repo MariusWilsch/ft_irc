@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 18:20:10 by verdant           #+#    #+#             */
-/*   Updated: 2023/07/09 14:37:34 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/07/10 15:57:08 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,29 @@ void	ServerReactor::run( void )
 	}
 }
 
+
+void	ServerReactor::sendMSG(int sockfd, const std::string& nick, const std::string& user, const std::string& host,
+             const std::string& command, const std::string& channel, const std::string& optionalMessage)
+{
+    std::string message = ":" + nick + "!" + user + "@" + host + " " + command + " " + channel;
+
+    // Append the optional message if it's present
+    if (!optionalMessage.empty()) {
+        message += " :" + optionalMessage;
+    }
+
+    message += "\r\n";
+
+    send(sockfd, message.c_str(), message.size(), 0);
+}
+void ServerReactor::sendNumericReply(int sockfd, const std::string& server, const std::string& numericCode,
+                      const std::string& targetNick, const std::string& parameters, const std::string& message) 
+{
+    std::string reply = ":" + server + " " + numericCode + " " + targetNick + " " + parameters + " :" + message + "\r\n";
+    send(sockfd, reply.c_str(), reply.size(), 0);
+}
+
+
 void	ServerReactor::acceptNewClient( void )
 {
 	int				clientSocket;
@@ -121,6 +144,30 @@ void	ServerReactor::acceptNewClient( void )
 	EV_SET(&clientEvent, clientSocket, EVFILT_READ, EV_ADD, 0, 0, NULL); // Adding client to kqueue
 	if (kevent(_kq, &clientEvent, 1, NULL, 0, NULL) == -1)
 		this->writeError("kevent", "Failed to add client to kqueue");
+
+	// // Send a JOIN message
+	// this->sendMSG(clientSocket, "NickName", "UserName", "host", "JOIN", "#channel", "");
+	// // Send a PART message
+	// this->sendMSG(clientSocket, "NickName", "UserName", "host", "PART", "#channel", "Goodbye cruel world!");
+	// // Send a KICK message
+	// this->sendMSG(clientSocket, "NickName", "UserName", "host", "KICK", "#channel", "Used an offensive word!");
+
+
+	// Send "Nickname is already in use"
+	sendNumericReply(clientSocket, "server.name", "433", "NickName", "*", "Nickname is already in use");
+	// Send "Welcome to the Internet Relay Network"
+	sendNumericReply(clientSocket, "server.name", "001", "NickName", "*", "Welcome to the Internet Relay Network");
+
+
+// std::string message = ":" + nick + "!" + user + "@" + host + " JOIN :" + channel + "\r\n";
+// send(clientSocket, message.c_str(), message.size(), 0);
+
+// std::string message = ":" + nick + "!" + user + "@" + host + " KICK :" + channel + "\r\n";
+// send(clientSocket, message.c_str(), message.size(), 0);
+
+
+    
+    std::cout << "PART message sent to client" << std::endl;
 	// TODO: Ask client to authenticate by providing his nickname & password by sending a message
 		// E.g "/AUTH nickname password"
 	// _clientManager.addClient(clientSocket, ClientData(clientSocket));

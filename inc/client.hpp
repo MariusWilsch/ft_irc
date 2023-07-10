@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 17:50:23 by verdant           #+#    #+#             */
-/*   Updated: 2023/07/09 16:11:24 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/07/10 11:35:20 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,6 @@ class	ClientManager {
 
 #endif
 
-socket;
+// socket;
 
 // send(socket, ":sender_nickname PRIVMSG #channel :message\r\n", 79, 0);

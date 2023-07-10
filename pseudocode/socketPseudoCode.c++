@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/02 14:15:45 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/07/02 15:24:48 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/07/10 11:20:44 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,9 +94,7 @@ int main(int argc, char **argv)
 			}
 			else {
 				cout << "New client connected" << endl;
-				// Do something with the client socket
-				// ...
-				// Close the client socket
+				send(clientSocket, "Hello client!\n", 14, 0);
 				close(clientSocket);
 			}
 		}
