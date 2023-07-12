@@ -5,67 +5,59 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/07 17:50:23 by verdant           #+#    #+#             */
-/*   Updated: 2023/07/10 11:35:20 by mwilsch          ###   ########.fr       */
+/*   Created: 2023/07/11 15:30:13 by mwilsch           #+#    #+#             */
+/*   Updated: 2023/07/11 16:01:14 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CLIENT_HPP
-# define CLIENT_HPP
+#pragma once
 
-# include <iostream>
-# include <string>
-# include <set>
-# include <map>
-# include <unistd.h>
+#include "main.hpp"
 
+enum userType {USER, SERVER_OP, CHANNEL_OP};
 
-using std::cout;
-using std::endl;
-using std::string;
-using std::map;
-using std::vector;
-using std::set;
-
+/**
+ * @brief Class to handle client-level operations
+ * 
+ */
 class ClientData {
 	private:
 		int									_clientSocket;
+		int									_mode;
+		string							_realname;
 		string							_nickname;
 		string							_username;
-		enum								Role {USER, OPERATOR};
-		Role								_role;
-		// set 	_	<string> channels; // how do I want to store the client's channels?
-		bool								_isAuthenticated;
-		// string							_messageBuffer;
+		userType						_userType;
+		const string				_unused;
 	public:
+		/*			CLASS DEFAULT FUNCTIONS			*/
+		
 		ClientData( void );
-		ClientData(int clientSocket);
-		// Getters
-		int									getClientSocket() const;
-		string							getMessageBuffer() const;
-		// Setters
-		// void								setClientSocket(int clientSocket);
-		// void								setMessageBuffer(string messageBuffer);
+		ClientData( int clientSocket );
+		~ClientData();
+
+		/*			GETTERS			*/
+
+
+		/*			SETTERS			 */
+
+		
 };
 
-class	ClientManager {
+/**
+ * @brief Class to handle client-level operations
+ * 
+ */
+class ClientManager {
 	private:
 		set <string>							_usedNicknames;
 		map <int, ClientData>			_activeClientsBySocket;
-		map <string, ClientData>	_inactiveClientsByNickname;
 	public:
+		/*			CLASS DEFAULT FUNCTIONS			*/
+		
 		ClientManager( void );
-		void	addClient(int clientSocket, const ClientData &clientData);
-		void	removeClient(int clientSocket);
-		void	processMessage(int clientSocket, string message);
-		// void	printActiveClients() const;
-		// void	addMessageToBuffer(int clientSocket, char buffer[]);
-		// void	authenticateClient(int clientSocket, string nickname, string username);
-		// Addtional methods, i.e forward messages, etc.
+		~ClientManager();
+
+		/*			???			*/
+		
 };
-
-#endif
-
-// socket;
-
-// send(socket, ":sender_nickname PRIVMSG #channel :message\r\n", 79, 0);

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   channel.hpp                                        :+:      :+:    :+:   */
+/*   message.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/11 16:01:33 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/07/11 16:04:35 by mwilsch          ###   ########.fr       */
+/*   Created: 2023/07/11 16:04:46 by mwilsch           #+#    #+#             */
+/*   Updated: 2023/07/11 16:13:41 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,39 +18,22 @@
  * @brief 
  * 
  */
-class ChannelData {
+class Message {
 	private:
-		string _name;
-		string _topic;
-		set <int> _clientSockets;
-		set <int> _operators;
+		string	_rawMessage;
+		string	_prefix;
+		string	_command;
+		string	_params;
+		string	_trailing;
+		string	_sender;
+		enum RecipientType { CLIENT, CHANNEL } _recipientType; // Maybe add SERVER? for commands like OPER or AUTHENTICATE
+		//ClientData* _clientRecipient;
+		//ChannelData* _channelRecipient;
 	public:
-	/*			CLASS DEFAULT FUNCTIONS			*/
-	
-		ChannelData( void );
-		~ChannelData( void );
-	
-	/*			GETTERS			*/
+		/*			CLASS DEFAULT FUNCTIONS			*/
+		Message( void );
+		Message( string rawMessage );
+		~Message( void );
 
-
-	/*			SETTERS			 */
-
-
+		/*			???			*/
 };
-
-/**
- * @brief 
- * 
- */
-class ChannelManager {
-	private:
-		map<string, ChannelData> _channels;
-	public:
-	/*			CLASS DEFAULT FUNCTIONS			*/
-	
-		ChannelManager( void );
-		~ChannelManager( void );
-		
-	/*			???			*/
-	
-};	

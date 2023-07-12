@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 18:20:10 by verdant           #+#    #+#             */
-/*   Updated: 2023/07/10 15:57:08 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/07/11 15:44:44 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,8 @@ void	ServerReactor::run( void )
 	}
 }
 
+// Format being used is: :nick!user@host COMMAND #channel :optional message
+// :<nick>!<user>@<host> <command> <channel> :<optionalMessage>
 
 void	ServerReactor::sendMSG(int sockfd, const std::string& nick, const std::string& user, const std::string& host,
              const std::string& command, const std::string& channel, const std::string& optionalMessage)
@@ -154,23 +156,12 @@ void	ServerReactor::acceptNewClient( void )
 
 
 	// Send "Nickname is already in use"
-	sendNumericReply(clientSocket, "server.name", "433", "NickName", "*", "Nickname is already in use");
-	// Send "Welcome to the Internet Relay Network"
-	sendNumericReply(clientSocket, "server.name", "001", "NickName", "*", "Welcome to the Internet Relay Network");
+	// sendNumericReply(clientSocket, "server.name", "433", "NickName", "*", "Nickname is already in use");
+	// // Send "Welcome to the Internet Relay Network"
+	// sendNumericReply(clientSocket, "server.name", "001", "NickName", "*", "Welcome to the Internet Relay Network");
+	// Send RPL_TOPIC
+	sendNumericReply(clientSocket, "server.name", "332", "NickName", "#channel", "Topic for #channel");
 
-
-// std::string message = ":" + nick + "!" + user + "@" + host + " JOIN :" + channel + "\r\n";
-// send(clientSocket, message.c_str(), message.size(), 0);
-
-// std::string message = ":" + nick + "!" + user + "@" + host + " KICK :" + channel + "\r\n";
-// send(clientSocket, message.c_str(), message.size(), 0);
-
-
-    
-    std::cout << "PART message sent to client" << std::endl;
-	// TODO: Ask client to authenticate by providing his nickname & password by sending a message
-		// E.g "/AUTH nickname password"
-	// _clientManager.addClient(clientSocket, ClientData(clientSocket));
 	cout << "New client connected" << endl;
 }
 

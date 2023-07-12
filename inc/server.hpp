@@ -5,68 +5,55 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/07 18:18:42 by verdant           #+#    #+#             */
-/*   Updated: 2023/07/10 15:56:39 by mwilsch          ###   ########.fr       */
+/*   Created: 2023/07/11 15:04:15 by mwilsch           #+#    #+#             */
+/*   Updated: 2023/07/11 15:46:25 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SERVER_HPP
-# define SERVER_HPP
+#pragma once
 
+#include "main.hpp"
 
-# include "client.hpp"
-# include <sys/socket.h>
-# include <netinet/in.h>
-# include <arpa/inet.h>
-# include <sys/types.h>
-# include <sys/event.h>
-# include <sys/time.h>
-# include <fcntl.h>
-# include <cerrno>
-
-using std::string;
-using std::set;
-using std::map;
-using std::cout;
-using std::endl;
-using std::cerr;
-
-class	ServerReactor {
+/**
+ * @brief Class to handle server-level operations
+ * 
+ */
+class ServerReactor {
 	private:
-		int									_serverSocket;
-		int									_maxClients;
-		string							_connectionPassword;
-		int									_kq;
-		bool								_isShutdown;
-		ClientManager				_clientManager;
-		// ChannelManager			_channelManager;
+		int			_serverSocket;
+		int			_kq;
+		bool		_isShutdown;
+		string	_connectionPassword;
+		// ClientManager	_clientManager;
+		// ChannelManager	_channelManager;
 	public:
+		/*			Class Default Functions			*/
+		
 		ServerReactor();
-		ServerReactor(int port, int maxClients, string connectionPassword);
+		ServerReactor( int port, string connectionPassword );
 		~ServerReactor();
+		/*			Socket & Multiplexing			*/
+
 		int		setupServerSocket( int port );
 		void	setBlocking(int fd);
-		void	acceptNewClient();
-		void	handleIncomingMessage(int clientSocket);
-		void	writeError(string functionName, string errorMessage);
 		void	updateMoinitoring(int clientSocket, int filter, int flags);
+		
+
+		/*			EVENTS			*/
+		void	acceptNewClient();
+		void	recieveIncomingMessage(int clientSocket);
+		//void	sendMessageToClient(int clientSocket, string message);
+		 
+		/*			SERVER T0 CLIENT COMMUICATION			*/ // TODO: Think of a better way to pass parameters. Maybe a class?
+			// Or should I do this in the client manager?
+			// Format // :<nick>!<user>@<host> <command> <channel> :<optionalMessage>
+		void	sendAcknowledgement(int clientSocket, string nick, string user, string host, string command, string channel, string optionalMessage);
+			// Format // :<server> <numericCode> <targetNick> <parameters> :<message>
+		void	sendNumericReply(int clientSocket, string numericCode, string targetNick, string parameters, string message);
+
+		/*			MAIN			*/
 		void	run();
-		// Experimental
-		// Create a extra class called Message format which I call before using sendMSG which has the following members
-			// string nick; // A get_address to get nick, user, host would be smart
-			// string user; // A get_address to get nick, user, host would be smart
-			// string host; // A get_address to get nick, user, host would be smart
-			// string command;
-			// string channel;
-			// string optionalMessage;
-		void sendMSG(int sockfd, const std::string& nick, const std::string& user, const std::string& host,
-             const std::string& command, const std::string& channel, const std::string& optionalMessage);
-		void sendNumericReply(int sockfd, const std::string& server, const std::string& numericCode,
-                      const std::string& targetNick, const std::string& parameters, const std::string& message);
-
-		// void 	writeError(string functionName, string errorMessage, int errorNumber);
-		// void	handleOutgoingMessage(int clientSocket);
-		// void	shutdown();	
+		
+			/*			UTILS			*/
+		void	writeServerError(string functionName, string errorMessage, int errorNumber);
 };
-
-#endif
