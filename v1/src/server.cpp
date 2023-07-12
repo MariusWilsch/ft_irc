@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 18:20:10 by verdant           #+#    #+#             */
-/*   Updated: 2023/07/11 15:44:44 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/07/12 11:02:51 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ int	ServerReactor::setupServerSocket( int port )
 		this->writeError("bind", "Failed to bind socket");
 	if (listen(serverSocket, 20) == -1)
 		this->writeError("listen", "Failed to listen on socket");
-	this->setBlocking(serverSocket);
+	this->setToNonBlocking(serverSocket);
 	return (serverSocket);
 }
 
@@ -70,7 +70,7 @@ ServerReactor::~ServerReactor()
 	close(_serverSocket);
 }
 
-void ServerReactor::setBlocking( int socket )
+void ServerReactor::setToNonBlocking( int socket )
 {
 	int	flags;
 
@@ -142,7 +142,7 @@ void	ServerReactor::acceptNewClient( void )
 	clientSocket = accept(_serverSocket, (struct sockaddr *)&clientAddress, &clientAddressLength);
 	if (clientSocket == -1)
 		this->writeError("accept", "Failed to accept new client");
-	this->setBlocking(clientSocket);
+	this->setToNonBlocking(clientSocket);
 	EV_SET(&clientEvent, clientSocket, EVFILT_READ, EV_ADD, 0, 0, NULL); // Adding client to kqueue
 	if (kevent(_kq, &clientEvent, 1, NULL, 0, NULL) == -1)
 		this->writeError("kevent", "Failed to add client to kqueue");

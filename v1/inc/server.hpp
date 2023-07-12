@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 18:18:42 by verdant           #+#    #+#             */
-/*   Updated: 2023/07/10 15:56:39 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/07/12 11:02:51 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ class	ServerReactor {
 		ServerReactor(int port, int maxClients, string connectionPassword);
 		~ServerReactor();
 		int		setupServerSocket( int port );
-		void	setBlocking(int fd);
+		void	setToNonBlocking(int fd);
 		void	acceptNewClient();
 		void	handleIncomingMessage(int clientSocket);
 		void	writeError(string functionName, string errorMessage);

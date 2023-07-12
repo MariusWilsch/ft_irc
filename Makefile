@@ -1,14 +1,17 @@
 CXX := clang++
 CXXFLAGS := -std=c++98 # -Wall -Wextra -Werror 
-INC := -Iinc/
+INC := -I inc/
 
 TARGET := ft_irc
 
 SRC_DIR := src/
 OBJ_DIR := obj/
 
-SRC := $(wildcard $(SRC_DIR)*.cpp)
-OBJ := $(patsubst $(SRC_DIR)%.cpp,$(OBJ_DIR)%.o,$(SRC))
+SRC := $(wildcard $(SRC_DIR)*/*.cpp) $(SRC_DIR)main.cpp
+OBJ := $(patsubst $(SRC_DIR)%.cpp,$(OBJ_DIR)%.o, $(SRC))
+
+
+
 
 GREEN = \033[0;32m
 RED = \033[0;31m

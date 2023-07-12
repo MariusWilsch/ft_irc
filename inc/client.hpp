@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 15:30:13 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/07/11 16:01:14 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/07/12 11:25:11 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ class ClientData {
 		string							_nickname;
 		string							_username;
 		userType						_userType;
-		const string				_unused;
+		string							_unused;
 	public:
 		/*			CLASS DEFAULT FUNCTIONS			*/
 		
@@ -38,6 +38,7 @@ class ClientData {
 
 		/*			GETTERS			*/
 
+		int									getClientSocket( void ) const { return _clientSocket; };
 
 		/*			SETTERS			 */
 
@@ -58,6 +59,9 @@ class ClientManager {
 		ClientManager( void );
 		~ClientManager();
 
-		/*			???			*/
+		/*			MEMBER FUNCTIONS			*/
+		
+		void	addClient( int clientSocket );
+		void	removeClient( int clientSocket );
 		
 };
