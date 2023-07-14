@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   serverMessage.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
+/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 13:27:34 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/07/12 14:58:54 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/07/14 17:10:37 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,48 +14,73 @@
 
 /*			CLASS DEFAULT FUNCTIONS			*/
 
+CommandProperties::CommandProperties() : mandatoryParams(0), ignoreTrailing(false) {};
 
-// 1. Find token start and length
+CommandProperties::CommandProperties(int m, bool i) : mandatoryParams(m), ignoreTrailing(i) {};
 
-Message::Message( void ) {
-	_rawMessage = "";
-	_prefix = "";
-	_command = "";
-	_params = "";
-	_trailing = "";
-	_sender = "";
-	_tokStart = 0;
-	_tokLength = 0;
-	_recipientType = CLIENT;
-}
-
-
-Message::Message( string rawMessage ) : _rawMessage(rawMessage) {
-	
-	// 1. Split rawMessage into tokens using space as delimiter
-	split(' ');
-	for (int i = 0; i < _tokens.size(); i++)
-		std::cout << _tokens[i] << std::endl;
-	// 2. Check if first token is a prefix
-}
+// Message::Message( void ) {
+// 	// _senderSocket = 0;
+// 	_isFatal = false;
+// 	_rawMessage = "";
+// 	_prefix = "";
+// 	_command = "";
+// 	_trailing = "";;
+// 	_properties = map <string, CommandProperties>();
+// }
 
 Message::~Message( void ) {};
 
-/*			???			*/
+Message::Message( string rawMessage, ClientData& senderData ) : _rawMessage(rawMessage), _senderData(senderData) {	
+	
+	// Parse raw message
+	createPropertiesMap();
+	extractCommand();
+	extractTrailing();
+	extractParams(' ');
 
+	// Print extracted data
+	printData();
 
-
-// If there is a trailing message don't split it into tokens
-
-void	Message::split(char delimiter)
-{
-	string	token;
-	std::istringstream tokenStream(_rawMessage);
-
-	while (std::getline(tokenStream, token, delimiter))
-	{
-		if 
-		if (!token.empty())
-			_tokens.push_back(token);
-	}
+	// Execute command
 }
+
+/*			GETTERS			*/
+
+string Message::getCommand( void ) { 
+	return _command; 
+}
+
+std::vector <string> Message::getParams( void ) {
+	if (_params.empty())
+		return (std::vector <string>());
+	return _params;
+}
+
+ClientData& Message::getSenderData( void ) { 
+	return _senderData; 
+}
+
+
+/*			SETTERS			*/
+
+void Message::setResponseCode( string responseCode )  { 
+	_isFatal = true;
+	_responseCode = responseCode; 
+}
+
+/*			MEMBER FUNCTIONS			*/
+
+void Message::printData( void )
+{
+	std::cout << "Prefix: " << _prefix << std::endl;
+	std::cout << "Command: " << _command << std::endl;
+	std::cout << "Params: ";
+	for (std::vector<string>::iterator it = _params.begin(); it != _params.end(); ++it)
+	{
+		std::cout << *it << " ";
+		if (it == _params.end() - 1)
+			std::cout << std::endl;
+	}
+	std::cout << "Trailing: " << _trailing << std::endl;
+}
+

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
+/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 15:04:15 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/07/12 13:57:18 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/07/14 17:25:59 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,9 @@
 #include <fcntl.h>
 #include <errno.h>
 
+#define IMPLEMENTED_CMDS 2
+
+
 
 /**
  * @brief Class to handle server-level operations
@@ -34,10 +37,12 @@
  */
 class ServerReactor {
 	private:
-		int			_serverSocket;
-		int			_kq;
-		bool		_isShutdown;
-		string	_connectionPassword;
+		int				_serverSocket;
+		int				_kq;
+		bool			_isShutdown;
+		typedef void 	(ServerReactor::*cmd)(Message &message);
+		cmd				_cmds[3];
+		string			_connectionPassword;
 		ClientManager	_clientManager;
 		// ChannelManager	_channelManager;
 	public:
@@ -58,10 +63,16 @@ class ServerReactor {
 		void	recieveIncomingMessage( int clientSocket );
 		//void	sendMessageToClient(int clientSocket, string message);
 		 
-		/*			SERVER T0 CLIENT COMMUICATION			*/ // 
+		/*			SERVER T0 CLIENT COMMUICATION			*/  
 		
+	
+		/*			COMMAND IMPLEMENTATION			*/
+		void		execPass(Message &message);
+		void		execNick(Message &message);
+		// void		exceUser(Message &message);
 
 		/*			MAIN			*/
+		void	execute(Message &message);
 		void	run();
 		
 			/*			UTILS			*/
@@ -70,7 +81,7 @@ class ServerReactor {
 
 
 // FIXME: I'm not sure in which class these functions should be. It depends on when they need to be called.
-// TODO: Think of a better way to pass parameters. Maybe a class?
+// TODO: Think of a better way to exec parameters. Maybe a class?
 	// Format // :<nick>!<user>@<host> <command> <channel> :<optionalMessage>
 //void	sendAcknowledgement(int clientSocket, string nick, string user, string host, string command, string channel, string optionalMessage);
 	// Format // :<server> <numericCode> <targetNick> <parameters> :<message>

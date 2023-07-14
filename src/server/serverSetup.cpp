@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   serverSetup.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
+/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 10:00:19 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/07/12 11:10:20 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/07/14 17:14:06 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,10 @@ ServerReactor::ServerReactor( void ) {
 	_isShutdown = false;
 	_serverSocket = -1;
 	_clientManager = ClientManager();
+	_cmds[0] = &ServerReactor::execPass;
+	_cmds[1] = &ServerReactor::execNick;
+	// _cmds[2] = &ServerReactor::exceUser;
+	// TODO: Add more commands as I implement them
 	//_channelManager = ChannelManager();
 }
 

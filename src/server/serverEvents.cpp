@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   serverEvents.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
+/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 10:17:06 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/07/12 13:26:44 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/07/14 16:36:38 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,11 @@
 // TODO: Refactor this to be more readable and use more member variables
 void	ServerReactor::recieveIncomingMessage( int clientSocket )
 {
-	char		buffer[1024];
 	int			bytesRead;
-	string	message;
-	size_t	pos;
+	char		buffer[1024];
+	string		message;
+	size_t		pos;
 
-	std::cout << "Receiving message" << std::endl;
 	pos = 0;
 	while (pos != string::npos)
 	{
@@ -40,9 +39,10 @@ void	ServerReactor::recieveIncomingMessage( int clientSocket )
 		pos = message.find("\r\n");
 		memset(buffer, 0, bytesRead);
 	}
-	// TODO: Process message
 	std::cout << "Message: " << message << std::endl;
-	Message processMessage(message);
+	Message processMessage(message, _clientManager.getClientData(clientSocket));
+	// TODO: Implement command execution
+	execute(processMessage);
 }
 
 void	ServerReactor::acceptNewClient( void )

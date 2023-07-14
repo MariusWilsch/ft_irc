@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
+/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 10:02:23 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/07/12 13:04:15 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/07/14 17:06:53 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ ClientData::ClientData( void )
 	_realname = "";
 	_nickname = "";
 	_username = "";
-	_userType = USER;
+	// _userType = USER;
 	_unused = "*";
 }
 
@@ -54,3 +54,20 @@ void	ClientManager::removeClient( int clientSocket )
 	std::cout << "Removing client from map container" << std::endl;
 	_activeClientsBySocket.erase(clientSocket);
 }
+
+bool	ClientManager::isNicknameInUse( string nickname )
+{
+	if (_usedNicknames.find(nickname) != _usedNicknames.end()) {
+		_usedNicknames.insert(nickname);
+		return (false);
+	}
+	return (true);
+}
+
+
+/*			GETTERS			*/
+
+ClientData&	ClientManager::getClientData( int clientSocket ) {
+	return _activeClientsBySocket[clientSocket];
+}
+

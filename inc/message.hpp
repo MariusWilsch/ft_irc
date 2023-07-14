@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   message.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
+/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 16:04:46 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/07/12 14:01:28 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/07/14 17:12:06 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,35 +17,67 @@
 #include <vector>
 #include <sstream>
 
+enum Registering {
+	PASS,
+	NICK,
+	USER,
+	REGISTERED
+};
+
+class ClientData;
+struct CommandProperties {
+	int		mandatoryParams;
+	bool	ignoreTrailing;
+	CommandProperties();
+	CommandProperties(int m, bool i);
+};
+
+
+		// enum RecipientType { CLIENT, CHANNEL }
+		// 	 _recipientType; // Maybe add SERVER? for commands like OPER or AUTHENTICATE
+		//ClientData* _clientRecipient;
+		//ChannelData* _channelRecipient;
+
 /**
  * @brief 
  * 
  */
 class Message {
 	private:
-		string	_rawMessage;
-		string	_prefix;
-		string	_command;
-		string	_params;
-		string	_trailing;
-		string	_sender;
-		int			_tokStart;
-		int			_tokLength;
-		std::vector<string> _tokens;
-		//int		_senderSocket;
-		//enum tokenType {PREFIX, COMMAND, PARAMS, TRAILING};
-		enum RecipientType { CLIENT, CHANNEL }
-			 _recipientType; // Maybe add SERVER? for commands like OPER or AUTHENTICATE
-		//ClientData* _clientRecipient;
-		//ChannelData* _channelRecipient;
+		// int								_senderSocket;
+		bool							_isFatal;
+		string							_responseCode; // Maybe make this an int?
+		string							_rawMessage;
+		string							_prefix;
+		string							_command;
+		string							_trailing;
+		std::vector<string>				_params;
+		ClientData&						_senderData;
+		map <string, CommandProperties> _properties;
 	public:
 		/*			CLASS DEFAULT FUNCTIONS			*/
 		
-		Message( void );
-		Message( string rawMessage );
+		// Message( void );
+		Message( string rawMessage, ClientData& senderData );
 		~Message( void );
-		/*			???			*/
+		
+		/*			EXTRACT			*/
 	
-		void split(char delimiter);
-		//int	getTokenLength( char identifier )
+		void							createPropertiesMap( void );
+		void							extractCommand( void );
+		void							extractTrailing( void );
+		void							extractParams(char delimiter);
+
+		/*			???			*/
+
+		void	printData( void );
+
+		/*			GETTERS			*/
+		string							getCommand( void );
+		std::vector<string> 			getParams( void );
+		ClientData&						getSenderData( void );
+
+		/*			SETTERS			*/
+
+		void							setResponseCode( string code );
 };

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
+/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 15:30:13 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/07/12 11:25:11 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/07/14 17:06:14 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 #include "main.hpp"
 
-enum userType {USER, SERVER_OP, CHANNEL_OP};
+// enum userType {USER, SERVER_OP, CHANNEL_OP};
 
 /**
  * @brief Class to handle client-level operations
@@ -24,11 +24,12 @@ class ClientData {
 	private:
 		int									_clientSocket;
 		int									_mode;
-		string							_realname;
-		string							_nickname;
-		string							_username;
-		userType						_userType;
-		string							_unused;
+		bool								_isRegistered[3];
+		string								_realname;
+		string								_nickname;
+		string								_username;
+		string								_unused;
+		// userType							_userType;
 	public:
 		/*			CLASS DEFAULT FUNCTIONS			*/
 		
@@ -36,11 +37,17 @@ class ClientData {
 		ClientData( int clientSocket );
 		~ClientData();
 
+		/*			MEMBER FUNCTIONS			*/
+
+		
+
 		/*			GETTERS			*/
 
 		int									getClientSocket( void ) const { return _clientSocket; };
 
 		/*			SETTERS			 */
+
+		void								setRegisterBool( int index, bool value ) { _isRegistered[index] = value; };
 
 		
 };
@@ -51,8 +58,8 @@ class ClientData {
  */
 class ClientManager {
 	private:
-		set <string>							_usedNicknames;
-		map <int, ClientData>			_activeClientsBySocket;
+		set <string>						_usedNicknames;
+		map <int, ClientData>				_activeClientsBySocket;
 	public:
 		/*			CLASS DEFAULT FUNCTIONS			*/
 		
@@ -61,7 +68,13 @@ class ClientManager {
 
 		/*			MEMBER FUNCTIONS			*/
 		
-		void	addClient( int clientSocket );
-		void	removeClient( int clientSocket );
+		void								addClient( int clientSocket );
+		void								removeClient( int clientSocket );
+		// void								checkRegisteredStatus( int clientSocket );
+		bool								isNicknameInUse( string nick );
+
+		/*			GETTERS			*/
+
+		ClientData&				getClientData( int clientSocket );
 		
 };
