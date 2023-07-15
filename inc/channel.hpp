@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 16:01:33 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/07/11 16:04:35 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/07/15 14:05:02 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,11 @@
 
 /**
  * @brief 
+ * 
+ * @param _name The name of the channel
+ * @param _topic The topic of the channel
+ * @param _clientSockets The set of client sockets in the channel
+ * @param _operators The set of operators in the channel
  * 
  */
 class ChannelData {
@@ -41,6 +46,7 @@ class ChannelData {
 /**
  * @brief 
  * 
+ * @param _channels The map of channels
  */
 class ChannelManager {
 	private:

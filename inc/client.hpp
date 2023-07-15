@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 15:30:13 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/07/14 17:06:14 by verdant          ###   ########.fr       */
+/*   Updated: 2023/07/15 14:04:30 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,15 @@
 
 /**
  * @brief Class to handle client-level operations
+ * 
+ * @param _clientSocket The client socket
+ * @param _mode mode is set to 0 per RFC 2812
+ * @param _isRegistered An array of booleans to know if the client is registered
+ * @param _realname The realname of the client
+ * @param _nickname The nickname of the client
+ * @param _username The username of the client
+ * @param _unused Set to '*' per RFC 2812
+ * @param _userType The type of user (USER, SERVER_OP, CHANNEL_OP)
  * 
  */
 class ClientData {
@@ -54,6 +63,9 @@ class ClientData {
 
 /**
  * @brief Class to handle client-level operations
+ * 
+ * @param _usedNicknames A set of used nicknames
+ * @param _activeClientsBySocket A map of active clients by socket
  * 
  */
 class ClientManager {
