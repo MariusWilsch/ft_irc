@@ -3,19 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
+/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 15:04:15 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/07/15 13:59:25 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/08/22 14:05:48 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-#include "main.hpp"
-#include "client.hpp"
-#include "channel.hpp"
-#include "message.hpp"
 
 #include <sys/types.h>
 #include <sys/event.h>
@@ -26,6 +22,11 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <errno.h>
+
+#include "main.hpp"
+#include "client.hpp"
+#include "channel.hpp"
+#include "message.hpp"
 
 
 /**

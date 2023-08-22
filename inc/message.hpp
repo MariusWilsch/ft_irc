@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 16:04:46 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/08/22 13:51:23 by verdant          ###   ########.fr       */
+/*   Updated: 2023/08/22 14:06:11 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ class Message {
 		/*			???			*/
 
 		void	printData( void );
-		void	executeCommand(const std::string& command) {
+		void	executeCommand(const std::string& command); 
 
 		/*			GETTERS			*/
 		string							getCommand( void );

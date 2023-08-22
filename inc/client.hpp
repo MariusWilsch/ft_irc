@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 15:30:13 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/08/22 13:51:16 by verdant          ###   ########.fr       */
+/*   Updated: 2023/08/22 14:05:19 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,10 @@ class ClientData {
 	private:
 		int									_clientSocket;
 		int									_mode;
-		bool								_isRegistered[3];
 		string								_realname;
 		string								_nickname;
 		string								_username;
 		string								_unused;
-		bool								_isRegistered;
 		// userType							_userType;
 	public:
 		/*			CLASS DEFAULT FUNCTIONS			*/
@@ -57,7 +55,6 @@ class ClientData {
 
 		/*			SETTERS			 */
 
-		void								setRegisterBool( int index, bool value ) { _isRegistered[index] = value; };
 
 		
 };
