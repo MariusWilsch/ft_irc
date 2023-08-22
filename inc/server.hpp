@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 15:04:15 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/07/14 17:25:59 by verdant          ###   ########.fr       */
+/*   Updated: 2023/07/15 13:59:25 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,21 +27,23 @@
 #include <fcntl.h>
 #include <errno.h>
 
-#define IMPLEMENTED_CMDS 2
-
-
 
 /**
  * @brief Class to handle server-level operations
  * 
+ * @details This class is responsible for handling the server socket, multiplexing and events.
+ * @param _serverSocket The server socket
+ * @param _kq The kqueue
+ * @param _isShutdown A boolean to know if the server is shutdown
+ * @param _connectionPassword The password to connect to the server
+ * @param _clientManager The client manager where all the clients are stored
+ * @param _channelManager The channel manager where all the channels are stored
  */
 class ServerReactor {
 	private:
 		int				_serverSocket;
 		int				_kq;
 		bool			_isShutdown;
-		typedef void 	(ServerReactor::*cmd)(Message &message);
-		cmd				_cmds[3];
 		string			_connectionPassword;
 		ClientManager	_clientManager;
 		// ChannelManager	_channelManager;
@@ -67,9 +69,6 @@ class ServerReactor {
 		
 	
 		/*			COMMAND IMPLEMENTATION			*/
-		void		execPass(Message &message);
-		void		execNick(Message &message);
-		// void		exceUser(Message &message);
 
 		/*			MAIN			*/
 		void	execute(Message &message);
@@ -78,11 +77,3 @@ class ServerReactor {
 			/*			UTILS			*/
 		void	writeServerError(string functionName, string errorMessage, int errorNumber);
 };
-
-
-// FIXME: I'm not sure in which class these functions should be. It depends on when they need to be called.
-// TODO: Think of a better way to exec parameters. Maybe a class?
-	// Format // :<nick>!<user>@<host> <command> <channel> :<optionalMessage>
-//void	sendAcknowledgement(int clientSocket, string nick, string user, string host, string command, string channel, string optionalMessage);
-	// Format // :<server> <numericCode> <targetNick> <parameters> :<message>
-//void	sendNumericReply(int clientSocket, string numericCode, string targetNick, string parameters, string message);
