@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 15:04:15 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/08/22 14:05:48 by verdant          ###   ########.fr       */
+/*   Updated: 2023/08/22 18:30:01 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,16 @@
 #include "message.hpp"
 
 
+
+struct CommandProperties {
+	int				mandatoryParams;
+	bool			ignoreTrailing;
+	
+	CommandProperties();
+	CommandProperties(int m, bool i);
+};
+
+
 /**
  * @brief Class to handle server-level operations
  * 
@@ -42,18 +52,19 @@
  */
 class ServerReactor {
 	private:
-		int				_serverSocket;
-		int				_kq;
-		bool			_isShutdown;
-		string			_connectionPassword;
-		ClientManager	_clientManager;
+		int								_serverSocket;
+		int								_kq;
+		bool							_isShutdown;
+		string							_connectionPassword;
+		ClientManager					_clientManager;
+		map <string, CommandProperties> _properties;
 		// ChannelManager	_channelManager;
 	public:
 		/*			Class Default Functions			*/
 		
-		ServerReactor();
 		ServerReactor( int port, string connectionPassword );
 		~ServerReactor();
+		
 		/*			Socket & Multiplexing			*/
 
 		void	setupServerSocket( int port );
@@ -72,9 +83,11 @@ class ServerReactor {
 		/*			COMMAND IMPLEMENTATION			*/
 
 		/*			MAIN			*/
-		void	execute(Message &message);
+
 		void	run();
 		
 			/*			UTILS			*/
+			
 		void	writeServerError(string functionName, string errorMessage, int errorNumber);
+		void	createPropertiesMap( void );
 };

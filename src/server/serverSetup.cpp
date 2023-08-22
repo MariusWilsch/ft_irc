@@ -6,28 +6,30 @@
 /*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 10:00:19 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/07/15 10:58:02 by verdant          ###   ########.fr       */
+/*   Updated: 2023/08/22 18:53:57 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "server.hpp"
 
+
+
+// TODO: Place this appropriately as soon as I fixed the bug
+
+CommandProperties::CommandProperties() : mandatoryParams(0), ignoreTrailing(false) {};
+
+CommandProperties::CommandProperties(int m, bool i) : mandatoryParams(m), ignoreTrailing(i) {};
+
 /*			CLASS DEFAULT FUNCTIONS			*/
 
-ServerReactor::ServerReactor( void ) {
-	_isShutdown = false;
+ServerReactor::ServerReactor( int port, std::string password ) {
 	_serverSocket = -1;
 	_clientManager = ClientManager();
-	// _cmds[0] = &ServerReactor::execPass;
-	// _cmds[1] = &ServerReactor::execNick;
-	// _cmds[2] = &ServerReactor::exceUser;
-	// TODO: Add more commands as I implement them
 	//_channelManager = ChannelManager();
-}
-
-ServerReactor::ServerReactor( int port, std::string password ) {
+	_isShutdown = false;
 	_connectionPassword = password;
 	setupServerSocket(port);
+	createPropertiesMap();
 	
 	if (_serverSocket == -1)
 		writeServerError("socket", "Failed to create socket", errno);
@@ -49,8 +51,20 @@ void	ServerReactor::writeServerError( std::string function, std::string message,
 	exit(1);
 }
 
-/*			SOCKET & MULTIPLEXING			*/
+void	ServerReactor::createPropertiesMap( void ) {
+	_properties["PASS"] = CommandProperties(1, true);
+	_properties["NICK"] = CommandProperties(1, true);
+	_properties["USER"] = CommandProperties(4, false);
+	_properties["JOIN"] = CommandProperties(1, true);
+	_properties["PRIVMSG"] = CommandProperties(2, false);
+	_properties["OPER"] = CommandProperties(2, true);
+	_properties["KICK"] = CommandProperties(2, false);
+	_properties["INVITE"] = CommandProperties(2, true);
+	_properties["TOPIC"] = CommandProperties(1, false);
+	_properties["MODE"] = CommandProperties(2, true);
+}
 
+/*			SOCKET & MULTIPLEXING			*/
 
 void	ServerReactor::updateMoinitoring( int fd, int filter, int flags ) {
 	struct kevent	evSet;
@@ -60,10 +74,9 @@ void	ServerReactor::updateMoinitoring( int fd, int filter, int flags ) {
 		writeServerError("kevent", "Failed to update monitoring", errno);
 }
 
-
 void	ServerReactor::setupServerSocket( int port ) {
 	struct sockaddr_in	serverAddress;
-	int									yes;
+	int					yes;
 	
 	_serverSocket = socket(AF_INET, SOCK_STREAM, 0);
 	if (_serverSocket == -1)
@@ -81,7 +94,7 @@ void	ServerReactor::setupServerSocket( int port ) {
 }
 
 void	ServerReactor::setToNonBlocking( int fd ) {
-	int flags;
+	int	flags;
 	
 	flags = fcntl(fd, F_GETFL, 0);
 	if (flags == -1)
@@ -89,8 +102,4 @@ void	ServerReactor::setToNonBlocking( int fd ) {
 	if (fcntl(fd, F_SETFL, flags & ~O_NONBLOCK) == -1)
 		writeServerError("fcntl", "Failed to set socket flags", errno);
 }
-
-
-
-
 

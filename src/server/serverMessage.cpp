@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 13:27:34 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/08/22 14:07:37 by verdant          ###   ########.fr       */
+/*   Updated: 2023/08/22 19:14:48 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,34 +14,21 @@
 
 /*			CLASS DEFAULT FUNCTIONS			*/
 
-CommandProperties::CommandProperties() : mandatoryParams(0), ignoreTrailing(false) {};
-
-CommandProperties::CommandProperties(int m, bool i, CommandHandler h) : mandatoryParams(m), ignoreTrailing(i), handler(h) {};
-
-// Message::Message( void ) {
-// 	// _senderSocket = 0;
-// 	_isFatal = false;
-// 	_rawMessage = "";
-// 	_prefix = "";
-// 	_command = "";
-// 	_trailing = "";;
-// 	_properties = map <string, CommandProperties>();
-// }
-
 Message::~Message( void ) {};
 
-Message::Message( string rawMessage, ClientData& senderData ) : _rawMessage(rawMessage), _senderData(senderData) {	
+Message::Message( string rawMessage, map <string, CommandProperties> properties ) : _rawMessage(rawMessage), _properties(properties) {
 	
+	_isFatal = false;
 	// Parse raw message
-	createPropertiesMap();
-	extractCommand();
-	extractTrailing();
-	extractParams(' ');
+	extractCommand( );
+	extractTrailing( );
+	extractParams( );
 
 	// Print extracted data
 	printData();
 
 	// Execute command
+	// [...]
 }
 
 /*			GETTERS			*/
@@ -56,17 +43,13 @@ std::vector <string> Message::getParams( void ) {
 	return _params;
 }
 
-ClientData& Message::getSenderData( void ) { 
-	return _senderData; 
-}
-
 
 /*			SETTERS			*/
 
-void Message::setResponseCode( string responseCode )  { 
-	_isFatal = true;
-	_responseCode = responseCode; 
-}
+// void Message::setResponseCode( string responseCode )  { 
+// 	_isFatal = true;
+// 	_responseCode = responseCode; 
+// }
 
 /*			MEMBER FUNCTIONS			*/
 
@@ -83,4 +66,3 @@ void Message::printData( void )
 	}
 	std::cout << "Trailing: " << _trailing << std::endl;
 }
-

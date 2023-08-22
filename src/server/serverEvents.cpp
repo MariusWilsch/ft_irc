@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 10:17:06 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/08/22 13:47:48 by verdant          ###   ########.fr       */
+/*   Updated: 2023/08/22 18:53:37 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	ServerReactor::recieveIncomingMessage( int clientSocket )
 		memset(buffer, 0, bytesRead);
 	}
 	std::cout << "Message: " << message << std::endl;
-	Message processMessage(message, _clientManager.getClientData(clientSocket));
+	Message processMessage(message, _properties);
 	// TODO: Implement command execution
 	// execute(processMessage);
 }
@@ -66,8 +66,8 @@ void	ServerReactor::acceptNewClient( void )
 void	ServerReactor::run( void )
 {
 	struct kevent	eventList[32];
-	int						eventCount, fd, filter;
-
+	int				eventCount, fd, filter;
+	
 	while (_isShutdown == false)
 	{
 		eventCount = kevent(_kq, NULL, 0, eventList, 32, NULL);

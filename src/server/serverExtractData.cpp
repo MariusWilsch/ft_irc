@@ -6,65 +6,54 @@
 /*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 14:08:52 by verdant           #+#    #+#             */
-/*   Updated: 2023/08/22 08:10:25 by verdant          ###   ########.fr       */
+/*   Updated: 2023/08/22 19:18:11 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "message.hpp"
 
-void	Message::createPropertiesMap( void ) {
-	if (_isFatal == true)
-		return;
-	_properties["PASS"] = CommandProperties(1, true, NULL);
-	_properties["NICK"] = CommandProperties(1, true, NULL);
-	_properties["USER"] = CommandProperties(4, false, NULL);
-	_properties["JOIN"] = CommandProperties(1, true, NULL);
-	_properties["PRIVMSG"] = CommandProperties(2, false, NULL);
-	_properties["OPER"] = CommandProperties(2, true, NULL);
-	_properties["KICK"] = CommandProperties(2, false, NULL);
-	_properties["INVITE"] = CommandProperties(2, true, NULL);
-	_properties["TOPIC"] = CommandProperties(1, false, NULL);
-	_properties["MODE"] = CommandProperties(2, true, NULL);
-}
-
-void	Message::extractCommand( void )
+void	Message::extractCommand( void  )
 {
 	size_t				pos;
 	string				token;
-	const char			delimiter = ' ';
 	std::istringstream	tokenStream(_rawMessage);
 
 	// Get Prefix
-	if (_isFatal == true)
-		return;
-	if (std::getline(tokenStream, token, delimiter))
+	// TODO: find a better way for this (maybe throw an exception) - What's the purpose of this?
+	if (_isFatal == true) 
+		return; 
+	if (std::getline(tokenStream, token, ' '))
 	{
 		if (!token.empty() && token[0] == ':')
 			_prefix = token;
 		else
 			_command = token;
 	}
-	// Get Command if command is empty
-	if (_command.empty() && std::getline(tokenStream, token, delimiter))
-	{
-		if (!token.empty())
-			_command = token;
-	}
-	 // TODO: throw 421 numeric reply  :<servername> 421 <nick> <command> :Unknown command
+	// Get Command if command is empty		
+	if (_command.empty() && std::getline(tokenStream, token, ' '))
+		_command = token;
+		
+
+	// Remove trailing whitespaces and convert to uppercase to match command in properties map
+	token.erase(std::remove_if(token.begin(), token.end(), ::isspace), token.end());
+	std::transform(token.begin(), token.end(), token.begin(), ::toupper);
 	if (_properties.count(token) == 0)
 	{
 		_isFatal = true;
 		std::cout << "Unknown command: " << token << std::endl;
+	 	// TODO: throw 421 numeric reply  :<servername> 421 <nick> <command> :Unknown command
+		return ;
 	}
-	// toUpper command
-	std::transform(_command.begin(), _command.end(), _command.begin(), ::toupper);
+	
 	// Erase prefix && command from rawMessage
 	pos = _rawMessage.find(_command);
 	if (pos != std::string::npos)
 		_rawMessage.erase(0, pos + _command.length());
+		
+	_command = token;
 }
 
-void	Message::extractTrailing( void )
+void	Message::extractTrailing( void  )
 {
 	size_t	pos;
 	
@@ -80,14 +69,14 @@ void	Message::extractTrailing( void )
 	}
 }
 
-void	Message::extractParams(char delimiter)
+void	Message::extractParams( void )
 {
 	std::string			token;
 	std::istringstream	tokenStream(_rawMessage);
 	
 	if (_isFatal == true)
 		return;
-	while (std::getline(tokenStream, token, delimiter))
+	while (std::getline(tokenStream, token, ' '))
 	{
 		if (!token.empty())
 			_params.push_back(token);
