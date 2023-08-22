@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   multiplexingPseudoCode.c++                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
+/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/03 12:16:52 by verdant           #+#    #+#             */
-/*   Updated: 2023/07/08 18:18:35 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/07/15 11:06:44 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ int	serverSocketSetup( int port )
  * @param serverSocket 
  * @note 
  */
-void handleNewConnection( int serverSocket, int kq )
+void §handleNewConnection( int serverSocket, int kq )
 {
 	cout << "New client connection" << endl;
 	// 1. Accept the connection

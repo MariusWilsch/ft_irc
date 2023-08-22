@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 10:00:19 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/07/14 17:14:06 by verdant          ###   ########.fr       */
+/*   Updated: 2023/07/15 10:58:02 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@ ServerReactor::ServerReactor( void ) {
 	_isShutdown = false;
 	_serverSocket = -1;
 	_clientManager = ClientManager();
-	_cmds[0] = &ServerReactor::execPass;
-	_cmds[1] = &ServerReactor::execNick;
+	// _cmds[0] = &ServerReactor::execPass;
+	// _cmds[1] = &ServerReactor::execNick;
 	// _cmds[2] = &ServerReactor::exceUser;
 	// TODO: Add more commands as I implement them
 	//_channelManager = ChannelManager();

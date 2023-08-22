@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 10:17:06 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/07/14 16:36:38 by verdant          ###   ########.fr       */
+/*   Updated: 2023/08/22 13:47:48 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	ServerReactor::recieveIncomingMessage( int clientSocket )
 	std::cout << "Message: " << message << std::endl;
 	Message processMessage(message, _clientManager.getClientData(clientSocket));
 	// TODO: Implement command execution
-	execute(processMessage);
+	// execute(processMessage);
 }
 
 void	ServerReactor::acceptNewClient( void )

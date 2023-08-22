@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 14:33:23 by verdant           #+#    #+#             */
-/*   Updated: 2023/07/14 17:38:31 by verdant          ###   ########.fr       */
+/*   Updated: 2023/07/15 11:11:36 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	ServerReactor::execPass(Message& message)
 {
 	// std::cout << "Pass: " << message.getParams()[0] << std::endl;
 	// std::cout << "Pass: " << _connectionPassword << std::endl;
-	// _connectionPassword.compare(message.getParams()[0]) == 0 ? message.setResponseCode("001") : message.setResponseCode("464");
+	_connectionPassword.compare(message.getParams()[0]) == 0 ? message.setResponseCode("001") : message.setResponseCode("464");
 	// message.getSenderData().setRegisterBool(PASS, true);
 
 	std::cout << "pass function" << std::endl;
@@ -63,6 +63,7 @@ void	ServerReactor::execute(Message& message)
 	
 	std::cout << "Mem add" << &_cmds[0] << std::endl;
 	
+	// Somehow this causes a segfault
 	(this->*_cmds[0])(message);
 
 	// TODO: HANDLE isfatal and response code

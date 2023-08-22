@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 15:30:13 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/07/14 17:06:14 by verdant          ###   ########.fr       */
+/*   Updated: 2023/07/15 11:14:04 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ class ClientData {
 		string								_nickname;
 		string								_username;
 		string								_unused;
+		bool								_isRegistered;
 		// userType							_userType;
 	public:
 		/*			CLASS DEFAULT FUNCTIONS			*/

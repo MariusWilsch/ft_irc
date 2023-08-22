@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 14:08:52 by verdant           #+#    #+#             */
-/*   Updated: 2023/07/14 17:21:55 by verdant          ###   ########.fr       */
+/*   Updated: 2023/08/22 08:10:25 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,16 @@
 void	Message::createPropertiesMap( void ) {
 	if (_isFatal == true)
 		return;
-	_properties["PASS"] = CommandProperties(1, true);
-	_properties["NICK"] = CommandProperties(1, true);
-	_properties["USER"] = CommandProperties(4, false);
-	_properties["JOIN"] = CommandProperties(1, true);
-	_properties["PRIVMSG"] = CommandProperties(2, false);
-	_properties["OPER"] = CommandProperties(2, true);
-	_properties["KICK"] = CommandProperties(2, false);
-	_properties["INVITE"] = CommandProperties(2, true);
-	_properties["TOPIC"] = CommandProperties(1, false);
-	_properties["MODE"] = CommandProperties(2, true);
+	_properties["PASS"] = CommandProperties(1, true, NULL);
+	_properties["NICK"] = CommandProperties(1, true, NULL);
+	_properties["USER"] = CommandProperties(4, false, NULL);
+	_properties["JOIN"] = CommandProperties(1, true, NULL);
+	_properties["PRIVMSG"] = CommandProperties(2, false, NULL);
+	_properties["OPER"] = CommandProperties(2, true, NULL);
+	_properties["KICK"] = CommandProperties(2, false, NULL);
+	_properties["INVITE"] = CommandProperties(2, true, NULL);
+	_properties["TOPIC"] = CommandProperties(1, false, NULL);
+	_properties["MODE"] = CommandProperties(2, true, NULL);
 }
 
 void	Message::extractCommand( void )

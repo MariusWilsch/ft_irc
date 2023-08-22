@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 13:27:34 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/07/14 17:10:37 by verdant          ###   ########.fr       */
+/*   Updated: 2023/08/22 08:08:52 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 
 CommandProperties::CommandProperties() : mandatoryParams(0), ignoreTrailing(false) {};
 
-CommandProperties::CommandProperties(int m, bool i) : mandatoryParams(m), ignoreTrailing(i) {};
+CommandProperties::CommandProperties(int m, bool i) : mandatoryParams(m), ignoreTrailing(i), handler(h) {};
 
 // Message::Message( void ) {
 // 	// _senderSocket = 0;

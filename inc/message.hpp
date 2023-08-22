@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 16:04:46 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/07/14 17:12:06 by verdant          ###   ########.fr       */
+/*   Updated: 2023/08/22 08:08:11 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 
 #include <vector>
 #include <sstream>
+#include <algorithm>
 
 enum Registering {
 	PASS,
@@ -24,12 +25,15 @@ enum Registering {
 	REGISTERED
 };
 
+typedef void (*CommandHandler)();
+
 class ClientData;
 struct CommandProperties {
-	int		mandatoryParams;
-	bool	ignoreTrailing;
+	int				mandatoryParams;
+	bool			ignoreTrailing;
+	CommandHandler	handler;
 	CommandProperties();
-	CommandProperties(int m, bool i);
+	CommandProperties(int m, bool i,  CommandHandler h);
 };
 
 
@@ -71,6 +75,7 @@ class Message {
 		/*			???			*/
 
 		void	printData( void );
+		void	executeCommand(const std::string& command) {
 
 		/*			GETTERS			*/
 		string							getCommand( void );
