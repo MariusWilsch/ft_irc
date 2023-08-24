@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 15:04:15 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/08/22 18:30:01 by verdant          ###   ########.fr       */
+/*   Updated: 2023/08/24 20:35:28 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,8 @@ class ServerReactor {
 		bool							_isShutdown;
 		string							_connectionPassword;
 		ClientManager					_clientManager;
-		map <string, CommandProperties> _properties;
 		// ChannelManager	_channelManager;
+		map <string, CommandProperties> _properties;
 	public:
 		/*			Class Default Functions			*/
 		
@@ -73,6 +73,7 @@ class ServerReactor {
 		
 
 		/*			EVENTS			*/
+		
 		void	acceptNewClient();
 		void	recieveIncomingMessage( int clientSocket );
 		//void	sendMessageToClient(int clientSocket, string message);

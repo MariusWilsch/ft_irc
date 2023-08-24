@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 10:02:23 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/07/14 17:06:53 by verdant          ###   ########.fr       */
+/*   Updated: 2023/08/24 21:23:49 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,28 +46,14 @@ void	ClientManager::addClient( int clientSocket )
 {
 	std::cout << "Creating Client Data and adding client to map container" << std::endl;
 	ClientData newClient(clientSocket);
-	_activeClientsBySocket.insert(std::pair<int, ClientData>(clientSocket, newClient));
+	_ClientsBySocket.insert(std::pair<int, ClientData>(clientSocket, newClient));
 }
 
 void	ClientManager::removeClient( int clientSocket )
 {
 	std::cout << "Removing client from map container" << std::endl;
-	_activeClientsBySocket.erase(clientSocket);
-}
-
-bool	ClientManager::isNicknameInUse( string nickname )
-{
-	if (_usedNicknames.find(nickname) != _usedNicknames.end()) {
-		_usedNicknames.insert(nickname);
-		return (false);
-	}
-	return (true);
+	_ClientsBySocket.erase(clientSocket);
 }
 
 
-/*			GETTERS			*/
-
-ClientData&	ClientManager::getClientData( int clientSocket ) {
-	return _activeClientsBySocket[clientSocket];
-}
 

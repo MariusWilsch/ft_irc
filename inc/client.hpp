@@ -6,15 +6,13 @@
 /*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 15:30:13 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/08/22 14:05:19 by verdant          ###   ########.fr       */
+/*   Updated: 2023/08/24 21:23:59 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
 #include "main.hpp"
-
-// enum userType {USER, SERVER_OP, CHANNEL_OP};
 
 /**
  * @brief Class to handle client-level operations
@@ -37,7 +35,6 @@ class ClientData {
 		string								_nickname;
 		string								_username;
 		string								_unused;
-		// userType							_userType;
 	public:
 		/*			CLASS DEFAULT FUNCTIONS			*/
 		
@@ -69,7 +66,7 @@ class ClientData {
 class ClientManager {
 	private:
 		set <string>						_usedNicknames;
-		map <int, ClientData>				_activeClientsBySocket;
+		map <int, ClientData>				_ClientsBySocket;
 	public:
 		/*			CLASS DEFAULT FUNCTIONS			*/
 		
@@ -80,11 +77,9 @@ class ClientManager {
 		
 		void								addClient( int clientSocket );
 		void								removeClient( int clientSocket );
-		// void								checkRegisteredStatus( int clientSocket );
-		bool								isNicknameInUse( string nick );
 
 		/*			GETTERS			*/
 
-		ClientData&				getClientData( int clientSocket );
+		ClientData&							getClientData( int clientSocket );
 		
 };
