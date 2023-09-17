@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 16:01:33 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/07/15 14:05:02 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/09/17 19:36:38 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,25 +29,28 @@ class ChannelData {
 		string _topic;
 		set <int> _clientSockets;
 		set <int> _operators;
-	public:
-	/*			CLASS DEFAULT FUNCTIONS			*/
-	
-		ChannelData( void );
-		~ChannelData( void );
+
+	public:	
+	ChannelData( void );
+	~ChannelData( void );
 	
 	/*			GETTERS			*/
-
+	string getName( void ) const;
+	string getTopic( void ) const;
+	set <int> getClientSockets( void ) const;
+	set <int> getOperators( void ) const;
 
 	/*			SETTERS			 */
+	void setName( string name );
+	void setTopic( string topic );
+	void	addClient( int clientSocket);
+	void	addOperator( int clientSocket);
 
-
+	/* 			ClientData methods			*/
+	bool		isOperator(int clientSocket);
+	bool		isCLient(int clinetSocket);
 };
 
-/**
- * @brief 
- * 
- * @param _channels The map of channels
- */
 class ChannelManager {
 	private:
 		map<string, ChannelData> _channels;
@@ -57,6 +60,10 @@ class ChannelManager {
 		ChannelManager( void );
 		~ChannelManager( void );
 		
-	/*			???			*/
+	/*			GETTERS			*/
+	ChannelData& getChannelByName( string name );
+
+	/*			SETTERS			*/
+	void addChannel( string name, ChannelData channelData );
 	
 };	

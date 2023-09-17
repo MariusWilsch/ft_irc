@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 10:02:23 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/09/17 15:01:27 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/09/17 19:24:17 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,8 +116,15 @@ void	ClientManager::removeClient( int clientSocket )
 
 ClientData& ClientManager::getClientData( int clientSocket )
 {
-	map<int, ClientData>::iterator it =  this->_ClientsBySocket.find(clientSocket);
-	return (it->second);
+	try{
+		map<int, ClientData>::iterator it =  this->_ClientsBySocket.find(clientSocket);
+		if (it != this->_ClientsBySocket.end())
+			return (it->second);
+		throw std::exception();
+	}
+	catch (std::exception &ex){
+		std::cout << "Client doesn't exist" << std::endl;
+	}
 }
 
 
