@@ -28,7 +28,7 @@
 #include "channel.hpp"
 #include "message.hpp"
 
-
+#include "ExecuteCommands.hpp"
 
 struct CommandProperties {
 	int				mandatoryParams;

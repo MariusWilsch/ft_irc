@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 10:02:23 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/08/24 21:23:49 by verdant          ###   ########.fr       */
+/*   Updated: 2023/09/17 15:01:27 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,16 +24,73 @@ ClientData::ClientData( void )
 	_unused = "*";
 }
 
-ClientData::ClientData( int clientSocket ) : _clientSocket(clientSocket) {};
+ClientData::ClientData( int clientSocket, unsigned int clientsNumber)
+{
+	// Give the user an initial authentication.
+	string user;
+
+	user = "User";
+	user.append(std::to_string(clientsNumber));
+	_clientSocket = clientSocket;
+	_realname = user;
+	_nickname = user;
+	_username = user;
+	_registration = false;
+}
 
 ClientData::~ClientData() {};
 
 /*			GETTERS			*/
+int		ClientData::getMode(){
+	return (this->_mode);
+}
+
+string	ClientData::getRealname(){
+	return (this->_realname);
+}
+
+string	ClientData::getNickname(){
+	return (this->_nickname);
+}
+
+string	ClientData::getUsername(){
+	return (this->_username);
+}
+
+string 	ClientData::getUnused(){
+	return (this->_unused);
+}
+
+bool	ClientData::getRegistration(){
+	return (this->_registration);
+}
 
 
 /*			SETTERS			 */
 
+void	ClientData::setmode(int mode){
+	this->_mode = mode;
+}
 
+void	ClientData::setRealname(string realname){
+	this->_realname = realname;
+}
+
+void	ClientData::setNickname(string nickname){
+	this->_nickname = nickname;
+}
+
+void	ClientData::setUsername(string username){
+	this->_username = username;
+}
+
+void	ClientData::setUnused(string unused){
+	this->_unused = unused;
+}
+
+void	ClientData::setRegistration( bool b){
+	this->_registration = b;
+}
 /*			CLASS DEFAULT FUNCTIONS: CLIENT MANAGER			*/
 
 ClientManager::ClientManager( void ) {};
@@ -42,10 +99,10 @@ ClientManager::~ClientManager() {};
 
 /*			MEMBER FUNCTIONS			*/
 
-void	ClientManager::addClient( int clientSocket )
+void	ClientManager::addClient( int clientSocket)
 {
 	std::cout << "Creating Client Data and adding client to map container" << std::endl;
-	ClientData newClient(clientSocket);
+	ClientData newClient(clientSocket, _ClientsBySocket.size());
 	_ClientsBySocket.insert(std::pair<int, ClientData>(clientSocket, newClient));
 }
 
@@ -57,3 +114,13 @@ void	ClientManager::removeClient( int clientSocket )
 
 
 
+ClientData& ClientManager::getClientData( int clientSocket )
+{
+	map<int, ClientData>::iterator it =  this->_ClientsBySocket.find(clientSocket);
+	return (it->second);
+}
+
+
+map<int, ClientData>&				ClientManager::getClientBySocket(){
+	return (this->_ClientsBySocket);
+}

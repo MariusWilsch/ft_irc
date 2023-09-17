@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   serverEvents.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 10:17:06 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/08/22 18:53:37 by verdant          ###   ########.fr       */
+/*   Updated: 2023/09/16 18:09:51 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,14 +42,17 @@ void	ServerReactor::recieveIncomingMessage( int clientSocket )
 	std::cout << "Message: " << message << std::endl;
 	Message processMessage(message, _properties);
 	// TODO: Implement command execution
-	// execute(processMessage);
+
+	//****************************************************************************************/
+	// initialize all the clients by giving them a default authentication.
+	ExecuteCommands::execute(processMessage, _clientManager, clientSocket);
 }
 
 void	ServerReactor::acceptNewClient( void )
 {
 	struct sockaddr_in	clientAddress;
 	socklen_t						clientAddressSize;
-	int									clientSocket;
+	int								clientSocket;
 	
 	std::cout << "Accepting new client" << std::endl;
 	clientAddressSize = sizeof(clientAddress);

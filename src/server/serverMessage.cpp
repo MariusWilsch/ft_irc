@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   serverMessage.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 13:27:34 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/08/22 19:14:48 by verdant          ###   ########.fr       */
+/*   Updated: 2023/09/17 13:11:19 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,14 @@ std::vector <string> Message::getParams( void ) {
 	return _params;
 }
 
+bool	Message::getFatal( void )
+{
+	return (this->_isFatal);
+}
+
+string	Message::getTrailing( void ){
+	return (this->_trailing);
+}
 
 /*			SETTERS			*/
 

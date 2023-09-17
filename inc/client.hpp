@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 15:30:13 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/08/24 21:23:59 by verdant          ###   ########.fr       */
+/*   Updated: 2023/09/17 14:59:26 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,12 @@ class ClientData {
 		string								_nickname;
 		string								_username;
 		string								_unused;
+		bool								_registration;
 	public:
 		/*			CLASS DEFAULT FUNCTIONS			*/
 		
 		ClientData( void );
-		ClientData( int clientSocket );
+		ClientData( int clientSocket, unsigned int clientsNumber);
 		~ClientData();
 
 		/*			MEMBER FUNCTIONS			*/
@@ -49,11 +50,24 @@ class ClientData {
 		/*			GETTERS			*/
 
 		int									getClientSocket( void ) const { return _clientSocket; };
+		
+		int		getMode();
+		string	getRealname();
+		string	getNickname();
+		string	getUsername();
+		string 	getUnused();
+		bool	getRegistration();
+
 
 		/*			SETTERS			 */
 
+		void	setmode(int mode);
+		void	setRealname(string realname);
+		void	setNickname(string nickname);
+		void	setUsername(string username);
+		void	setUnused(string unused);
+		void	setRegistration( bool b);
 
-		
 };
 
 /**
@@ -75,11 +89,11 @@ class ClientManager {
 
 		/*			MEMBER FUNCTIONS			*/
 		
-		void								addClient( int clientSocket );
+		void								addClient( int clientSocket);
 		void								removeClient( int clientSocket );
 
 		/*			GETTERS			*/
 
 		ClientData&							getClientData( int clientSocket );
-		
+		map<int, ClientData>&				getClientBySocket();
 };
