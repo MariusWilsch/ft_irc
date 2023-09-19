@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 16:01:33 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/09/17 19:36:38 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/09/19 04:03:49 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ class ChannelData {
 		string _topic;
 		set <int> _clientSockets;
 		set <int> _operators;
+		
+		// Add set of ejected clients.
 
 	public:	
 	ChannelData( void );

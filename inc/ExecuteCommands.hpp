@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 19:05:52 by ahammout          #+#    #+#             */
-/*   Updated: 2023/09/19 02:23:22 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/09/19 03:57:45 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ class ExecuteCommands
     static void     pass(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket);
 
     //*********************************** CHANNEL OPERATOR COMMANDS ***********************************//
-    // static void     join(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket);
+    static void     join(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket);
     
 };
 

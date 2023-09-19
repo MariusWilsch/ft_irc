@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 19:02:14 by ahammout          #+#    #+#             */
-/*   Updated: 2023/09/19 02:09:37 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/09/19 03:57:31 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,9 @@ void ExecuteCommands::execute(ServerReactor &_serverReactor, Message &ProcessMes
             else if (ProcessMessage.getCommand().compare("PASS") == 0){
                 pass(_serverReactor, ProcessMessage, clientSocket);
             }
-            // else if (ProcessMessage.getCommand().compare("JOIN") == 0){
-            //     join(_serverReactor, ProcessMessage, clientSocket);
-            // }
+            else if (ProcessMessage.getCommand().compare("JOIN") == 0){
+                join(_serverReactor, ProcessMessage, clientSocket);
+            }
             //~~~~~~~~~~~~~~~~~~~~~~~~~~ CHANNEL OPERATORS COMMANDS ~~~~~~~~~~~~~~~~~~~~~~~~~~//
 
         }
