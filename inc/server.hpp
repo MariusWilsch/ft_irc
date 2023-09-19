@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 15:04:15 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/08/24 20:35:28 by verdant          ###   ########.fr       */
+/*   Updated: 2023/09/19 02:51:27 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ class ServerReactor {
 		bool							_isShutdown;
 		string							_connectionPassword;
 		ClientManager					_clientManager;
-		// ChannelManager	_channelManager;
+		ChannelManager					_channelManager;
 		map <string, CommandProperties> _properties;
 	public:
 		/*			Class Default Functions			*/
@@ -82,6 +82,11 @@ class ServerReactor {
 		
 	
 		/*			COMMAND IMPLEMENTATION			*/
+
+		/* 					GETTERS					*/
+		ClientManager&	getClientManager();
+		ChannelManager&	getChannelManager();
+
 
 		/*			MAIN			*/
 

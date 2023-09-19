@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 19:02:14 by ahammout          #+#    #+#             */
-/*   Updated: 2023/09/18 23:55:28 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/09/19 02:09:37 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,7 @@ ExecuteCommands::~ExecuteCommands(){};
 
 ExecuteCommands::ExecuteCommands(){};
 
-
-
-void ExecuteCommands::execute(Message &ProcessMessage, ClientManager &_ClientManager, int clientSocket)
+void ExecuteCommands::execute(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket)
 {
     try 
     {
@@ -33,15 +31,17 @@ void ExecuteCommands::execute(Message &ProcessMessage, ClientManager &_ClientMan
         else{
             //~~~~~~~~~~~~~~~~~~~~~~~~~~ ATHENTICATON COMMANDS ~~~~~~~~~~~~~~~~~~~~~~~~~~//
             if (ProcessMessage.getCommand().compare("NICK") == 0){
-                nick(ProcessMessage, _ClientManager, clientSocket);
+                nick(_serverReactor, ProcessMessage, clientSocket);
             }
             else if (ProcessMessage.getCommand().compare("USER") == 0){
-                user(ProcessMessage, _ClientManager, clientSocket);
+                user(_serverReactor, ProcessMessage, clientSocket);
             }
             else if (ProcessMessage.getCommand().compare("PASS") == 0){
-                pass(ProcessMessage, _ClientManager, clientSocket);
+                pass(_serverReactor, ProcessMessage, clientSocket);
             }
-            
+            // else if (ProcessMessage.getCommand().compare("JOIN") == 0){
+            //     join(_serverReactor, ProcessMessage, clientSocket);
+            // }
             //~~~~~~~~~~~~~~~~~~~~~~~~~~ CHANNEL OPERATORS COMMANDS ~~~~~~~~~~~~~~~~~~~~~~~~~~//
 
         }

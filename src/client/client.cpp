@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 10:02:23 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/09/17 19:24:17 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/09/19 03:29:24 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,30 +41,37 @@ ClientData::ClientData( int clientSocket, unsigned int clientsNumber)
 ClientData::~ClientData() {};
 
 /*			GETTERS			*/
-int		ClientData::getMode(){
+
+int		ClientData::getClientSocket( void ) const{
+	return (this->_clientSocket);
+}
+int		ClientData::getMode() const{
 	return (this->_mode);
 }
 
-string	ClientData::getRealname(){
+string	ClientData::getRealname() const{
 	return (this->_realname);
 }
 
-string	ClientData::getNickname(){
+string	ClientData::getNickname() const{
 	return (this->_nickname);
 }
 
-string	ClientData::getUsername(){
+string	ClientData::getUsername() const{
 	return (this->_username);
 }
 
-string 	ClientData::getUnused(){
+string 	ClientData::getUnused() const{
 	return (this->_unused);
 }
 
-bool	ClientData::getRegistration(){
+bool	ClientData::getRegistration() const{
 	return (this->_registration);
 }
 
+string	ClientData::getPassword() const{
+	return (this->_password);
+}
 
 /*			SETTERS			 */
 
@@ -91,6 +98,11 @@ void	ClientData::setUnused(string unused){
 void	ClientData::setRegistration( bool b){
 	this->_registration = b;
 }
+
+void	ClientData::setPassword(string pass){
+	this->_password = pass;
+}
+
 /*			CLASS DEFAULT FUNCTIONS: CLIENT MANAGER			*/
 
 ClientManager::ClientManager( void ) {};
@@ -113,18 +125,11 @@ void	ClientManager::removeClient( int clientSocket )
 }
 
 
-
+//*
 ClientData& ClientManager::getClientData( int clientSocket )
 {
-	try{
-		map<int, ClientData>::iterator it =  this->_ClientsBySocket.find(clientSocket);
-		if (it != this->_ClientsBySocket.end())
-			return (it->second);
-		throw std::exception();
-	}
-	catch (std::exception &ex){
-		std::cout << "Client doesn't exist" << std::endl;
-	}
+	map<int, ClientData>::iterator it =  this->_ClientsBySocket.find(clientSocket);
+	return (it->second);
 }
 
 

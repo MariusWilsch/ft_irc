@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 10:17:06 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/09/16 18:09:51 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/09/19 02:51:21 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	ServerReactor::recieveIncomingMessage( int clientSocket )
 
 	//****************************************************************************************/
 	// initialize all the clients by giving them a default authentication.
-	ExecuteCommands::execute(processMessage, _clientManager, clientSocket);
+	ExecuteCommands::execute(*this, processMessage, clientSocket);
 }
 
 void	ServerReactor::acceptNewClient( void )

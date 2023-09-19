@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   serverSetup.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 10:00:19 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/08/22 18:53:57 by verdant          ###   ########.fr       */
+/*   Updated: 2023/09/19 02:51:06 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,5 +101,14 @@ void	ServerReactor::setToNonBlocking( int fd ) {
 		writeServerError("fcntl", "Failed to get socket flags", errno);
 	if (fcntl(fd, F_SETFL, flags & ~O_NONBLOCK) == -1)
 		writeServerError("fcntl", "Failed to set socket flags", errno);
+}
+
+
+ClientManager&	ServerReactor::getClientManager(){
+	return (this->_clientManager);
+}
+
+ChannelManager&	ServerReactor::getChannelManager(){
+	return (this->_channelManager);
 }
 

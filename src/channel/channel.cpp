@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 10:02:20 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/09/17 19:37:13 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/09/19 02:52:14 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,16 +82,8 @@ ChannelManager::ChannelManager(){
 ChannelManager::~ChannelManager(){};
 
 ChannelData& ChannelManager::getChannelByName(string name){
-    try
-    {
-        map<string, ChannelData>::iterator it = _channels.find(name);
-        if (it != _channels.end())
-            return (it->second);
-        throw std::exception();
-    }
-    catch (std::exception &ex){
-        std::cout << "Channel doesn't exist" << std::endl;
-    }
+    map<string, ChannelData>::iterator it = _channels.find(name);
+    return (it->second);
 }
 
 void ChannelManager::addChannel(string name, ChannelData channelData){

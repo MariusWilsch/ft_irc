@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 15:30:13 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/09/17 14:59:26 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/09/19 03:21:29 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ class ClientData {
 		string								_nickname;
 		string								_username;
 		string								_unused;
+		string								_password;
 		bool								_registration;
 	public:
 		/*			CLASS DEFAULT FUNCTIONS			*/
@@ -49,14 +50,15 @@ class ClientData {
 
 		/*			GETTERS			*/
 
-		int									getClientSocket( void ) const { return _clientSocket; };
+		int		getClientSocket( void ) const;
+		int		getMode() const;
+		string	getRealname() const;
+		string	getNickname() const;
+		string	getUsername() const;
+		string 	getUnused() const;
+		bool	getRegistration() const;
+		string	getPassword() const;
 		
-		int		getMode();
-		string	getRealname();
-		string	getNickname();
-		string	getUsername();
-		string 	getUnused();
-		bool	getRegistration();
 
 
 		/*			SETTERS			 */
@@ -67,6 +69,7 @@ class ClientData {
 		void	setUsername(string username);
 		void	setUnused(string unused);
 		void	setRegistration( bool b);
+		void	setPassword(string pass);
 
 };
 

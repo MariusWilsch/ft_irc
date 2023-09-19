@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 19:05:52 by ahammout          #+#    #+#             */
-/*   Updated: 2023/09/13 19:03:34 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/09/19 02:23:22 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,16 +19,22 @@
 #include "client.hpp"
 
 class Message;
+class ServerReactor;
 class ExecuteCommands
 {
     public:
     ExecuteCommands();
     ~ExecuteCommands();
 
+    //*********************************** ATHENTICATION COMMANDS ***********************************//
+    static void     execute(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket);
+    static void     nick(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket);
+    static void     user(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket);
+    static void     pass(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket);
 
-    static void     execute(Message &ProcessMessage, ClientManager &_ClientManager, int clientSocket);
-    static void     nick(Message &ProcessMessage, ClientManager &_ClientManager, int clientSocket);
-    static void     user(Message &ProcessMessage, ClientManager &_ClientManager, int clientSocket);
+    //*********************************** CHANNEL OPERATOR COMMANDS ***********************************//
+    // static void     join(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket);
+    
 };
 
 #endif
