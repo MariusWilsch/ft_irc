@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 19:02:14 by ahammout          #+#    #+#             */
-/*   Updated: 2023/09/17 16:13:23 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/09/18 23:55:28 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,9 @@ void ExecuteCommands::execute(Message &ProcessMessage, ClientManager &_ClientMan
             else if (ProcessMessage.getCommand().compare("USER") == 0){
                 user(ProcessMessage, _ClientManager, clientSocket);
             }
-            // else if (ProcessMessage.getCommand().compare("PASS") == 0){
-            //     pass(ProcessMessage, _ClientManager, clientSocket);
-            // }
+            else if (ProcessMessage.getCommand().compare("PASS") == 0){
+                pass(ProcessMessage, _ClientManager, clientSocket);
+            }
             
             //~~~~~~~~~~~~~~~~~~~~~~~~~~ CHANNEL OPERATORS COMMANDS ~~~~~~~~~~~~~~~~~~~~~~~~~~//
 
