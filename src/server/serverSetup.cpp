@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 10:00:19 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/09/21 20:47:01 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/09/24 12:11:57 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,11 @@ ServerReactor::ServerReactor( int port, std::string password ) {
 	_serverName = "Ft_irc-server";
 	_serverSocket = -1;
 	_clientManager = ClientManager();
-	//_channelManager = ChannelManager();
+	_channelManager = ChannelManager();
 	_isShutdown = false;
 	_connectionPassword = password;
 	setupServerSocket(port);
 	createPropertiesMap();
-	
 	if (_serverSocket == -1)
 		writeServerError("socket", "Failed to create socket", errno);
 	_kq = kqueue();
