@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 10:00:19 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/09/19 02:51:06 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/09/21 20:47:01 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ CommandProperties::CommandProperties(int m, bool i) : mandatoryParams(m), ignore
 /*			CLASS DEFAULT FUNCTIONS			*/
 
 ServerReactor::ServerReactor( int port, std::string password ) {
+	_serverName = "Ft_irc-server";
 	_serverSocket = -1;
 	_clientManager = ClientManager();
 	//_channelManager = ChannelManager();
@@ -112,3 +113,6 @@ ChannelManager&	ServerReactor::getChannelManager(){
 	return (this->_channelManager);
 }
 
+string	ServerReactor::getServerName(){
+	return (this->_serverName);
+}

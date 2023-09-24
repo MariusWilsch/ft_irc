@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 10:02:20 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/09/19 02:52:14 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/09/24 12:02:34 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
 ChannelData::ChannelData( void ){
     _name = "";
     _topic = "";
+    _key = "";
+    _security = false;
     _clientSockets = set<int>();
     _operators = set<int>();
 }
@@ -33,6 +35,13 @@ string ChannelData::getTopic( void ) const{
     return (this->_topic );
 }
 
+bool    ChannelData::getSecurity(void) const{
+    return (this->_security);
+}
+
+string		ChannelData::getKey( void ) const{
+    return (this->_key);
+}
 set <int>   ChannelData::getClientSockets( void ) const{
     return (this->_clientSockets);
 }
@@ -51,6 +60,14 @@ void    ChannelData::setTopic(string topic){
     this->_topic = topic;
 }
 
+void		ChannelData::setSecurity( bool s){
+    this->_security = s;    
+}
+
+void		ChannelData::setKey (string key){
+    this->_key = key;
+}
+
 void ChannelData::addClient(int clientSocket){
     this->_clientSockets.insert(clientSocket);
 }
@@ -58,6 +75,15 @@ void ChannelData::addClient(int clientSocket){
 void ChannelData::addOperator(int clientSocket){
     this->_operators.insert(clientSocket);
 }
+
+void    ChannelData::removeClient(set<int>::iterator cl){
+    this->_clientSockets.erase(*cl);
+}
+
+void		ChannelData::removeOperator(set<int>::iterator op){
+    this->_operators.erase(*op);
+}
+
 
 /************************* ClientData methods ***************************/
 
@@ -68,12 +94,12 @@ bool ChannelData::isOperator(int clientSocket){
 }
 
 bool ChannelData::isCLient(int clientSocket){
-    if (_clientSockets.find(clientSocket) != _operators.end())
+    if (_clientSockets.find(clientSocket) != _clientSockets.end())
         return (true);
     return (false);
 }
 
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ CLIENT MANAGER	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~/
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ CHANNEL MANAGER	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~/
 
 ChannelManager::ChannelManager(){
     _channels = map<string, ChannelData>();
@@ -81,11 +107,23 @@ ChannelManager::ChannelManager(){
 
 ChannelManager::~ChannelManager(){};
 
+// Check channel existence before returning it.
 ChannelData& ChannelManager::getChannelByName(string name){
     map<string, ChannelData>::iterator it = _channels.find(name);
     return (it->second);
 }
 
-void ChannelManager::addChannel(string name, ChannelData channelData){
+map<string, ChannelData>&	ChannelManager::getChannels( void ){
+    return (this->_channels);
+}
+
+bool    ChannelManager::channelExistence(string name){
+    map<string, ChannelData>::iterator it = _channels.find(name);
+    if (it == _channels.end())
+        return (false);
+    return (true);
+}
+
+void ChannelManager::addChannel(string name, ChannelData &channelData){
     _channels.insert(std::pair<string, ChannelData>(name, channelData));
 }

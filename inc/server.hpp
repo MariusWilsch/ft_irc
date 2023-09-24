@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 15:04:15 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/09/19 02:51:27 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/09/20 20:34:25 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ struct CommandProperties {
  * @param _connectionPassword The password to connect to the server
  * @param _clientManager The client manager where all the clients are stored
  * @param _channelManager The channel manager where all the channels are stored
+ * @param _serverName The name of the server.
  */
 class ServerReactor {
 	private:
@@ -56,6 +57,7 @@ class ServerReactor {
 		int								_kq;
 		bool							_isShutdown;
 		string							_connectionPassword;
+		string							_serverName;
 		ClientManager					_clientManager;
 		ChannelManager					_channelManager;
 		map <string, CommandProperties> _properties;
@@ -84,8 +86,9 @@ class ServerReactor {
 		/*			COMMAND IMPLEMENTATION			*/
 
 		/* 					GETTERS					*/
-		ClientManager&	getClientManager();
-		ChannelManager&	getChannelManager();
+		ClientManager&	getClientManager( void );
+		ChannelManager&	getChannelManager( void );
+		string			getServerName( void );
 
 
 		/*			MAIN			*/

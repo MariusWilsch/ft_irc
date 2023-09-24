@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 15:07:18 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/09/16 18:19:55 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/09/21 19:09:14 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,11 @@
 #include <set>
 #include <map>
 #include <string>
+#include <vector>
 
 using std::string;
 using std::map;
 using std::set;
+using std::vector;
 using std::cout;
 using std::endl;

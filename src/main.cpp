@@ -3,14 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 09:59:41 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/08/22 18:52:18 by verdant          ###   ########.fr       */
+/*   Updated: 2023/09/20 16:12:59 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "server.hpp"
+
+/*
+	* parsing issues:
+		1 - Empty element in the end of the parameters vector
+*/
 
 int	main( int argc, char **argv )
 {
