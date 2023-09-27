@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 19:02:14 by ahammout          #+#    #+#             */
-/*   Updated: 2023/09/19 03:57:31 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/09/26 09:38:16 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,26 @@ void ExecuteCommands::execute(ServerReactor &_serverReactor, Message &ProcessMes
             }
             else if (ProcessMessage.getCommand().compare("JOIN") == 0){
                 join(_serverReactor, ProcessMessage, clientSocket);
+            }
+            else if (ProcessMessage.getCommand().compare("MODE") == 0){
+                cout << "Execute MODE command" << endl;
+                mode(_serverReactor, ProcessMessage, clientSocket);
+            }
+            //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
+            else if (ProcessMessage.getCommand().compare("TOPIC") == 0){
+                cout << "Execute TOPIC command" << endl;
+            }
+            else if (ProcessMessage.getCommand().compare("KICK") == 0){
+                cout << "Execute KICK command" << endl;
+            }
+            else if (ProcessMessage.getCommand().compare("INVITE") == 0){
+                cout << "Execute INVITE command" << endl;
+            }
+            else if (ProcessMessage.getCommand().compare("KICK") == 0){
+                cout << "Execute KICK command" << endl;
+            }
+            else if (ProcessMessage.getCommand().compare("PRIVMSG") == 0){
+                cout << "Execute PRIVMSG command" << endl;
             }
             //~~~~~~~~~~~~~~~~~~~~~~~~~~ CHANNEL OPERATORS COMMANDS ~~~~~~~~~~~~~~~~~~~~~~~~~~//
 

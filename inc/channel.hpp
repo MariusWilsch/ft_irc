@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 16:01:33 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/09/24 11:44:05 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/09/26 15:05:39 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,34 +31,41 @@ class ChannelData {
 		string	_topic;
 		string	_key;
 		bool	_security;
+		bool	_inviteOnly;
+		bool	_topicSet;
 		set <int> _clientSockets;
 		set <int> _operators;
+		set <int> _inviteList;
 
 	public:
-	ChannelData( void );
-	~ChannelData( void );
-	
-	/*			GETTERS			*/
-	string 		getName( void ) const;
-	string 		getTopic( void ) const;
-	bool		getSecurity( void ) const;
-	string		getKey( void ) const;
-	set <int> 	getClientSockets( void ) const;
-	set <int> 	getOperators( void ) const;
+		ChannelData( void );
+		~ChannelData( void );
+		
+		/*			GETTERS			*/
+		string 		getName( void ) const;
+		string 		getTopic( void ) const;
+		bool		getSecurity( void ) const;
+		string		getKey( void ) const;
+		bool		getTopicSet ( void ) const;
+		bool		getInviteFlag ( void )  const;
+		set <int> 	getClientSockets( void ) const;
+		set <int> 	getOperators( void ) const;
 
-	/*			SETTERS			 */
-	void 		setName( string name );
-	void 		setTopic( string topic );
-	void		setSecurity( bool s);
-	void		setKey (string key);
-	void		addClient( int clientSocket);
-	void		addOperator( int clientSocket);
+		/*			SETTERS			 */
+		void 		setName( string name );
+		void 		setTopic( string topic );
+		void		setSecurity( bool s);
+		void		setKey (string key);
+		void		setInviteFlag(bool stat);
+		void		setTopicSet(bool stat);
+		void		addClient( int clientSocket);
+		void		addOperator( int clientSocket);
 
-	/* 			ClientData methods			*/
-	bool		isOperator(int clientSocket);
-	bool		isCLient(int clinetSocket);
-	void    	removeClient(set<int>::iterator cl);
-	void		removeOperator(set<int>::iterator op);
+		/* 			ClientData methods			*/
+		bool		isOperator(int clientSocket);
+		bool		isCLient(int clinetSocket);
+		void    	removeClient(set<int>::iterator cl);
+		void		removeOperator(set<int>::iterator op);
 };
 
 class ChannelManager {
@@ -75,9 +82,9 @@ class ChannelManager {
 	map<string, ChannelData>&	getChannels( void );
 
 	/*			SETTERS			*/
-	void addChannel( string name, ChannelData &channelData );
+	void	addChannel( string name, ChannelData &channelData );
 
 	/*			METHODS			*/
 	bool			channelExistence(string name);
-	
+	bool			itsChannel( string name );
 };	

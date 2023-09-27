@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 10:02:20 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/09/24 12:02:34 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/09/26 15:10:50 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,15 @@ bool    ChannelData::getSecurity(void) const{
 string		ChannelData::getKey( void ) const{
     return (this->_key);
 }
+
+bool		ChannelData::getTopicSet ( void ) const{
+    return (this->_topicSet);
+}
+
+bool		ChannelData::getInviteFlag ( void )  const{
+    return (this->_inviteOnly);
+}
+
 set <int>   ChannelData::getClientSockets( void ) const{
     return (this->_clientSockets);
 }
@@ -67,6 +76,15 @@ void		ChannelData::setSecurity( bool s){
 void		ChannelData::setKey (string key){
     this->_key = key;
 }
+
+void    	ChannelData::setInviteFlag(bool stat){
+    this->_inviteOnly = stat;
+}
+
+void		ChannelData::setTopicSet(bool stat){
+    this->_topicSet = stat;
+}
+
 
 void ChannelData::addClient(int clientSocket){
     this->_clientSockets.insert(clientSocket);
@@ -126,4 +144,14 @@ bool    ChannelManager::channelExistence(string name){
 
 void ChannelManager::addChannel(string name, ChannelData &channelData){
     _channels.insert(std::pair<string, ChannelData>(name, channelData));
+}
+
+bool			ChannelManager::itsChannel( string name ){
+    if (name[0] == '#' || name[0] == '&' || name[0] == '!' || name[0] == '+')
+    {
+        name.erase(0, 1);
+        if (this->channelExistence(name))
+            return (true);
+    }
+    return (false);
 }

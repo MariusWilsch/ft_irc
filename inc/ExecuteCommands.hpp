@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 19:05:52 by ahammout          #+#    #+#             */
-/*   Updated: 2023/09/19 03:57:45 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/09/25 20:18:34 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,12 @@
 #include "server.hpp"
 #include "client.hpp"
 
+
+/*
+    * Start with implementing the commmand privmsg: the command takes <Target> <Message> as parameter.
+    * Example "PRIVMSG PrivateChnnel :  Wa hamid jiblya lizar li khdity, okhit byed"
+*/
+
 class Message;
 class ServerReactor;
 class ExecuteCommands
@@ -26,7 +32,7 @@ class ExecuteCommands
     ExecuteCommands();
     ~ExecuteCommands();
 
-    //*********************************** ATHENTICATION COMMANDS ***********************************//
+    //*********************************** AUTHENTICATION COMMANDS ***********************************//
     static void     execute(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket);
     static void     nick(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket);
     static void     user(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket);
@@ -34,7 +40,8 @@ class ExecuteCommands
 
     //*********************************** CHANNEL OPERATOR COMMANDS ***********************************//
     static void     join(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket);
-    
+    static void     mode(ServerReactor &_serverReactor, Message &ProccessMessage, int clientSocket);
+    static void     privmsg(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket);
 };
 
 #endif

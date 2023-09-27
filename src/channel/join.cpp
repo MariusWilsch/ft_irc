@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/24 12:13:30 by ahammout          #+#    #+#             */
-/*   Updated: 2023/09/24 12:18:28 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/09/27 16:01:01 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ void ExecuteCommands::join(ServerReactor &_serverReactor, Message &ProcessMessag
     if (stat == 0){
         map<string, ChannelData>::iterator  it;
         map<string, ChannelData> &m = _serverReactor.getChannelManager().getChannels();
-        for (it = m.begin(); it != m.end(); it++)
+        for (it = m.begin(); it != m.end();)
         {
             set<int>::iterator RemoveIt;
             // Remove client from channel mumbers (_clientSockets)
@@ -115,6 +115,12 @@ void ExecuteCommands::join(ServerReactor &_serverReactor, Message &ProcessMessag
             RemoveIt = it->second.getOperators().find(clientSocket);
             if (RemoveIt != it->second.getOperators().end())
                 it->second.removeOperator(RemoveIt);
+            // Remove the channel when all the users leaves it: "Do i need to take consideration to standard channels and safe channels??"
+            if (it->second.getOperators().size() == 0 && it->second.getClientSockets().size() == 0){
+                _serverReactor.getChannelManager().getChannels().erase(it++);
+            }
+            else
+                ++it;
         }
     }
     for (unsigned int i = 0; i < ChannelNames.size(); i++){
@@ -133,11 +139,16 @@ void ExecuteCommands::join(ServerReactor &_serverReactor, Message &ProcessMessag
             Joined = true;
             cout << "The channel <" << _serverReactor.getChannelManager().getChannelByName(ChannelNames[i]).getName() << "> Has been created by " << _serverReactor.getClientManager().getClientData(clientSocket).getUsername() << std::endl;
         }
-        
         // Channel is exist, Check Security cases, and inform all the channels clients.
         else {
             ChannelData& Channel = _serverReactor.getChannelManager().getChannelByName(ChannelNames[i]);
             if (!Channel.isCLient(clientSocket)){
+                if (Channel.getInviteFlag()){
+                    if (!Channel.isInvited(clientSocket)){
+                        // Don't accecpt it's joining to channel.
+                    }
+                }
+                // The channel is private.
                 if (Channel.getSecurity() == true){
                     if (ChannelKeys.size() >= 1 && (ChannelKeys[i].c_str() != NULL)){
                         if (Channel.getKey().compare(ChannelKeys[i]) == 0)
@@ -156,7 +167,7 @@ void ExecuteCommands::join(ServerReactor &_serverReactor, Message &ProcessMessag
                         }
                     }
                 }
-                // The channel is public
+                // The channel is public.
                 else{
                     if (ChannelKeys.size() >= 1 && (ChannelKeys[i].empty())){
                             Channel.addClient(clientSocket);
@@ -176,9 +187,9 @@ void ExecuteCommands::join(ServerReactor &_serverReactor, Message &ProcessMessag
                     // Inform all the Clients inside the channel that the current client has been joined the channel.
                     cout << "The client <" << _serverReactor.getClientManager().getClientData(clientSocket).getUsername() << "> Has joined the channel " << _serverReactor.getChannelManager().getChannelByName(ChannelNames[i]).getName() << std::endl;
                     string message = _serverReactor.getClientManager().getClientData(clientSocket).getUsername();
-                    message.append(" has joined the Channel (> ");
+                    message.append(" has joined the Channel # ");
                     message.append(Channel.getName());
-                    message.append(")\n");
+                    message.append("\n");
                     set <int> s = Channel.getClientSockets();
                     for (set<int>::iterator it = s.begin() ; it !=  s.end() ; it++){
                         if (*it != clientSocket)

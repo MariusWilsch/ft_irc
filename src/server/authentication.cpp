@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 00:53:10 by ahammout          #+#    #+#             */
-/*   Updated: 2023/09/19 03:31:00 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/09/26 18:43:01 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ void ExecuteCommands::nick(ServerReactor &_serverReactor, Message &ProcessMessag
         {
             string n;
 
-            string message = " <fantastc-server> ";
+            string message = "<fantastc-server> ";
             n = _serverReactor.getClientManager().getClientData(clientSocket).getNickname();
             n.erase(remove(n.begin(), n.end(), '\n'), n.end());
             message.append(n);
@@ -112,6 +112,7 @@ void     ExecuteCommands::user(ServerReactor &_serverReactor, Message &ProcessMe
             _serverReactor.getClientManager().getClientData(clientSocket).setRealname(ProcessMessage.getTrailing());
             _serverReactor.getClientManager().getClientData(clientSocket).setRegistration(true);
             
+            // ~~~~~~~~~~~~~~~~~~~ INFORM THE SERVER  ~~~~~~~~~~~~~~~~~~~ // 
             std::cout<< "User informations: \n" << std::endl << "USERNAME: " << _serverReactor.getClientManager().getClientData(clientSocket).getUsername() << std::endl;
             std::cout << "MODE: " << _serverReactor.getClientManager().getClientData(clientSocket).getMode() << std::endl;
             std::cout << "UNUSED: " << _serverReactor.getClientManager().getClientData(clientSocket).getUnused() << std::endl;

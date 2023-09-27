@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 10:17:06 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/09/19 02:51:21 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/09/27 15:37:39 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,4 +88,5 @@ void	ServerReactor::run( void )
 			// 	handleOutgoingMessage(fd);
 		}
 	}
+	cout << "Server: " << this->_serverName << " is shutdown." << endl;
 }
