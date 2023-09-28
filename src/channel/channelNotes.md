@@ -8,8 +8,8 @@
     + MODE command with option that affect a specific user:
         * +/- o : Channel operator privilege.
     + MODE command with option that affect the whole channel;
-        * +/- i : Invel only channel.
+    √    * +/- i : Invel only channel.
         * -/+ t : the restrictions of the TOPIC command to channel operators.
-        * -/+ k : The channel key (password).
+    √    * -/+ k : The channel key (password).
         * -/+ l : The user limit to channel.
     

@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 19:02:14 by ahammout          #+#    #+#             */
-/*   Updated: 2023/09/28 21:34:41 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/09/28 22:47:43 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,14 +55,9 @@ void ExecuteCommands::execute(ServerReactor &_serverReactor, Message &ProcessMes
             else if (ProcessMessage.getCommand().compare("KICK") == 0){
                 cout << "Execute KICK command" << endl;
             }
-            else if (ProcessMessage.getCommand().compare("KICK") == 0){
-                cout << "Execute KICK command" << endl;
-            }
             else if (ProcessMessage.getCommand().compare("PRIVMSG") == 0){
                 cout << "Execute PRIVMSG command" << endl;
             }
-            //~~~~~~~~~~~~~~~~~~~~~~~~~~ CHANNEL OPERATORS COMMANDS ~~~~~~~~~~~~~~~~~~~~~~~~~~//
-
         }
     }
     catch (std::exception &ex){}

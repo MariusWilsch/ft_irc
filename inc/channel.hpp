@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 16:01:33 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/09/28 21:28:40 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/09/28 22:29:38 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,22 +80,21 @@ class ChannelData {
 class ChannelManager {
 	private:
 		map<string, ChannelData>	_channels;
-		// ServerReactor&				_serverReactor;
 
 	public:
-	/*			CLASS DEFAULT FUNCTIONS			*/
-	
-		ChannelManager( void );
-		~ChannelManager( void );
+		/*			CLASS DEFAULT FUNCTIONS			*/
 		
-	/*			GETTERS			*/
-	ChannelData&				getChannelByName( string name );
-	map<string, ChannelData>&	getChannels( void );
+			ChannelManager( void );
+			~ChannelManager( void );
+			
+		/*			GETTERS			*/
+		ChannelData&				getChannelByName( string name );
+		map<string, ChannelData>&	getChannels( void );
 
-	/*			SETTERS			*/
-	void	addChannel( string name, ChannelData &channelData );
+		/*			SETTERS			*/
+		void	addChannel( string name, ChannelData &channelData );
 
-	/*			METHODS			*/
-	bool			channelExistence(string name);
-	bool			itsChannel( string name );
+		/*			METHODS			*/
+		bool			channelExistence(string name);
+		bool			itsChannel( string name );
 };	

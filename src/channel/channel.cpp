@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 10:02:20 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/09/28 22:08:12 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/09/28 22:30:01 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,6 @@ ChannelManager::ChannelManager(){
 
 ChannelManager::~ChannelManager(){};
 
-// Check channel existence before returning it.
 ChannelData& ChannelManager::getChannelByName(string name){
     map<string, ChannelData>::iterator it = _channels.find(name);
     return (it->second);

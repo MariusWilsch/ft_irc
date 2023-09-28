@@ -6,17 +6,18 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 20:17:01 by ahammout          #+#    #+#             */
-/*   Updated: 2023/09/27 15:47:57 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/09/28 22:49:04 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ExecuteCommands.hpp"
 
-// Cut new line from the strings of all the element of the vector.
+//! Is all the members of the channel have the permission to change the channel modes.
 
 // ~~~~~~~~~~~~~ ONLY THE OPERATORS ARE ALLOWED TO PERFORM SUCH OPERATION ~~~~~~~~~~/ 
 void    inviteOnly(ServerReactor &_serverReactor, Message &ProccessMessage, int clientSocket)
 {
+    //* Example: mode #PrivateChannel [+/-] i
     if (ProccessMessage.getParams().size() == 2){
         string mode = ProccessMessage.getParams()[1];
         mode.erase(remove(mode.begin(), mode.end(), '\n'), mode.end());
@@ -62,14 +63,8 @@ void    inviteOnly(ServerReactor &_serverReactor, Message &ProccessMessage, int 
 
 }
 
-
-/*
-    mode effect on channel:
-        + To join the channel need to check the secure flag of the channel if it's on "1" means it's necessary to provide a key
-        + if the flag is off "0" means there is no need to provide a key to join the channel.
-*/
+//* Example: mode #PrivateChannel [+/-] o
 void    SecureChannel(ServerReactor &_serverReactor, Message &ProccessMessage, int clientSocket){
-    //* Example: mode #PrivateChannel [+/-] o
     if (ProccessMessage.getParams().size() == 3 || ProccessMessage.getParams().size() == 2){
         string mode = ProccessMessage.getParams()[1];
         mode.erase(remove(mode.begin(), mode.end(), '\n'), mode.end());
@@ -116,29 +111,39 @@ void    SecureChannel(ServerReactor &_serverReactor, Message &ProccessMessage, i
     }
 }
 
+void    ChannelOperatorPrivilege(ServerReactor &_serverReactor, Message &ProccessMessage, int clientSocket){
+    cout << "Give the Privilege" << endl;
+}
+
+//* Parameters: <channel> {[+|-]|o|p|s|i|t|n|b|v} [<limit>] [<user>] [<ban mask>]
 void     ExecuteCommands::mode(ServerReactor &_serverReactor, Message &ProccessMessage, int clientSocket)
 {
-    // Check the syntax of the parameters befor executing the command
-    //* Parameters: <channel> {[+|-]|o|p|s|i|t|n|b|v} [<limit>] [<user>] [<ban mask>]
-    //* Example: mode #PrivateChannel [+/-] i
-    // for (unsigned int i = 0; i < ProccessMessage.getParams().size(); i++){
-    //     cout << ProccessMessage.getParams()[i] << endl;
-    // }
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ MODES THAT AFFECTS ONLY THE CHANNEL ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
-    // Invite list mode : [+i] [-i]
-    string mode = ProccessMessage.getParams()[1];
-    mode.erase(remove(mode.begin(), mode.end(), '\n'), mode.end());
-    if (mode.compare("+i") == 0 || mode.compare("-i") == 0){
-        inviteOnly(_serverReactor, ProccessMessage, clientSocket);
+    if (ProccessMessage.getParams().size() >= 2){
+        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ MODES THAT AFFECTS ONLY THE CHANNEL ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
+        string mode = ProccessMessage.getParams()[1];
+        mode.erase(remove(mode.begin(), mode.end(), '\n'), mode.end());
+        if (mode.compare("+i") == 0 || mode.compare("-i") == 0){
+            inviteOnly(_serverReactor, ProccessMessage, clientSocket);
+        }
+        else if (mode.compare("+k") == 0 || mode.compare("-k") == 0){
+            SecureChannel(_serverReactor, ProccessMessage, clientSocket);
+        }
+        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ MODES THAT AFFECTS THE USERS INSIDE THE CHANNEL ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
+        else if (mode.compare("+o") == 0 || mode.compare("-o") == 0){
+            ChannelOperatorPrivilege(_serverReactor, ProccessMessage, clientSocket);
+        }
+        else{
+            string buffer = "error(472): ";
+            buffer.append(mode);
+            buffer.append(": is unknown mode char to me");
+            buffer.append("\n");
+            send(clientSocket, buffer.c_str(), buffer.size(), 0);
+            throw std::exception();
+        }
     }
-    else if (mode.compare("+k") == 0 || mode.compare("-k") == 0){
-        SecureChannel(_serverReactor, ProccessMessage, clientSocket);
-    }
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ MODES THAT AFFECTS THE USERS INSIDE THE CHANNEL ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
     else{
-        string buffer = "error(472): ";
-        buffer.append(mode);
-        buffer.append(": is unknown mode char to me");
+        string buffer = "error(461):";
+        buffer.append(" Not enough parameters");
         buffer.append("\n");
         send(clientSocket, buffer.c_str(), buffer.size(), 0);
         throw std::exception();

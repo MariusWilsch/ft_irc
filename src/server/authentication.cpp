@@ -6,20 +6,17 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 00:53:10 by ahammout          #+#    #+#             */
-/*   Updated: 2023/09/26 18:43:01 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/09/28 22:32:47 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ExecuteCommands.hpp"
 
-// void    ExecuteCommands::user(std::string userName);
-
 bool    NickNameValidation(string param)
 {
     int a = 0;
 
-    for (unsigned int i = 0; i < param.size(); i++)
-    {
+    for (unsigned int i = 0; i < param.size(); i++){
         if (isalpha(param[i]))
             a ++;
     }
@@ -32,7 +29,6 @@ bool    NickNameValidation(string param)
 void ExecuteCommands::nick(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket)
 {
     string err;
-
 
     if (ProcessMessage.getParams().empty())
     {
