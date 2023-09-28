@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/24 12:13:30 by ahammout          #+#    #+#             */
-/*   Updated: 2023/09/27 16:01:01 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/09/28 22:09:50 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int splitParams(std::vector<string> &ChannelNames, std::vector<string> &ChannelK
         param.erase(std::remove(param.begin(), param.end(), '\n'), param.end());
         unsigned int c = advParam(param);
         if (c == 0){
-            if (param[0] == '#' || param[0] == '&' || param[0] == '+' || param[0] == '!'){
+            if (param[0] == '#'){
                 param.erase(0, 1);
                 ChannelNames.push_back(param);
             }
@@ -69,7 +69,7 @@ int splitParams(std::vector<string> &ChannelNames, std::vector<string> &ChannelK
                 sub.erase(std::remove(sub.begin(), sub.end(), ' '), sub.end());
                 param = param.substr(e + 1);
             
-                if (sub[0] == '#' || sub[0] == '&' || sub[0] == '+' || sub[0] == '!'){
+                if (sub[0] == '#'){
                     sub.erase(0, 1);
                     ChannelNames.push_back(sub);
                 }
@@ -144,8 +144,13 @@ void ExecuteCommands::join(ServerReactor &_serverReactor, Message &ProcessMessag
             ChannelData& Channel = _serverReactor.getChannelManager().getChannelByName(ChannelNames[i]);
             if (!Channel.isCLient(clientSocket)){
                 if (Channel.getInviteFlag()){
-                    if (!Channel.isInvited(clientSocket)){
+                    if (!Channel.isInvited(_serverReactor.getClientManager().getClientData(clientSocket).getNickname())){
                         // Don't accecpt it's joining to channel.
+                        string buffer = "error: ";
+                        buffer.append(" this channel is Invite only");
+                        buffer.append("\n");
+                        send(clientSocket, buffer.c_str(), buffer.size(), 0);
+                        throw std::exception();
                     }
                 }
                 // The channel is private.

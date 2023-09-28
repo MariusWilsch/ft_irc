@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 10:02:23 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/09/19 03:29:24 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/09/28 21:53:02 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,13 +103,13 @@ void	ClientData::setPassword(string pass){
 	this->_password = pass;
 }
 
-/*			CLASS DEFAULT FUNCTIONS: CLIENT MANAGER			*/
+/*					CLIENT MANAGER						*/
 
 ClientManager::ClientManager( void ) {};
 
 ClientManager::~ClientManager() {};
 
-/*			MEMBER FUNCTIONS			*/
+/*					MEMBER FUNCTIONS					*/
 
 void	ClientManager::addClient( int clientSocket)
 {
@@ -124,15 +124,24 @@ void	ClientManager::removeClient( int clientSocket )
 	_ClientsBySocket.erase(clientSocket);
 }
 
-
-//*
 ClientData& ClientManager::getClientData( int clientSocket )
 {
 	map<int, ClientData>::iterator it =  this->_ClientsBySocket.find(clientSocket);
 	return (it->second);
 }
 
-
 map<int, ClientData>&				ClientManager::getClientBySocket(){
 	return (this->_ClientsBySocket);
+}
+
+bool	ClientManager::MatchNickName(set <int> ChannelMembers, string nickname){
+	for (set<int>::iterator it = ChannelMembers.begin(); it != ChannelMembers.end(); it++){
+		map <int, ClientData>::iterator client = _ClientsBySocket.find(*it);
+		if (client != _ClientsBySocket.end()){
+			if (client->second.getNickname().compare(nickname) == 0){
+				return (true);
+			}
+		}
+	}
+	return (false);
 }

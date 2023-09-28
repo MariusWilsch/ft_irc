@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 10:02:20 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/09/26 15:10:50 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/09/28 22:08:12 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,10 @@ set <int>   ChannelData::getOperators( void ) const{
     return (this->_operators);
 }
 
+set <string>	ChannelData::getInviteList( void ) const{
+    return (this->_inviteList);
+}
+
 /********************** SETTERS	***********************/
 
 void    ChannelData::setName(string name){
@@ -94,6 +98,10 @@ void ChannelData::addOperator(int clientSocket){
     this->_operators.insert(clientSocket);
 }
 
+void		ChannelData::addGuest( string nickName){
+    this->_inviteList.insert(nickName);
+}
+
 void    ChannelData::removeClient(set<int>::iterator cl){
     this->_clientSockets.erase(*cl);
 }
@@ -117,6 +125,11 @@ bool ChannelData::isCLient(int clientSocket){
     return (false);
 }
 
+bool		ChannelData::isInvited(string nickName){
+    if (_inviteList.find(nickName) != _inviteList.end())
+        return (true);
+    return (false);
+}
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ CHANNEL MANAGER	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~/
 
 ChannelManager::ChannelManager(){
@@ -147,7 +160,7 @@ void ChannelManager::addChannel(string name, ChannelData &channelData){
 }
 
 bool			ChannelManager::itsChannel( string name ){
-    if (name[0] == '#' || name[0] == '&' || name[0] == '!' || name[0] == '+')
+    if (name[0] == '#')
     {
         name.erase(0, 1);
         if (this->channelExistence(name))

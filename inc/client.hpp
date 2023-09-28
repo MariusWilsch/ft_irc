@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 15:30:13 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/09/19 03:21:29 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/09/28 21:45:31 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,4 +99,10 @@ class ClientManager {
 
 		ClientData&							getClientData( int clientSocket );
 		map<int, ClientData>&				getClientBySocket();
+		
+		/*			METHODS			*/
+		// Repreduce a method that takes two parameters: 1 - a set of client socket 2 - a nick name,
+		// search for each the client socket from the set inside the map of _ClientsBySocket  and then check if the nick name is matched
+		// if the nick name founded in the given socket id which represent a member of a channel it means that, the user is a memeber.
+		bool	MatchNickName(set <int> ChannelMembers, string nickname);
 };

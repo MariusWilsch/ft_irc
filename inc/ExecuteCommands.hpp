@@ -6,14 +6,14 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 19:05:52 by ahammout          #+#    #+#             */
-/*   Updated: 2023/09/25 20:18:34 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/09/28 15:26:50 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef EXECUTECOMMANDS_HPP
 #define EXECUTECOMMANDS_HPP
 
-#include<iostream>
+#include <iostream>
 #include "message.hpp"
 #include "server.hpp"
 #include "client.hpp"
@@ -41,6 +41,7 @@ class ExecuteCommands
     //*********************************** CHANNEL OPERATOR COMMANDS ***********************************//
     static void     join(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket);
     static void     mode(ServerReactor &_serverReactor, Message &ProccessMessage, int clientSocket);
+    static void     invite(ServerReactor &_serverReactor, Message &ProccessMessage, int clientSocket);
     static void     privmsg(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket);
 };
 
