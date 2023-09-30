@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   serverMessage.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 13:27:34 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/09/17 13:11:19 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/09/30 16:26:32 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ Message::~Message( void ) {};
 Message::Message( string rawMessage, map <string, CommandProperties> properties ) : _rawMessage(rawMessage), _properties(properties) {
 	
 	_isFatal = false;
+	// Earse \r\n
+	
 	// Parse raw message
 	extractCommand( );
 	extractTrailing( );
@@ -63,14 +65,15 @@ string	Message::getTrailing( void ){
 
 void Message::printData( void )
 {
-	std::cout << "Prefix: " << _prefix << std::endl;
-	std::cout << "Command: " << _command << std::endl;
-	std::cout << "Params: ";
-	for (std::vector<string>::iterator it = _params.begin(); it != _params.end(); ++it)
-	{
-		std::cout << *it << " ";
-		if (it == _params.end() - 1)
-			std::cout << std::endl;
-	}
-	std::cout << "Trailing: " << _trailing << std::endl;
+	// std::cout << "Size of params vec: " << _params.size() << endl;
+	// std::cout << "Prefix: " << _prefix << std::endl;
+	// std::cout << "Command: " << _command << std::endl;
+	// std::cout << "Params: ";
+	// for (std::vector<string>::iterator it = _params.begin(); it != _params.end(); ++it)
+	// {
+	// 	std::cout << "|" << *it << "| ";
+	// 	if (it == _params.end() - 1)
+	// 		std::cout << std::endl;
+	// }
+	// std::cout << "Trailing: " << _trailing << std::endl;
 }

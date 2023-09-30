@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   commandsExecution.cpp                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 19:02:14 by ahammout          #+#    #+#             */
-/*   Updated: 2023/09/30 13:44:12 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/09/30 14:58:46 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,9 @@ void ExecuteCommands::execute(ServerReactor &_serverReactor, Message &ProcessMes
             else if (ProcessMessage.getCommand().compare("INVITE") == 0){
                 invite(_serverReactor, ProcessMessage, clientSocket);
             }
-            else if (ProcessMessage.getCommand().compare("TOPIC") == 0){
-=                topic(_serverReactor, ProcessMessage, clientSocket);
-            }
+//             else if (ProcessMessage.getCommand().compare("TOPIC") == 0){
+// =                topic(_serverReactor, ProcessMessage, clientSocket);
+//             }
             //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
             else if (ProcessMessage.getCommand().compare("KICK") == 0){
                 cout << "Execute KICK command" << endl;
