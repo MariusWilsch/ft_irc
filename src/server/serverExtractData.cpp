@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   serverExtractData.cpp                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 14:08:52 by verdant           #+#    #+#             */
-/*   Updated: 2023/08/22 19:18:11 by verdant          ###   ########.fr       */
+/*   Updated: 2023/09/30 16:38:24 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,8 @@ void	Message::extractParams( void )
 		return;
 	while (std::getline(tokenStream, token, ' '))
 	{
-		if (!token.empty())
+		if (!token.empty() && token != "\n")
 			_params.push_back(token);
 	}
+	cout << _params.size() << endl;
 }

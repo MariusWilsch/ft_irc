@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   serverEvents.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 10:17:06 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/09/27 15:37:39 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/09/30 16:38:06 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	ServerReactor::recieveIncomingMessage( int clientSocket )
 
 	//****************************************************************************************/
 	// initialize all the clients by giving them a default authentication.
-	ExecuteCommands::execute(*this, processMessage, clientSocket);
+	// ExecuteCommands::execute(*this, processMessage, clientSocket);
 }
 
 void	ServerReactor::acceptNewClient( void )
