@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 19:05:52 by ahammout          #+#    #+#             */
-/*   Updated: 2023/09/28 15:26:50 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/09/30 13:42:38 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ class ExecuteCommands
     static void     join(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket);
     static void     mode(ServerReactor &_serverReactor, Message &ProccessMessage, int clientSocket);
     static void     invite(ServerReactor &_serverReactor, Message &ProccessMessage, int clientSocket);
+    static void     topic(ServerReactor &_ServerReactor, Message &ProcessMessage, int clientSocket);
     static void     privmsg(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket);
 };
 

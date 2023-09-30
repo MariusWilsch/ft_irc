@@ -6,13 +6,20 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 20:17:01 by ahammout          #+#    #+#             */
-/*   Updated: 2023/09/28 22:49:04 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/09/30 13:35:53 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ExecuteCommands.hpp"
 
 //! Is all the members of the channel have the permission to change the channel modes.
+
+void    informMembers(set <int> clientSockets, string message, int clientSocket){
+        for (set<int>::iterator it = clientSockets.begin() ; it !=  clientSockets.end() ; it++){
+            if (*it != clientSocket)
+                send(*it, message.c_str(), message.size(), 0);
+        }
+}
 
 // ~~~~~~~~~~~~~ ONLY THE OPERATORS ARE ALLOWED TO PERFORM SUCH OPERATION ~~~~~~~~~~/ 
 void    inviteOnly(ServerReactor &_serverReactor, Message &ProccessMessage, int clientSocket)
@@ -35,11 +42,7 @@ void    inviteOnly(ServerReactor &_serverReactor, Message &ProccessMessage, int 
                 message.append(" has changed mode: ");
                 message.append(mode);
                 message.append("\n");
-                set <int> s = _serverReactor.getChannelManager().getChannelByName(channelName).getClientSockets();
-                for (set<int>::iterator it = s.begin() ; it !=  s.end() ; it++){
-                    if (*it != clientSocket)
-                        send(*it, message.c_str(), message.size(), 0);
-                }
+                informMembers(_serverReactor.getChannelManager().getChannelByName(channelName).getClientSockets(), message, clientSocket);
             }
             else{
                 string buffer = "error(482): ";
@@ -63,8 +66,8 @@ void    inviteOnly(ServerReactor &_serverReactor, Message &ProccessMessage, int 
 
 }
 
-//* Example: mode #PrivateChannel [+/-] o
-void    SecureChannel(ServerReactor &_serverReactor, Message &ProccessMessage, int clientSocket){
+//* Example: mode #PrivateChannel [+/-] k
+void    secureChannel(ServerReactor &_serverReactor, Message &ProccessMessage, int clientSocket){
     if (ProccessMessage.getParams().size() == 3 || ProccessMessage.getParams().size() == 2){
         string mode = ProccessMessage.getParams()[1];
         mode.erase(remove(mode.begin(), mode.end(), '\n'), mode.end());
@@ -81,8 +84,15 @@ void    SecureChannel(ServerReactor &_serverReactor, Message &ProccessMessage, i
                     _serverReactor.getChannelManager().getChannelByName(channelName).setSecurity(true);
                     _serverReactor.getChannelManager().getChannelByName(channelName).setKey(key);
                 }
-                else if (mode.compare("-k") == 0 && ProccessMessage.getParams().size() == 2)
+                else if (mode.compare("-k") == 0 && ProccessMessage.getParams().size() == 2){
                     _serverReactor.getChannelManager().getChannelByName(channelName).setSecurity(false);
+                    _serverReactor.getChannelManager().getChannelByName(channelName).setKey("");
+                }
+                string message = _serverReactor.getClientManager().getClientData(clientSocket).getUsername();
+                message.append(" has changed mode: ");
+                message.append(mode);
+                message.append("\n");
+                informMembers(_serverReactor.getChannelManager().getChannelByName(channelName).getClientSockets(), message, clientSocket);
             }
             else{
                 string buffer = "error(482): ";
@@ -115,6 +125,51 @@ void    ChannelOperatorPrivilege(ServerReactor &_serverReactor, Message &Procces
     cout << "Give the Privilege" << endl;
 }
 
+//* Example: mode #PrivateChannel [+/-] t
+void    setTopic(ServerReactor &_serverReactor, Message &ProccessMessage, int clientSocket){
+    if (ProccessMessage.getParams().size() == 3 || ProccessMessage.getParams().size() == 2){
+        string mode = ProccessMessage.getParams()[1];
+        mode.erase(remove(mode.begin(), mode.end(), '\n'), mode.end());
+        if (_serverReactor.getChannelManager().itsChannel(ProccessMessage.getParams()[0])){
+            string channelName = ProccessMessage.getParams()[0];
+            string topic;
+            channelName.erase(0, 1);
+            if (ProccessMessage.getParams().size() == 3){
+                topic = ProccessMessage.getParams()[2];
+                topic.erase(remove(topic.begin(), topic.end(), '\n'), topic.end());
+            }
+            if (mode.compare("+t") && !topic.empty()){
+                _serverReactor.getChannelManager().getChannelByName(channelName).setTopicFlag(true);
+                _serverReactor.getChannelManager().getChannelByName(channelName).setTopic(topic);
+            }
+            else if (mode.compare("-t")){
+                _serverReactor.getChannelManager().getChannelByName(channelName).setTopicFlag(false);
+                _serverReactor.getChannelManager().getChannelByName(channelName).setTopic("");
+            }
+            string message = _serverReactor.getClientManager().getClientData(clientSocket).getUsername();
+            message.append(" has changed mode: ");
+            message.append(mode);
+            message.append("\n");
+            informMembers(_serverReactor.getChannelManager().getChannelByName(channelName).getClientSockets(), message, clientSocket);
+        }
+        else{
+            string buffer = "error(403): ";
+            buffer.append(ProccessMessage.getParams()[0]);
+            buffer.append(" :No such channel");
+            buffer.append("\n");
+            send(clientSocket, buffer.c_str(), buffer.size(), 0);
+            throw std::exception();
+        }
+    }
+    else{
+        string buffer = "error(461): ";
+        buffer.append(" Not enough parameters");
+        buffer.append("\n");
+        send(clientSocket, buffer.c_str(), buffer.size(), 0);
+        throw std::exception();
+    }
+}
+
 //* Parameters: <channel> {[+|-]|o|p|s|i|t|n|b|v} [<limit>] [<user>] [<ban mask>]
 void     ExecuteCommands::mode(ServerReactor &_serverReactor, Message &ProccessMessage, int clientSocket)
 {
@@ -126,7 +181,10 @@ void     ExecuteCommands::mode(ServerReactor &_serverReactor, Message &ProccessM
             inviteOnly(_serverReactor, ProccessMessage, clientSocket);
         }
         else if (mode.compare("+k") == 0 || mode.compare("-k") == 0){
-            SecureChannel(_serverReactor, ProccessMessage, clientSocket);
+            secureChannel(_serverReactor, ProccessMessage, clientSocket);
+        }
+        else if (mode.compare("+t") == 0 || mode.compare("-t") == 0){
+            setTopic(_serverReactor, ProccessMessage, clientSocket);
         }
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ MODES THAT AFFECTS THE USERS INSIDE THE CHANNEL ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
         else if (mode.compare("+o") == 0 || mode.compare("-o") == 0){

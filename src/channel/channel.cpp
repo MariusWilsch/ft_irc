@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 10:02:20 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/09/28 22:30:01 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/09/30 13:22:20 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ string		ChannelData::getKey( void ) const{
     return (this->_key);
 }
 
-bool		ChannelData::getTopicSet ( void ) const{
+bool		ChannelData::getTopicFlag ( void ) const{
     return (this->_topicSet);
 }
 
@@ -85,7 +85,7 @@ void    	ChannelData::setInviteFlag(bool stat){
     this->_inviteOnly = stat;
 }
 
-void		ChannelData::setTopicSet(bool stat){
+void		ChannelData::setTopicFlag(bool stat){
     this->_topicSet = stat;
 }
 
