@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 10:17:06 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/09/30 16:12:34 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/02 17:24:24 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,11 @@ void	ServerReactor::recieveIncomingMessage( int clientSocket )
 	int			bytesRead;
 	char		buffer[1024];
 	string		message;
-	size_t		pos;
 
-	pos = 0;
-	while (pos != string::npos)
+	while (1)
 	{
 		bytesRead = recv(clientSocket, &buffer, 1023, 0);
+			std::cout << "Message: " << message << std::endl;
 		if (bytesRead == -1 && errno != EAGAIN && errno != EWOULDBLOCK)
 			writeServerError("recv", "Failed to receive message", errno);
 		if (bytesRead == 0)
@@ -34,18 +33,17 @@ void	ServerReactor::recieveIncomingMessage( int clientSocket )
 			_clientManager.removeClient(clientSocket);
 			return ;
 		}
-		buffer[bytesRead] = '\0';
 		message.append(buffer);
-		pos = message.find("\r\n");
 		memset(buffer, 0, bytesRead);
+		if (message.find("\n") != string::npos)
+			break;
 	}
-	std::cout << "Message: " << message << std::endl;
 	Message processMessage(message, _properties);
 	// TODO: Implement command execution
 
 	//****************************************************************************************/
 	// initialize all the clients by giving them a default authentication.
-	// ExecuteCommands::execute(*this, processMessage, clientSocket);
+	ExecuteCommands::execute(*this, processMessage, clientSocket);
 }
 
 void	ServerReactor::acceptNewClient( void )

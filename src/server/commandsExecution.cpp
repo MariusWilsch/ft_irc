@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 19:02:14 by ahammout          #+#    #+#             */
-/*   Updated: 2023/09/30 14:58:46 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/02 17:30:54 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ void ExecuteCommands::execute(ServerReactor &_serverReactor, Message &ProcessMes
             }
             else if (ProcessMessage.getCommand().compare("PRIVMSG") == 0){
                 cout << "Execute PRIVMSG command" << endl;
+								privmsg(_serverReactor, ProcessMessage, clientSocket);
             }
         }
     }

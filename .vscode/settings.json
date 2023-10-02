@@ -7,8 +7,7 @@
 		"algorithm": "cpp",
 		"string": "cpp",
 		"iosfwd": "cpp",
-		"vector": "cpp",
-		"sstream": "cpp"
+		"system_error": "cpp"
 	},
   "C_Cpp_Runner.cCompilerPath": "clang",
   "C_Cpp_Runner.cppCompilerPath": "clang++",
