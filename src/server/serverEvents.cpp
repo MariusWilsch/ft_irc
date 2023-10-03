@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 10:17:06 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/02 17:24:24 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/03 11:12:52 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,15 @@ void	ServerReactor::recieveIncomingMessage( int clientSocket )
 			return ;
 		}
 		message.append(buffer);
+		cout << "Message: " << message << endl;
 		memset(buffer, 0, bytesRead);
 		if (message.find("\n") != string::npos)
 			break;
 	}
+
+
+	// cout << "In ServerReactor::recieveIncomingMessage: " << message << endl;
+	
 	Message processMessage(message, _properties);
 	// TODO: Implement command execution
 

@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 14:08:52 by verdant           #+#    #+#             */
-/*   Updated: 2023/10/03 10:56:01 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/03 11:06:19 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ void	Message::extractCommand( void  )
 		_rawMessage.erase(0, pos + _command.length());
 		
 	_command = token;
+
 }
 
 void	Message::extractTrailing( void  )

@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 13:27:34 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/03 10:53:59 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/03 11:27:54 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,11 @@ Message::~Message( void ) {};
 Message::Message( string rawMessage, map <string, CommandProperties> properties ) : _rawMessage(rawMessage), _properties(properties) {
 
 	_isFatal = false;
-	// Earse \n
+	// Earse \n // TODO: I later need to figure out what to do with \r\n at the end of messages
 	rawMessage.erase(std::remove(rawMessage.begin(), rawMessage.end(), '\n'), rawMessage.end());
+
+
+	// cout << "In Message constructor: " << rawMessage << endl;
 
 	// Parse raw message
 	extractCommand( );
@@ -66,15 +69,15 @@ string	Message::getTrailing( void ){
 
 void Message::printData( void )
 {
-	// std::cout << "Size of params vec: " << _params.size() << endl;
-	// std::cout << "Prefix: " << _prefix << std::endl;
-	// std::cout << "Command: " << _command << std::endl;
-	// std::cout << "Params: ";
-	// for (std::vector<string>::iterator it = _params.begin(); it != _params.end(); ++it)
-	// {
-	// 	std::cout << "|" << *it << "| ";
-	// 	if (it == _params.end() - 1)
-	// 		std::cout << std::endl;
-	// }
-	// std::cout << "Trailing: " << _trailing << std::endl;
+	std::cout << "Size of params vec: " << _params.size() << endl;
+	std::cout << "Prefix: " << _prefix << std::endl;
+	std::cout << "Command: " << _command << std::endl;
+	std::cout << "Params: ";
+	for (std::vector<string>::iterator it = _params.begin(); it != _params.end(); ++it)
+	{
+		std::cout << "|" << *it << "| ";
+		if (it == _params.end() - 1)
+			std::cout << std::endl;
+	}
+	std::cout << "Trailing: " << _trailing << std::endl;
 }
