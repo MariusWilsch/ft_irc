@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 14:08:52 by verdant           #+#    #+#             */
-/*   Updated: 2023/09/30 16:32:34 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/03 10:56:01 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,12 +78,7 @@ void	Message::extractParams( void )
 		return;
 	while (std::getline(tokenStream, token, ' '))
 	{
-		for (char c : token) {
-        std::cout << "The integer value of '" << c << "' is: " << static_cast<int>(c) << std::endl;
-    }
-		
-		if (!token.empty() && token != "\n")
+		if (!token.empty())
 			_params.push_back(token);
 	}
-	std::cout << "Size of params vec: " << _params.size() << endl;
 }

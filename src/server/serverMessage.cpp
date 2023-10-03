@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 13:27:34 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/02 17:23:38 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/03 10:53:59 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,15 +17,11 @@
 Message::~Message( void ) {};
 
 Message::Message( string rawMessage, map <string, CommandProperties> properties ) : _rawMessage(rawMessage), _properties(properties) {
-	
-
-
-
-	cout << rawMessage << endl;
 
 	_isFatal = false;
-	// Earse \r\n
-	
+	// Earse \n
+	rawMessage.erase(std::remove(rawMessage.begin(), rawMessage.end(), '\n'), rawMessage.end());
+
 	// Parse raw message
 	extractCommand( );
 	extractTrailing( );
