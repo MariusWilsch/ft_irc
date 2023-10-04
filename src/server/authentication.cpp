@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   authentication.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 00:53:10 by ahammout          #+#    #+#             */
-/*   Updated: 2023/09/28 22:32:47 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/04 17:32:43 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ void ExecuteCommands::nick(ServerReactor &_serverReactor, Message &ProcessMessag
     nickName.erase(remove(nickName.begin(), nickName.end(), '\n'), nickName.end());
     if (nickName.compare(_serverReactor.getClientManager().getClientData(clientSocket).getNickname()) != 0)
     {
+				cout << "CHANGING THE NICKNAME HERE" << endl;
         for (it = _serverReactor.getClientManager().getClientBySocket().begin(); it != _serverReactor.getClientManager().getClientBySocket().end(); it++){
             if ((it->second.getNickname().compare(nickName) == 0) && (it->second.getClientSocket() != clientSocket))
             {

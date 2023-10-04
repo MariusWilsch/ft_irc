@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 10:17:06 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/03 11:12:52 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/04 17:10:31 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ void	ServerReactor::recieveIncomingMessage( int clientSocket )
 	while (1)
 	{
 		bytesRead = recv(clientSocket, &buffer, 1023, 0);
-			std::cout << "Message: " << message << std::endl;
 		if (bytesRead == -1 && errno != EAGAIN && errno != EWOULDBLOCK)
 			writeServerError("recv", "Failed to receive message", errno);
 		if (bytesRead == 0)
@@ -33,9 +32,8 @@ void	ServerReactor::recieveIncomingMessage( int clientSocket )
 			_clientManager.removeClient(clientSocket);
 			return ;
 		}
-		message.append(buffer);
-		cout << "Message: " << message << endl;
-		memset(buffer, 0, bytesRead);
+		message.append(buffer, bytesRead);
+		memset(buffer, 0, sizeof(buffer));
 		if (message.find("\n") != string::npos)
 			break;
 	}

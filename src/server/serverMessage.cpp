@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 13:27:34 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/03 11:27:54 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/04 17:24:51 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,12 @@ Message::Message( string rawMessage, map <string, CommandProperties> properties 
 
 	_isFatal = false;
 	// Earse \n // TODO: I later need to figure out what to do with \r\n at the end of messages
-	rawMessage.erase(std::remove(rawMessage.begin(), rawMessage.end(), '\n'), rawMessage.end());
+	
+	_rawMessage.erase(std::remove(_rawMessage.begin(), _rawMessage.end(), '\n'), _rawMessage.end());
+	_rawMessage.erase(std::remove(_rawMessage.begin(), _rawMessage.end(), '\r'), _rawMessage.end());
+	
 
-
-	// cout << "In Message constructor: " << rawMessage << endl;
+	cout << "|" << _rawMessage << "|" << endl;
 
 	// Parse raw message
 	extractCommand( );
@@ -31,7 +33,7 @@ Message::Message( string rawMessage, map <string, CommandProperties> properties 
 	extractParams( );
 
 	// Print extracted data
-	printData();
+	// printData();
 
 	// Execute command
 	// [...]
@@ -76,8 +78,7 @@ void Message::printData( void )
 	for (std::vector<string>::iterator it = _params.begin(); it != _params.end(); ++it)
 	{
 		std::cout << "|" << *it << "| ";
-		if (it == _params.end() - 1)
-			std::cout << std::endl;
 	}
+	std::cout << std::endl;
 	std::cout << "Trailing: " << _trailing << std::endl;
 }

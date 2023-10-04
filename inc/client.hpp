@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 15:30:13 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/09/28 21:45:31 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/04 16:16:18 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ class ClientData {
  */
 class ClientManager {
 	private:
-		set <string>						_usedNicknames;
+		// set <string>						_usedNicknames;
 		map <int, ClientData>				_ClientsBySocket;
 	public:
 		/*			CLASS DEFAULT FUNCTIONS			*/
@@ -98,11 +98,12 @@ class ClientManager {
 		/*			GETTERS			*/
 
 		ClientData&							getClientData( int clientSocket );
-		map<int, ClientData>&				getClientBySocket();
+		map<int, ClientData>&		getClientBySocket();
 		
 		/*			METHODS			*/
 		// Repreduce a method that takes two parameters: 1 - a set of client socket 2 - a nick name,
 		// search for each the client socket from the set inside the map of _ClientsBySocket  and then check if the nick name is matched
 		// if the nick name founded in the given socket id which represent a member of a channel it means that, the user is a memeber.
 		bool	MatchNickName(set <int> ChannelMembers, string nickname);
+		void	doesClientExist(string& nickname);
 };

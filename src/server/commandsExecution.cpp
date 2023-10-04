@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 19:02:14 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/02 17:30:54 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/04 17:31:02 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ void ExecuteCommands::execute(ServerReactor &_serverReactor, Message &ProcessMes
         else{
             //~~~~~~~~~~~~~~~~~~~~~~~~~~ ATHENTICATON COMMANDS ~~~~~~~~~~~~~~~~~~~~~~~~~~//
             if (ProcessMessage.getCommand().compare("NICK") == 0){
+								 cout << "Execute NICK command" << endl;
                 nick(_serverReactor, ProcessMessage, clientSocket);
             }
             else if (ProcessMessage.getCommand().compare("USER") == 0){

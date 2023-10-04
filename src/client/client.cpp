@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 10:02:23 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/09/28 21:53:02 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/04 17:28:59 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,8 +134,8 @@ map<int, ClientData>&				ClientManager::getClientBySocket(){
 	return (this->_ClientsBySocket);
 }
 
-bool	ClientManager::MatchNickName(set <int> ChannelMembers, string nickname){
-	for (set<int>::iterator it = ChannelMembers.begin(); it != ChannelMembers.end(); it++){
+bool	ClientManager::MatchNickName(set <int> ChannelMembers, string nickname) {
+	for (set<int>::iterator it = ChannelMembers.begin(); it != ChannelMembers.end(); it++) {
 		map <int, ClientData>::iterator client = _ClientsBySocket.find(*it);
 		if (client != _ClientsBySocket.end()){
 			if (client->second.getNickname().compare(nickname) == 0){
@@ -144,4 +144,21 @@ bool	ClientManager::MatchNickName(set <int> ChannelMembers, string nickname){
 		}
 	}
 	return (false);
+}
+
+void	ClientManager::doesClientExist(string& nickname) {
+	
+	map<int, ClientData>::iterator it;
+
+
+
+	for (it = _ClientsBySocket.begin(); it != _ClientsBySocket.end(); it++) {
+		cout << "|" << getClientData(it->first).getNickname() << "|" << endl;
+
+		// if (getClientData(it->first).getNickname().compare(nickname) == 0) {
+		// 	cout << "Nickname was found inside of map container" << endl;
+		// 	break ;
+		// }
+	}
+	cout << "Couldn't find the nickname within the map" << endl;
 }
