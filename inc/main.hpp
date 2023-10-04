@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 15:07:18 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/04 12:03:38 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/04 20:10:50 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,9 @@ using std::endl;
 #define ERR_NONICKNAMEGIVEN() "431: No nickname given\n"
 #define ERR_NICKNAMEINUSE(nick) "433: " + nick + " :Nickname is already in use\n"
 #define ERR_NEEDMOREPARAMS(command) "461: " + command + " : Not enough parameters\n"
+
+#define ERR_ALREADYREGISTRED() "462: You may not reregister\n"
+
 #define ERR_BADCHANNELKEY(channel) "475: " + channel + " : Cannot join channel (+k)\n"
 #define ERR_NOTONCHANNEL(channel) "442: " + channel + " : You're not on that channel\n"
 #define ERR_USERONCHANNEL(user, channel) "443: " + user + " " + channel + " : is already on channel\n"

@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 00:53:10 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/04 18:47:31 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/04 20:22:24 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,16 +36,13 @@ void ExecuteCommands::nick(ServerReactor &_serverReactor, Message &ProcessMessag
         send(clientSocket, Err.c_str(), Err.size(), 0);
         throw std::exception();
     }
-    // SERACH IF certain user uses the nickname:
-    //* If the user uses the nickname then add '_' to it, and search again.
     map<int, ClientData>::iterator it;
     string nickName = ProcessMessage.getParams()[0];
-    string oldNick =  ProcessMessage.getParams()[0];
+    string oldNick =  _serverReactor.getClientManager().getClientData(clientSocket).getNickname();
     
     nickName.erase(remove(nickName.begin(), nickName.end(), '\n'), nickName.end());
     if (nickName.compare(_serverReactor.getClientManager().getClientData(clientSocket).getNickname()) != 0)
     {
-				cout << "CHANGING THE NICKNAME HERE" << endl;
         for (it = _serverReactor.getClientManager().getClientBySocket().begin(); it != _serverReactor.getClientManager().getClientBySocket().end(); it++){
             if ((it->second.getNickname().compare(nickName) == 0) && (it->second.getClientSocket() != clientSocket))
             {
@@ -55,7 +52,6 @@ void ExecuteCommands::nick(ServerReactor &_serverReactor, Message &ProcessMessag
                 it = _serverReactor.getClientManager().getClientBySocket().begin();
             }
         }
-        //**********  INFORM ALL THE CLIENT THAT THE THIS CLIENT HAS CHANGED IT'S NICKNAME ************** /
         if (nickName.compare(oldNick) != 0)
         {
             string n;
@@ -65,7 +61,6 @@ void ExecuteCommands::nick(ServerReactor &_serverReactor, Message &ProcessMessag
             n.erase(remove(n.begin(), n.end(), '\n'), n.end());
             message.append(n);
             message.append(" is now known as: ");
-            // *** SET USING THE NICKNAME, 
             _serverReactor.getClientManager().getClientData(clientSocket).setNickname(nickName);
             message.append(_serverReactor.getClientManager().getClientData(clientSocket).getNickname());
             message.append("\n");
@@ -73,7 +68,6 @@ void ExecuteCommands::nick(ServerReactor &_serverReactor, Message &ProcessMessag
                 if (it->first != clientSocket)
                     send(it->first, message.c_str(), message.size(), 0);
             }
-            std::cout << "The nickName has be setted successfully: " << _serverReactor.getClientManager().getClientData(clientSocket).getNickname() << std::endl;
         }
     }
 }
@@ -98,19 +92,15 @@ void     ExecuteCommands::user(ServerReactor &_serverReactor, Message &ProcessMe
             std::cout << "REALNAME: " << _serverReactor.getClientManager().getClientData(clientSocket).getRealname() << std::endl;
         }
         else{
-            string buffer = "error(461): ";
-            buffer.append(" Not enough parameters");
-            buffer.append("\n");
-            send(clientSocket, buffer.c_str(), buffer.size(), 0);
+            string Err = ERR_NEEDMOREPARAMS(ProcessMessage.getCommand());
+            send(clientSocket, Err.c_str(), Err.size(), 0);
             throw std::exception();
         }
     }
     else 
     {
-        string buffer = "error(462): ";
-        buffer.append(" You may not reregister");
-        buffer.append("\n");
-        send(clientSocket, buffer.c_str(), buffer.size(), 0);
+        string Err = ERR_ALREADYREGISTRED();
+        send(clientSocket, Err.c_str(), Err.size(), 0);
         throw std::exception();
     }
 }
@@ -122,18 +112,14 @@ void ExecuteCommands::pass(ServerReactor &_serverReactor, Message &ProcessMessag
              _serverReactor.getClientManager().getClientData(clientSocket).setPassword(ProcessMessage.getParams()[0]);
         }
         else{
-            string buffer = "error(462): ";
-            buffer.append(" You may not reregister");
-            buffer.append("\n");
-            send(clientSocket, buffer.c_str(), buffer.size(), 0);
+            string Err = ERR_ALREADYREGISTRED();
+            send(clientSocket, Err.c_str(), Err.size(), 0);
             throw std::exception();
         }
     }
     else{
-        string buffer = "error(461): ";
-        buffer.append(" Not enough parameters");
-        buffer.append("\n");
-        send(clientSocket, buffer.c_str(), buffer.size(), 0);
+        string Err = ERR_NEEDMOREPARAMS(ProcessMessage.getCommand());
+        send(clientSocket, Err.c_str(), Err.size(), 0);
         throw std::exception();
     }
 }
