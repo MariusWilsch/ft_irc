@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 19:02:14 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/04 18:47:27 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/04 20:54:59 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,10 @@ bool    ExecuteCommands::whiteCheck(string str)
 }
 
 void    ExecuteCommands::informMembers(set <int> clientSockets, string message, int clientSocket){
-        for (set<int>::iterator it = clientSockets.begin() ; it !=  clientSockets.end() ; it++){
-            if (*it != clientSocket)
-                send(*it, message.c_str(), message.size(), 0);
-        }
+    for (set<int>::iterator it = clientSockets.begin() ; it !=  clientSockets.end() ; it++){
+        if (*it != clientSocket)
+            send(*it, message.c_str(), message.size(), 0);
+    }
 }
 
 void ExecuteCommands::execute(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket)
@@ -39,16 +39,13 @@ void ExecuteCommands::execute(ServerReactor &_serverReactor, Message &ProcessMes
     {
         if (ProcessMessage.getFatal())
         {
-            string buffer = "error(421): ";
-            buffer.append(" Unknown command");
-            buffer.append("\n");
-            send(clientSocket, buffer.c_str(), buffer.size(), 0);
+            string Err = ERR_UNKNOWNCOMMAND();
+            send(clientSocket, Err.c_str(), Err.size(), 0);
             throw std::exception();
         }
         else{
             //~~~~~~~~~~~~~~~~~~~~~~~~~~ ATHENTICATON COMMANDS ~~~~~~~~~~~~~~~~~~~~~~~~~~//
             if (ProcessMessage.getCommand().compare("NICK") == 0){
-								 cout << "Execute NICK command" << endl;
                 nick(_serverReactor, ProcessMessage, clientSocket);
             }
             else if (ProcessMessage.getCommand().compare("USER") == 0){
@@ -74,9 +71,9 @@ void ExecuteCommands::execute(ServerReactor &_serverReactor, Message &ProcessMes
                 kick(_serverReactor, ProcessMessage, clientSocket);
             }
                 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
-                else if (ProcessMessage.getCommand().compare("PRIVMSG") == 0){
-                cout << "Execute PRIVMSG command" << endl;
-								privmsg(_serverReactor, ProcessMessage, clientSocket);
+            else if (ProcessMessage.getCommand().compare("PRIVMSG") == 0){
+            cout << "Execute PRIVMSG command" << endl;
+                privmsg(_serverReactor, ProcessMessage, clientSocket);
             }
         }
     }

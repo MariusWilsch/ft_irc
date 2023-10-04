@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 00:53:10 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/04 20:22:24 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/04 20:51:55 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ bool    NickNameValidation(string param)
         return (false);
     return (true);
 }
-
 
 void ExecuteCommands::nick(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket)
 {
@@ -71,7 +70,6 @@ void ExecuteCommands::nick(ServerReactor &_serverReactor, Message &ProcessMessag
         }
     }
 }
-
 
 void     ExecuteCommands::user(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket)
 {

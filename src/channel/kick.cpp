@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/01 16:47:40 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/04 11:53:57 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/04 22:41:17 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,8 @@ void     ExecuteCommands::kick(ServerReactor &_serverReactor, Message &ProcessMe
                                 string Err = ERR_USERNOTINCHANNEL(Users[i], ChannelNames[i]);
                                 send(clientSocket, Err.c_str(), Err.size(), 0);
                             }
+
+                            // NUMERIC REPLY TO INFORM ALL THE CHANNEL MEMBER. "COMMENT"
                         }
                         else{
                             string Err = ERR_NEEDMOREPARAMS(ProcessMessage.getCommand());

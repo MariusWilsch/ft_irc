@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 19:05:52 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/02 20:31:21 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/04 22:05:18 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ class ExecuteCommands
 
     //*********************************** CHANNEL OPERATOR COMMANDS ***********************************//
     static void     join(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket);
+    static void     part(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket);
     static void     kick(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket);
     static void     mode(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket);
     static void     invite(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket);

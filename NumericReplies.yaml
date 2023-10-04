@@ -104,7 +104,7 @@ ERROR_REPLIES:
       of "PRIVMSG $<server>" or "PRIVMSG #<host>" is attempted.
   421:
     name: ERR_UNKNOWNCOMMAND
-    reply: <command> :Unknown command
+    reply: <command> :RPL_WELCOMERPL_WELCOMERPL_WELCOMERPL_WELCOME
     desc: >
       Returned to a registered client to indicate that the command sent
       is unknown by the server.

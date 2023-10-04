@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/30 13:41:28 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/04 19:33:37 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/04 20:51:07 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,8 @@
 // * Example:       TOPIC #PrivateChannel :Ethics.
 
 void     ExecuteCommands::topic(ServerReactor &_ServerReactor, Message &ProcessMessage, int clientSocket){
-    cout << "Execute topic command" << endl;
-    cout << "The trailing size: " << ProcessMessage.getTrailing().size() << endl;
     if (ProcessMessage.getParams().size() == 1){
         string channelName = ProcessMessage.getParams()[0];
-        // channelName.erase(remove(channelName.begin(), channelName.end(), '\n'), channelName.end());
         if (_ServerReactor.getChannelManager().itsChannel(channelName)){
             channelName.erase(0, 1);
             if (_ServerReactor.getChannelManager().getChannelByName(channelName).isCLient(clientSocket)){
