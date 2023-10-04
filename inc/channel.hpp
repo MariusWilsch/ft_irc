@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 16:01:33 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/09/30 13:21:38 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/04 17:13:42 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,13 @@ class ChannelData {
 		string			_name;
 		string			_topic;
 		string			_key;
-		bool			_security;
-		bool			_inviteOnly;
-		bool			_topicSet;
+		size_t			_limit;
+
+		bool			_securityFlag;
+		bool			_inviteOnlyFlag;
+		bool			_topicFlag;
+		bool			_limitFlag;
+
 		set <int> 		_clientSockets;
 		set <int> 		_operators;
 		set <string> 	_inviteList;
@@ -50,10 +54,16 @@ class ChannelData {
 		/*			GETTERS			*/
 		string 			getName( void ) const;
 		string 			getTopic( void ) const;
-		bool			getSecurity( void ) const;
 		string			getKey( void ) const;
+		string			getLimit( void ) const;
+
+		bool			getSecurity( void ) const;
 		bool			getTopicFlag ( void ) const;
 		bool			getInviteFlag ( void )  const;
+		
+		bool			getLimitFlag ( void ) const;
+		size_t			getLimit( void ) const;
+		
 		set <int> 		getClientSockets( void ) const;
 		set <int> 		getOperators( void ) const;
 		set <string>	getInviteList( void ) const;
@@ -61,10 +71,14 @@ class ChannelData {
 		/*			SETTERS			 */
 		void 			setName( string name );
 		void 			setTopic( string topic );
-		void			setSecurity( bool s);
 		void			setKey (string key);
-		void			setInviteFlag(bool stat);
-		void			setTopicFlag(bool stat);
+		void			setLimit(size_t limit);
+		
+		void			setSecurity( bool s);
+		void			setInviteFlag( bool stat );
+		void			setTopicFlag( bool stat );
+		void			setLimitFlag( bool stat );
+		
 		void			addClient( int clientSocket);
 		void			addOperator( int clientSocket);
 		void			addGuest( string nickName);
@@ -73,8 +87,8 @@ class ChannelData {
 		bool			isOperator(int clientSocket);
 		bool			isCLient(int clinetSocket);
 		bool			isInvited(string nickName);
-		void    		removeClient(set<int>::iterator cl);
-		void			removeOperator(set<int>::iterator op);
+		void    		removeClient(int SocketID);
+		void			removeOperator(int SocketID);
 };
 
 class ChannelManager {

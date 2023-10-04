@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 00:53:10 by ahammout          #+#    #+#             */
-/*   Updated: 2023/09/28 22:32:47 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/03 00:16:01 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,27 +30,14 @@ void ExecuteCommands::nick(ServerReactor &_serverReactor, Message &ProcessMessag
 {
     string err;
 
-    if (ProcessMessage.getParams().empty())
+    if (ProcessMessage.getParams().empty() || !NickNameValidation(ProcessMessage.getParams()[0]))
     {
-        string buffer = "error(431) :No nickname given";
-        buffer.append("\n");
-        send(clientSocket, buffer.c_str(), buffer.size(), 0);
-        throw std::exception();
-    }
-    else if (!NickNameValidation(ProcessMessage.getParams()[0]))
-    {
-        string buffer = "error(431): ";
-        err = ProcessMessage.getParams()[0];
-        err.erase(remove(err.begin(), err.end(), '\n'), err.end());
-        buffer.append(err);
-        buffer.append(" Erroneus nickname");
-        buffer.append("\n");
-        send(clientSocket, buffer.c_str(), buffer.size(), 0);
+        string Err = ERR_NONICKNAMEGIVEN();
+        send(clientSocket, Err.c_str(), Err.size(), 0);
         throw std::exception();
     }
     // SERACH IF certain user uses the nickname:
     //* If the user uses the nickname then add '_' to it, and search again.
- 
     map<int, ClientData>::iterator it;
     string nickName = ProcessMessage.getParams()[0];
     string oldNick =  ProcessMessage.getParams()[0];
@@ -61,13 +48,8 @@ void ExecuteCommands::nick(ServerReactor &_serverReactor, Message &ProcessMessag
         for (it = _serverReactor.getClientManager().getClientBySocket().begin(); it != _serverReactor.getClientManager().getClientBySocket().end(); it++){
             if ((it->second.getNickname().compare(nickName) == 0) && (it->second.getClientSocket() != clientSocket))
             {
-                string buffer = "error(433): ";
-                err = nickName;
-                err.erase(remove(err.begin(), err.end(), '\n'), err.end());
-                buffer.append(err);
-                buffer.append(" Nickname is already in use");
-                buffer.append("\n");
-                send(clientSocket, buffer.c_str(), buffer.size(), 0);
+                string Err = ERR_NICKNAMEINUSE(nickName);
+                send(clientSocket, Err.c_str(), Err.size(), 0);
                 nickName.append("_");
                 it = _serverReactor.getClientManager().getClientBySocket().begin();
             }

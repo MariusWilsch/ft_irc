@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 10:02:20 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/09/30 13:22:20 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/04 17:12:46 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,11 @@ ChannelData::ChannelData( void ){
     _name = "";
     _topic = "";
     _key = "";
-    _security = false;
+    _limit = -1;
+    _securityFlag = false;
+    _inviteOnlyFlag = false;
+    _topicFlag = false;
+    _limitFlag = false;
     _clientSockets = set<int>();
     _operators = set<int>();
 }
@@ -35,20 +39,28 @@ string ChannelData::getTopic( void ) const{
     return (this->_topic );
 }
 
-bool    ChannelData::getSecurity(void) const{
-    return (this->_security);
-}
-
 string		ChannelData::getKey( void ) const{
     return (this->_key);
 }
 
+size_t      ChannelData::getLimit( void ) const{
+    return (this->_limit);
+}
+
+bool    ChannelData::getSecurity(void) const{
+    return (this->_securityFlag);
+}
+
 bool		ChannelData::getTopicFlag ( void ) const{
-    return (this->_topicSet);
+    return (this->_topicFlag);
 }
 
 bool		ChannelData::getInviteFlag ( void )  const{
-    return (this->_inviteOnly);
+    return (this->_inviteOnlyFlag);
+}
+
+bool        ChannelData::getLimitFlag( void ) const{
+    return (this->_limitFlag);
 }
 
 set <int>   ChannelData::getClientSockets( void ) const{
@@ -65,6 +77,8 @@ set <string>	ChannelData::getInviteList( void ) const{
 
 /********************** SETTERS	***********************/
 
+
+
 void    ChannelData::setName(string name){
     this->_name = name;
 }
@@ -73,22 +87,29 @@ void    ChannelData::setTopic(string topic){
     this->_topic = topic;
 }
 
-void		ChannelData::setSecurity( bool s){
-    this->_security = s;    
-}
-
 void		ChannelData::setKey (string key){
     this->_key = key;
 }
 
+void        ChannelData::setLimit(size_t limit){
+    this->_limit = limit;
+}
+
+void		ChannelData::setSecurity( bool s){
+    this->_securityFlag = s;
+}
+
 void    	ChannelData::setInviteFlag(bool stat){
-    this->_inviteOnly = stat;
+    this->_securityFlag = stat;
 }
 
 void		ChannelData::setTopicFlag(bool stat){
-    this->_topicSet = stat;
+    this->_topicFlag = stat;
 }
 
+void        ChannelData::setLimitFlag(bool stat){
+    this->_limitFlag;
+}
 
 void ChannelData::addClient(int clientSocket){
     this->_clientSockets.insert(clientSocket);
@@ -102,12 +123,12 @@ void		ChannelData::addGuest( string nickName){
     this->_inviteList.insert(nickName);
 }
 
-void    ChannelData::removeClient(set<int>::iterator cl){
-    this->_clientSockets.erase(*cl);
+void    ChannelData::removeClient(int SocketID){
+    this->_clientSockets.erase(SocketID);
 }
 
-void		ChannelData::removeOperator(set<int>::iterator op){
-    this->_operators.erase(*op);
+void		ChannelData::removeOperator(int SocketID){
+    this->_operators.erase(SocketID);
 }
 
 

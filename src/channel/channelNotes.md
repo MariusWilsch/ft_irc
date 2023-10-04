@@ -9,7 +9,13 @@
         * +/- o : Channel operator privilege.
     + MODE command with option that affect the whole channel;
     √    * +/- i : Invel only channel.
-        * -/+ t : the restrictions of the TOPIC command to channel operators.
+    √    * -/+ t : the restrictions of the TOPIC command to channel operators.
     √    * -/+ k : The channel key (password).
         * -/+ l : The user limit to channel.
     
+# KICK NUMERIC REPLIES
+    Numeric Replies:
+
+        ERR_NEEDMOREPARAMS              ERR_NOSUCHCHANNEL
+        ERR_BADCHANMASK                 ERR_CHANOPRIVSNEEDED
+        ERR_USERNOTINCHANNEL            ERR_NOTONCHANNEL

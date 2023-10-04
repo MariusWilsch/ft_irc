@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 10:02:23 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/09/28 21:53:02 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/01 21:16:47 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,14 +134,14 @@ map<int, ClientData>&				ClientManager::getClientBySocket(){
 	return (this->_ClientsBySocket);
 }
 
-bool	ClientManager::MatchNickName(set <int> ChannelMembers, string nickname){
+int	ClientManager::MatchNickName(set <int> ChannelMembers, string nickname){
 	for (set<int>::iterator it = ChannelMembers.begin(); it != ChannelMembers.end(); it++){
 		map <int, ClientData>::iterator client = _ClientsBySocket.find(*it);
 		if (client != _ClientsBySocket.end()){
 			if (client->second.getNickname().compare(nickname) == 0){
-				return (true);
+				return (client->second.getClientSocket());
 			}
 		}
 	}
-	return (false);
+	return (-1);
 }

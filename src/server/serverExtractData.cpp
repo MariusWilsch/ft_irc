@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   serverExtractData.cpp                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 14:08:52 by verdant           #+#    #+#             */
-/*   Updated: 2023/09/30 16:38:24 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/09/30 16:45:53 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,5 +81,4 @@ void	Message::extractParams( void )
 		if (!token.empty() && token != "\n")
 			_params.push_back(token);
 	}
-	cout << _params.size() << endl;
 }

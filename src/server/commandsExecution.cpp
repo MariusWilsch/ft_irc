@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   commandsExecution.cpp                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 19:02:14 by ahammout          #+#    #+#             */
-/*   Updated: 2023/09/30 16:38:37 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/02 16:16:57 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,23 @@
 ExecuteCommands::~ExecuteCommands(){};
 
 ExecuteCommands::ExecuteCommands(){};
+
+bool    ExecuteCommands::whiteCheck(string str)
+{
+    for (unsigned int i = 0; i < str.length(); i++)
+    {
+        if (str[i] != ' ' && str[i] != '\n' && str[i] != '\t')
+            return false;
+    }
+    return true;
+}
+
+void    ExecuteCommands::informMembers(set <int> clientSockets, string message, int clientSocket){
+        for (set<int>::iterator it = clientSockets.begin() ; it !=  clientSockets.end() ; it++){
+            if (*it != clientSocket)
+                send(*it, message.c_str(), message.size(), 0);
+        }
+}
 
 void ExecuteCommands::execute(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket)
 {
@@ -39,6 +56,7 @@ void ExecuteCommands::execute(ServerReactor &_serverReactor, Message &ProcessMes
             else if (ProcessMessage.getCommand().compare("PASS") == 0){
                 pass(_serverReactor, ProcessMessage, clientSocket);
             }
+            //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ CHANNEL COMMANDS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
             else if (ProcessMessage.getCommand().compare("JOIN") == 0){
                 join(_serverReactor, ProcessMessage, clientSocket);
             }
@@ -48,14 +66,14 @@ void ExecuteCommands::execute(ServerReactor &_serverReactor, Message &ProcessMes
             else if (ProcessMessage.getCommand().compare("INVITE") == 0){
                 invite(_serverReactor, ProcessMessage, clientSocket);
             }
-//             else if (ProcessMessage.getCommand().compare("TOPIC") == 0){
-// =                topic(_serverReactor, ProcessMessage, clientSocket);
-//             }
-            //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
-            else if (ProcessMessage.getCommand().compare("KICK") == 0){
-                cout << "Execute KICK command" << endl;
+            else if (ProcessMessage.getCommand().compare("TOPIC") == 0){
+                topic(_serverReactor, ProcessMessage, clientSocket);
             }
-            else if (ProcessMessage.getCommand().compare("PRIVMSG") == 0){
+            else if (ProcessMessage.getCommand().compare("KICK") == 0){
+                kick(_serverReactor, ProcessMessage, clientSocket);
+            }
+                //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
+                else if (ProcessMessage.getCommand().compare("PRIVMSG") == 0){
                 cout << "Execute PRIVMSG command" << endl;
             }
         }

@@ -6,59 +6,39 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/24 12:13:30 by ahammout          #+#    #+#             */
-/*   Updated: 2023/09/28 22:09:50 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/04 11:49:32 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
  
 #include"ExecuteCommands.hpp"
-#include <vector>
-#include <algorithm>
 
-/*
-    * Rule applied to all string coming from input:  Cut '\n' if it's exist.
-    * When the join command seccussed the client will recieve RPL_TOPIC or RPL_NOTOPIC as confirmation to it's joining to the channel.
-*/
-
-bool    whiteCheck(string str)
-{
-    for (unsigned int i = 0; i < str.length(); i++)
-    {
-        if (str[i] != ' ' && str[i] != '\n' && str[i] != '\t')
-            return false;
-    }
-    return true;
-}
-
-size_t  advParam(string param){
-    int c = 0;
-    for (unsigned int i = 0; i < param.size(); i++){
-        if (param[i] == ',')
-            c++;
-    }
-    return (c);
-}
-
-int splitParams(std::vector<string> &ChannelNames, std::vector<string> &ChannelKeys, Message &ProcessMessage){
+int seperateNamesKeys(std::vector<string> &ChannelNames, std::vector<string> &ChannelKeys, Message &ProcessMessage){
+    if (ProcessMessage.getParams().size() == 0)
+        return (-1);
     string param = ProcessMessage.getParams()[0];
     param.erase(remove(param.begin(), param.end(), '\n'), param.end());
     if (ProcessMessage.getParams().size() == 1 && param.compare("0") == 0){
         return (0);
     }
-    if (ProcessMessage.getParams().size() < 1 || whiteCheck(ProcessMessage.getParams()[0]))
+    if (ProcessMessage.getParams().size() < 1 || ExecuteCommands::whiteCheck(ProcessMessage.getParams()[0]))
         return (-1);
     for (unsigned int i = 0; i < ProcessMessage.getParams().size(); i++)
     {
         param = ProcessMessage.getParams()[i];
         param.erase(std::remove(param.begin(), param.end(), ' '), param.end());
         param.erase(std::remove(param.begin(), param.end(), '\n'), param.end());
-        unsigned int c = advParam(param);
+        unsigned int c = 0;
+        for (unsigned int i = 0; i < param.size(); i++){
+            if (param[i] == ',')
+                c++;
+        }
         if (c == 0){
             if (param[0] == '#'){
                 param.erase(0, 1);
                 ChannelNames.push_back(param);
             }
-            else if (!whiteCheck(param)){
+            else if (!ExecuteCommands::whiteCheck(param)){
                 ChannelKeys.push_back(param);
             }
         }
@@ -73,7 +53,7 @@ int splitParams(std::vector<string> &ChannelNames, std::vector<string> &ChannelK
                     sub.erase(0, 1);
                     ChannelNames.push_back(sub);
                 }
-                else if (!whiteCheck(sub)){
+                else if (!ExecuteCommands::whiteCheck(sub)){
                     ChannelKeys.push_back(sub);
                 }
             }
@@ -92,13 +72,10 @@ void ExecuteCommands::join(ServerReactor &_serverReactor, Message &ProcessMessag
     std::vector<string> ChannelNames;
     std::vector<string> ChannelKeys;
 
-    int stat = splitParams(ChannelNames, ChannelKeys, ProcessMessage);
-    if (stat == -1)
-    {
-        string buffer = "error(461): ";
-        buffer.append(" Not enough parameters");
-        buffer.append("\n");
-        send(clientSocket, buffer.c_str(), buffer.size(), 0);
+    int stat = seperateNamesKeys(ChannelNames, ChannelKeys, ProcessMessage);
+    if (stat == -1){
+        string Err = ERR_NEEDMOREPARAMS(ProcessMessage.getCommand());
+        send(clientSocket, Err.c_str(), Err.size(), 0);
         throw std::exception();
     }
     if (stat == 0){
@@ -107,15 +84,12 @@ void ExecuteCommands::join(ServerReactor &_serverReactor, Message &ProcessMessag
         for (it = m.begin(); it != m.end();)
         {
             set<int>::iterator RemoveIt;
-            // Remove client from channel mumbers (_clientSockets)
             RemoveIt = it->second.getClientSockets().find(clientSocket);
             if (RemoveIt != it->second.getClientSockets().end())
-                it->second.removeClient(RemoveIt);
-            // Remove client from channel operators (_operators)
+                it->second.removeClient(*RemoveIt);
             RemoveIt = it->second.getOperators().find(clientSocket);
             if (RemoveIt != it->second.getOperators().end())
-                it->second.removeOperator(RemoveIt);
-            // Remove the channel when all the users leaves it: "Do i need to take consideration to standard channels and safe channels??"
+                it->second.removeOperator(*RemoveIt);
             if (it->second.getOperators().size() == 0 && it->second.getClientSockets().size() == 0){
                 _serverReactor.getChannelManager().getChannels().erase(it++);
             }
@@ -123,6 +97,7 @@ void ExecuteCommands::join(ServerReactor &_serverReactor, Message &ProcessMessag
                 ++it;
         }
     }
+
     for (unsigned int i = 0; i < ChannelNames.size(); i++){
         bool Joined = false;
         // Create the channel if it's not exist, and make the current client as the operator of the channel.
@@ -137,7 +112,6 @@ void ExecuteCommands::join(ServerReactor &_serverReactor, Message &ProcessMessag
             }
             _serverReactor.getChannelManager().addChannel(ChannelNames[i], NewChannel);
             Joined = true;
-            cout << "The channel <" << _serverReactor.getChannelManager().getChannelByName(ChannelNames[i]).getName() << "> Has been created by " << _serverReactor.getClientManager().getClientData(clientSocket).getUsername() << std::endl;
         }
         // Channel is exist, Check Security cases, and inform all the channels clients.
         else {
@@ -146,6 +120,7 @@ void ExecuteCommands::join(ServerReactor &_serverReactor, Message &ProcessMessag
                 if (Channel.getInviteFlag()){
                     if (!Channel.isInvited(_serverReactor.getClientManager().getClientData(clientSocket).getNickname())){
                         // Don't accecpt it's joining to channel.
+                        //! REPLACE THIS BY AN APPROPRIATE NUMERIC REPLY.
                         string buffer = "error: ";
                         buffer.append(" this channel is Invite only");
                         buffer.append("\n");
@@ -164,10 +139,8 @@ void ExecuteCommands::join(ServerReactor &_serverReactor, Message &ProcessMessag
                         }
                         else{
                             // The key not matched: informe the specific client that the password is wrong by sending ERR_BADCHANNELKEY.
-                            string buffer = "error(475): ";
-                            buffer.append(" Cannot join channel (bad key)");
-                            buffer.append("\n");
-                            send(clientSocket, buffer.c_str(), buffer.size(), 0);
+                            string Err = ERR_BADCHANNELKEY(Channel.getName());
+                            send(clientSocket, Err.c_str(), Err.size(), 0);
                             throw std::exception();
                         }
                     }
@@ -177,20 +150,22 @@ void ExecuteCommands::join(ServerReactor &_serverReactor, Message &ProcessMessag
                     if (ChannelKeys.size() >= 1 && (ChannelKeys[i].empty())){
                             Channel.addClient(clientSocket);
                             Joined = true;
-                            cout << "The client <" << _serverReactor.getClientManager().getClientData(clientSocket).getUsername() << "> Has joined the channel " << _serverReactor.getChannelManager().getChannelByName(ChannelNames[i]).getName() << std::endl;
                         }
                     else{
-                        // The key not matched: informe the specific client that the password is wrong by sending ERR_BADCHANNELKEY.
-                        string buffer = "error(461): ";
-                        buffer.append(" Not enough parameters");
-                        buffer.append("\n");
-                        send(clientSocket, buffer.c_str(), buffer.size(), 0);
+                        string  Err = ERR_BADCHANNELKEY(Channel.getName());
+                        send(clientSocket, Err.c_str(), Err.size(), 0);
                         throw std::exception();
                     }
                 }
                 if (Joined == true){
-                    // Inform all the Clients inside the channel that the current client has been joined the channel.
-                    cout << "The client <" << _serverReactor.getClientManager().getClientData(clientSocket).getUsername() << "> Has joined the channel " << _serverReactor.getChannelManager().getChannelByName(ChannelNames[i]).getName() << std::endl;
+                    if (Channel.getTopicFlag()){
+                        string Rpl =  RPL_TOPIC(Channel.getName() ,Channel.getTopic());
+                        send(clientSocket, Rpl.c_str(), Rpl.size(), 0);
+                    }
+                    else{
+                        string Rpl =  RPL_NOTOPIC(Channel.getName());
+                        send(clientSocket, Rpl.c_str(), Rpl.size(), 0);
+                    }
                     string message = _serverReactor.getClientManager().getClientData(clientSocket).getUsername();
                     message.append(" has joined the Channel # ");
                     message.append(Channel.getName());

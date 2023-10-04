@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 13:27:34 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/09/17 13:11:19 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/09/30 15:43:02 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,7 @@ std::vector <string> Message::getParams( void ) {
 	return _params;
 }
 
-bool	Message::getFatal( void )
-{
+bool	Message::getFatal( void ){
 	return (this->_isFatal);
 }
 
