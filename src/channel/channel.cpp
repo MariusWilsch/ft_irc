@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 10:02:20 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/04 17:12:46 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/04 19:06:19 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,8 +95,8 @@ void        ChannelData::setLimit(size_t limit){
     this->_limit = limit;
 }
 
-void		ChannelData::setSecurity( bool s){
-    this->_securityFlag = s;
+void		ChannelData::setSecurity( bool stat){
+    this->_securityFlag = stat;
 }
 
 void    	ChannelData::setInviteFlag(bool stat){
@@ -108,7 +108,7 @@ void		ChannelData::setTopicFlag(bool stat){
 }
 
 void        ChannelData::setLimitFlag(bool stat){
-    this->_limitFlag;
+    this->_limitFlag = stat;
 }
 
 void ChannelData::addClient(int clientSocket){
@@ -187,4 +187,16 @@ bool			ChannelManager::itsChannel( string name ){
             return (true);
     }
     return (false);
+}
+
+void			ChannelManager::removeFromChannels(int _clientSocket){
+    map<string, ChannelData>::iterator it;
+    for (it = this->_channels.begin(); it != this->_channels.end(); it++){
+        if (it->second.isCLient(_clientSocket)){
+            it->second.removeClient(_clientSocket);
+            if (it->second.isOperator(_clientSocket)){
+                it->second.removeOperator(_clientSocket);
+            }
+        }
+    }
 }

@@ -35,6 +35,10 @@ $(OBJ_DIR)%.o: $(SRC_DIR)%.cpp inc/*.hpp
 $(OBJ_DIR):
 	@mkdir -p $(OBJ_DIR)
 
+run: all
+	@./$(TARGET) 8080 password
+
+
 clean:
 	@rm -rf $(OBJ_DIR)
 	@echo "$(RED)Object files removed.$(RESET)"

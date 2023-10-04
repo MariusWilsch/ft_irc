@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 10:17:06 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/09/27 15:37:39 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/04 19:02:57 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,8 @@ void	ServerReactor::recieveIncomingMessage( int clientSocket )
 	int			bytesRead;
 	char		buffer[1024];
 	string		message;
-	size_t		pos;
 
-	pos = 0;
-	while (pos != string::npos)
+	while (1)
 	{
 		bytesRead = recv(clientSocket, &buffer, 1023, 0);
 		if (bytesRead == -1 && errno != EAGAIN && errno != EWOULDBLOCK)
@@ -32,14 +30,18 @@ void	ServerReactor::recieveIncomingMessage( int clientSocket )
 		{
 			updateMoinitoring(clientSocket, EVFILT_READ, EV_DELETE);
 			_clientManager.removeClient(clientSocket);
+			_channelManager.removeFromChannels(clientSocket);
 			return ;
 		}
-		buffer[bytesRead] = '\0';
-		message.append(buffer);
-		pos = message.find("\r\n");
-		memset(buffer, 0, bytesRead);
+		message.append(buffer, bytesRead);
+		memset(buffer, 0, sizeof(buffer));
+		if (message.find("\n") != string::npos)
+			break;
 	}
-	std::cout << "Message: " << message << std::endl;
+
+
+	// cout << "In ServerReactor::recieveIncomingMessage: " << message << endl;
+	
 	Message processMessage(message, _properties);
 	// TODO: Implement command execution
 

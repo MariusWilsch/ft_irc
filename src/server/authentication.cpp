@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 00:53:10 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/03 00:16:01 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/04 18:47:31 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ void ExecuteCommands::nick(ServerReactor &_serverReactor, Message &ProcessMessag
     nickName.erase(remove(nickName.begin(), nickName.end(), '\n'), nickName.end());
     if (nickName.compare(_serverReactor.getClientManager().getClientData(clientSocket).getNickname()) != 0)
     {
+				cout << "CHANGING THE NICKNAME HERE" << endl;
         for (it = _serverReactor.getClientManager().getClientBySocket().begin(); it != _serverReactor.getClientManager().getClientBySocket().end(); it++){
             if ((it->second.getNickname().compare(nickName) == 0) && (it->second.getClientSocket() != clientSocket))
             {

@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 14:08:52 by verdant           #+#    #+#             */
-/*   Updated: 2023/09/30 16:45:53 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/04 18:46:45 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	Message::extractCommand( void  )
 	size_t				pos;
 	string				token;
 	std::istringstream	tokenStream(_rawMessage);
-
+	
 	// Get Prefix
 	// TODO: find a better way for this (maybe throw an exception) - What's the purpose of this?
 	if (_isFatal == true) 
@@ -51,6 +51,7 @@ void	Message::extractCommand( void  )
 		_rawMessage.erase(0, pos + _command.length());
 		
 	_command = token;
+
 }
 
 void	Message::extractTrailing( void  )
@@ -78,7 +79,8 @@ void	Message::extractParams( void )
 		return;
 	while (std::getline(tokenStream, token, ' '))
 	{
-		if (!token.empty() && token != "\n")
+		// cout << "|" << token << "|" << endl;
+		if (!token.empty())
 			_params.push_back(token);
 	}
 }

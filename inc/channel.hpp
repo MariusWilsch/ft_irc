@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 16:01:33 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/04 17:13:42 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/04 18:56:38 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,14 +55,13 @@ class ChannelData {
 		string 			getName( void ) const;
 		string 			getTopic( void ) const;
 		string			getKey( void ) const;
-		string			getLimit( void ) const;
+		size_t			getLimit( void ) const;
 
 		bool			getSecurity( void ) const;
 		bool			getTopicFlag ( void ) const;
 		bool			getInviteFlag ( void )  const;
 		
 		bool			getLimitFlag ( void ) const;
-		size_t			getLimit( void ) const;
 		
 		set <int> 		getClientSockets( void ) const;
 		set <int> 		getOperators( void ) const;
@@ -74,7 +73,7 @@ class ChannelData {
 		void			setKey (string key);
 		void			setLimit(size_t limit);
 		
-		void			setSecurity( bool s);
+		void			setSecurity( bool stat);
 		void			setInviteFlag( bool stat );
 		void			setTopicFlag( bool stat );
 		void			setLimitFlag( bool stat );
@@ -111,4 +110,6 @@ class ChannelManager {
 		/*			METHODS			*/
 		bool			channelExistence(string name);
 		bool			itsChannel( string name );
+
+		void			removeFromChannels(int _clientSocket);
 };

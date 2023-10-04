@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 10:02:23 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/01 21:16:47 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/04 18:49:54 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,8 +134,8 @@ map<int, ClientData>&				ClientManager::getClientBySocket(){
 	return (this->_ClientsBySocket);
 }
 
-int	ClientManager::MatchNickName(set <int> ChannelMembers, string nickname){
-	for (set<int>::iterator it = ChannelMembers.begin(); it != ChannelMembers.end(); it++){
+int	ClientManager::MatchNickName(set <int> ChannelMembers, string nickname) {
+	for (set<int>::iterator it = ChannelMembers.begin(); it != ChannelMembers.end(); it++) {
 		map <int, ClientData>::iterator client = _ClientsBySocket.find(*it);
 		if (client != _ClientsBySocket.end()){
 			if (client->second.getNickname().compare(nickname) == 0){
@@ -143,5 +143,22 @@ int	ClientManager::MatchNickName(set <int> ChannelMembers, string nickname){
 			}
 		}
 	}
-	return (-1);
+	return (false);
+}
+
+void	ClientManager::doesClientExist(string& nickname) {
+	
+	map<int, ClientData>::iterator it;
+
+
+
+	for (it = _ClientsBySocket.begin(); it != _ClientsBySocket.end(); it++) {
+		cout << "|" << getClientData(it->first).getNickname() << "|" << endl;
+
+		// if (getClientData(it->first).getNickname().compare(nickname) == 0) {
+		// 	cout << "Nickname was found inside of map container" << endl;
+		// 	break ;
+		// }
+	}
+	cout << "Couldn't find the nickname within the map" << endl;
 }
