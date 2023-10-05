@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   serverSetup.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
+/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 10:00:19 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/09/28 21:28:30 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/05 14:48:56 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,11 +45,7 @@ ServerReactor::~ServerReactor( void ) {
 }
 
 // TODO: Put this into a utils file
-void	ServerReactor::writeServerError( std::string function, std::string message, int error ) {
-	std::cout << "Error: " << function << " - " << message << std::endl;
-	std::cout << "Error: " << function << " - " << strerror(error) << std::endl;
-	exit(1);
-}
+
 
 void	ServerReactor::createPropertiesMap( void ) {
 	_properties["PASS"] = CommandProperties(1, true);
