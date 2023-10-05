@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
+/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 10:02:23 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/04 18:49:54 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/05 14:04:13 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,19 +146,18 @@ int	ClientManager::MatchNickName(set <int> ChannelMembers, string nickname) {
 	return (false);
 }
 
-void	ClientManager::doesClientExist(string& nickname) {
+int	ClientManager::doesClientExist(string& nickname) {
 	
 	map<int, ClientData>::iterator it;
 
-
-
 	for (it = _ClientsBySocket.begin(); it != _ClientsBySocket.end(); it++) {
-		cout << "|" << getClientData(it->first).getNickname() << "|" << endl;
+		// cout << "|" << getClientData(it->first).getNickname() << "|" << endl;
 
-		// if (getClientData(it->first).getNickname().compare(nickname) == 0) {
-		// 	cout << "Nickname was found inside of map container" << endl;
-		// 	break ;
-		// }
+		if (getClientData(it->first).getNickname().compare(nickname) == 0) {
+			cout << "Nickname was found inside of map container" << endl;
+			return (it->first);
+		}
 	}
 	cout << "Couldn't find the nickname within the map" << endl;
+	return (-1);
 }

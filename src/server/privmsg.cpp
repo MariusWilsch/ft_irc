@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   privmsg.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
+/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/24 22:51:30 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/04 16:16:02 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/05 14:16:00 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,15 +27,20 @@ void	ExecuteCommands::privmsg(ServerReactor &_serverReactor, Message &ProcessMes
 		send(clientSocket, message.c_str(), message.length(), 0);
 	}
 
+// string messageToSend = "PRIVMSG " + target + " :" + trailing + "\r\n";
+// send(targetSocket, messageToSend.c_str(), messageToSend.length(), 0);
+
 	
 	if (_serverReactor.getChannelManager().itsChannel(target)) { // If Channel
 			cout << "Sending to all clients in channel" << endl;
 	} else { // If Nickname
 			cout << "Sending the message to the user" << endl;
-			_serverReactor.getClientManager().doesClientExist(target);
-		// Check if nickname exists
-			// If exists, send message to client
-			// If not exists, send error message to client
-	} 
-	
+			int targetSocket = _serverReactor.getClientManager().doesClientExist(target);
+			if (targetSocket == -1) { // Check if nickname exists
+				cout << "Nickname not found" << endl;
+				return ; // If not exists, send error message to client
+			} // If exists, send message to client
+			string msgToSend = "PRIVMSG " + target + " :" + trailing + "\r\n";
+			send(targetSocket, msgToSend.c_str(), msgToSend.length(), 0);
+	}
 }
