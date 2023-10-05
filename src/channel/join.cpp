@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/24 12:13:30 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/05 18:09:40 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/05 19:01:44 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ int seperateNamesKeys(std::vector<string> &ChannelNames, std::vector<string> &Ch
                 string sub = param.substr(0, e);
                 sub.erase(std::remove(sub.begin(), sub.end(), ' '), sub.end());
                 param = param.substr(e + 1);
-            
                 if (sub[0] == '#'){
                     sub.erase(0, 1);
                     ChannelNames.push_back(sub);

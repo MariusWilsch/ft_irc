@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 09:59:41 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/09/28 22:36:36 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/05 21:04:55 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 /*
 	* parsing issues:
 		1 - Empty element in the end of the parameters vector
-		2 - When the client is leaves the server, needs to remove it from all the channels also !
-		3 - !PROBLEME:  When the server recieves lot of messages from clients, the program complete it's execution and stos without any crach~
+		2 - When the client leaves the server, needs to remove it from all the channels also !
+		3 - !PROBLEME:  When the server recieves lot of messages from clients, the program complete it's execution and stops without any crach~
 */
 
 int	main( int argc, char **argv )

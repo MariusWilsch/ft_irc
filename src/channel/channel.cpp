@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 10:02:20 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/04 19:06:19 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/05 21:16:45 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -199,4 +199,8 @@ void			ChannelManager::removeFromChannels(int _clientSocket){
             }
         }
     }
+}
+
+void        ChannelManager::removeChannel(string channelName){
+    this->_channels.erase(channelName);
 }

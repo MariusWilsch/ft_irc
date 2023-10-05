@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 10:00:19 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/09/28 21:28:30 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/05 21:23:24 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ void	ServerReactor::writeServerError( std::string function, std::string message,
 	exit(1);
 }
 
+// How to add a command to _properties, 
 void	ServerReactor::createPropertiesMap( void ) {
 	_properties["PASS"] = CommandProperties(1, true);
 	_properties["NICK"] = CommandProperties(1, true);
