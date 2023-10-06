@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 15:04:15 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/09/20 20:34:25 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/06 12:18:13 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,14 +81,14 @@ class ServerReactor {
 		//void	sendMessageToClient(int clientSocket, string message);
 		 
 		/*			SERVER T0 CLIENT COMMUICATION			*/  
-		
+		void		sendMsgToClient(int socket, const string& command, const vector<string> &params,  const string &trailing = "");
 	
 		/*			COMMAND IMPLEMENTATION			*/
 
 		/* 					GETTERS					*/
 		ClientManager&	getClientManager( void );
 		ChannelManager&	getChannelManager( void );
-		string			getServerName( void );
+		string					getServerName( void );
 
 
 		/*			MAIN			*/

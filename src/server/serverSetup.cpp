@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 10:00:19 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/06 11:10:35 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/06 12:16:57 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,11 +49,7 @@ ServerReactor::~ServerReactor( void ) {
 }
 
 // TODO: Put this into a utils file
-void	ServerReactor::writeServerError( std::string function, std::string message, int error ) {
-	std::cout << "Error: " << function << " - " << message << std::endl;
-	std::cout << "Error: " << function << " - " << strerror(error) << std::endl;
-	exit(1);
-}
+
 
 // How to add a command to _properties, 
 void	ServerReactor::createPropertiesMap( void ) {
