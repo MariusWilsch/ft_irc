@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   privmsg.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/24 22:51:30 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/05 14:45:25 by verdant          ###   ########.fr       */
+/*   Updated: 2023/10/06 10:50:16 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,8 @@ void	ExecuteCommands::privmsg(ServerReactor &_serverReactor, Message &ProcessMes
 				cout << "Nickname not found" << endl;
 				return ; // If not exists, send error message to client
 			} // If exists, send message to client
-			string msgToSend = "PRIVMSG " + target + " :" + trailing + "\r\n";
-			send(targetSocket, msgToSend.c_str(), msgToSend.length(), 0);
+			// string msgToSend = "PRIVMSG " + target + " :" + trailing + "\r\n";
+			// send(targetSocket, msgToSend.c_str(), msgToSend.length(), 0);
+			_serverReactor.sendMsgToClient(targetSocket, "PRIVMSG", {target}, trailing);
 	}
 }
