@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 15:07:18 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/04 21:19:11 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/06 11:15:30 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 #include <map>
 #include <string>
 #include <vector>
+#include <cstdarg> // for va_list and related functions
 
 using std::string;
 using std::map;
