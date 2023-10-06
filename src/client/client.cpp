@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 10:02:23 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/05 15:13:59 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/06 12:21:12 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,7 +146,7 @@ int	ClientManager::MatchNickName(set <int> ChannelMembers, string nickname) {
 	return (-1);
 }
 
-int	ClientManager::doesClientExist(string& nickname) {
+int	ClientManager::getClientSocketByNick(string& nickname) {
 	
 	map<int, ClientData>::iterator it;
 

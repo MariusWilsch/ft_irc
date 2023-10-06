@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 00:53:10 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/06 12:06:54 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/06 15:38:28 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,10 +83,10 @@ void     ExecuteCommands::user(ServerReactor &_serverReactor, Message &ProcessMe
             _serverReactor.getClientManager().getClientData(clientSocket).setRegistration(true);
             
             // ~~~~~~~~~~~~~~~~~~~ INFORM THE SERVER  ~~~~~~~~~~~~~~~~~~~ // 
-            std::cout<< "User informations: \n" << std::endl << "USERNAME: " << _serverReactor.getClientManager().getClientData(clientSocket).getUsername() << std::endl;
-            std::cout << "MODE: " << _serverReactor.getClientManager().getClientData(clientSocket).getMode() << std::endl;
-            std::cout << "UNUSED: " << _serverReactor.getClientManager().getClientData(clientSocket).getUnused() << std::endl;
-            std::cout << "REALNAME: " << _serverReactor.getClientManager().getClientData(clientSocket).getRealname() << std::endl;
+            // std::cout<< "User informations: \n" << std::endl << "USERNAME: " << _serverReactor.getClientManager().getClientData(clientSocket).getUsername() << std::endl;
+            // std::cout << "MODE: " << _serverReactor.getClientManager().getClientData(clientSocket).getMode() << std::endl;
+            // std::cout << "UNUSED: " << _serverReactor.getClientManager().getClientData(clientSocket).getUnused() << std::endl;
+            // std::cout << "REALNAME: " << _serverReactor.getClientManager().getClientData(clientSocket).getRealname() << std::endl;
         }
         else{
             string Err = ERR_NEEDMOREPARAMS(ProcessMessage.getCommand());

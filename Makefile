@@ -10,7 +10,7 @@ OBJ_DIR := obj/
 
 ## Debugging ##
 ifdef DEBUG
-		CXXFLAGS += -g -fsanitize=address
+		CXXFLAGS += -g++ -fsanitize=address
 endif
 
 

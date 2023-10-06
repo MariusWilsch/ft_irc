@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 20:17:01 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/06 10:56:11 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/06 15:45:25 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,25 +127,31 @@ void    ChannelTopicMode(ServerReactor &_serverReactor, Message &ProccessMessage
             string channelName = ProccessMessage.getParams()[0];
             string topic;
             channelName.erase(0, 1);
-            if (_serverReactor.getChannelManager().getChannelByName(channelName).isCLient(clientSocket))
-            {
-                if (ProccessMessage.getParams().size() == 3){
-                    topic = ProccessMessage.getParams()[2];
-                    topic.erase(remove(topic.begin(), topic.end(), '\n'), topic.end());
+            if (_serverReactor.getChannelManager().getChannelByName(channelName).isCLient(clientSocket)){
+                if (_serverReactor.getChannelManager().getChannelByName(channelName).isOperator(clientSocket)){
+                    if (ProccessMessage.getParams().size() == 3){
+                        topic = ProccessMessage.getParams()[2];
+                        topic.erase(remove(topic.begin(), topic.end(), '\n'), topic.end());
+                    }
+                    if (ProccessMessage.getParams()[1].compare("+t") == 0 && !topic.empty()){
+                        _serverReactor.getChannelManager().getChannelByName(channelName).setTopicFlag(true);
+                        _serverReactor.getChannelManager().getChannelByName(channelName).setTopic(topic);
+                    }
+                    else if (ProccessMessage.getParams()[1].compare("-t") == 0){
+                        _serverReactor.getChannelManager().getChannelByName(channelName).setTopicFlag(false);
+                        _serverReactor.getChannelManager().getChannelByName(channelName).setTopic("");
+                    }
+                    string message = _serverReactor.getClientManager().getClientData(clientSocket).getUsername();
+                    message.append(" has changed mode: ");
+                    message.append(ProccessMessage.getParams()[1]);
+                    message.append("\n");
+                    ExecuteCommands::informMembers(_serverReactor.getChannelManager().getChannelByName(channelName).getClientSockets(), message, clientSocket);
                 }
-                if (ProccessMessage.getParams()[1].compare("+t") == 0 && !topic.empty()){
-                    _serverReactor.getChannelManager().getChannelByName(channelName).setTopicFlag(true);
-                    _serverReactor.getChannelManager().getChannelByName(channelName).setTopic(topic);
+                else{
+                    string Err = ERR_CHANOPRIVSNEEDED(channelName);
+                    send(clientSocket, Err.c_str(), Err.size(), 0);
+                    throw std::exception();
                 }
-                else if (ProccessMessage.getParams()[1].compare("-t") == 0){
-                    _serverReactor.getChannelManager().getChannelByName(channelName).setTopicFlag(false);
-                    _serverReactor.getChannelManager().getChannelByName(channelName).setTopic("");
-                }
-                string message = _serverReactor.getClientManager().getClientData(clientSocket).getUsername();
-                message.append(" has changed mode: ");
-                message.append(ProccessMessage.getParams()[1]);
-                message.append("\n");
-                ExecuteCommands::informMembers(_serverReactor.getChannelManager().getChannelByName(channelName).getClientSockets(), message, clientSocket);
             }
             else{
                 string Err = ERR_NOTONCHANNEL(channelName);
@@ -179,28 +185,35 @@ void ChanneLimitMode(ServerReactor &_serverReactor, Message &ProccessMessage, in
             string  channelName = ProccessMessage.getParams()[0];
             channelName.erase(0, 1);
             if (_serverReactor.getChannelManager().getChannelByName(channelName).isCLient(clientSocket)){
-                if (ProccessMessage.getParams().size() == 3){
-                    if (isDecimal(ProccessMessage.getParams()[2]))
-                        limit = std::atoi(ProccessMessage.getParams()[1].c_str());
-                    else{
-                        string Err = ERR_NEEDMOREPARAMS(ProccessMessage.getCommand());
-                        send(clientSocket, Err.c_str(), Err.size(), 0);
-                        throw std::exception();
+                if (_serverReactor.getChannelManager().getChannelByName(channelName).isOperator(clientSocket)){ 
+                    if (ProccessMessage.getParams().size() == 3){
+                        if (isDecimal(ProccessMessage.getParams()[2]))
+                            limit = std::atoi(ProccessMessage.getParams()[1].c_str());
+                        else{
+                            string Err = ERR_NEEDMOREPARAMS(ProccessMessage.getCommand());
+                            send(clientSocket, Err.c_str(), Err.size(), 0);
+                            throw std::exception();
+                        }
                     }
+                    if (ProccessMessage.getParams()[1].compare("+l") == 0 && limit){
+                        _serverReactor.getChannelManager().getChannelByName(channelName).setLimitFlag(true);
+                        _serverReactor.getChannelManager().getChannelByName(channelName).setLimit(limit);
+                    }
+                    else if (ProccessMessage.getParams()[1].compare("-l") == 0){
+                        _serverReactor.getChannelManager().getChannelByName(channelName).setLimitFlag(false);
+                        _serverReactor.getChannelManager().getChannelByName(channelName).setLimit(-1);
+                    }
+                    string message = _serverReactor.getClientManager().getClientData(clientSocket).getUsername();
+                    message.append(" has changed mode: ");
+                    message.append(ProccessMessage.getParams()[1]);
+                    message.append("\n");
+                    ExecuteCommands::informMembers(_serverReactor.getChannelManager().getChannelByName(channelName).getClientSockets(), message, clientSocket);
                 }
-                if (ProccessMessage.getParams()[1].compare("+l") == 0 && limit){
-                    _serverReactor.getChannelManager().getChannelByName(channelName).setLimitFlag(true);
-                    _serverReactor.getChannelManager().getChannelByName(channelName).setLimit(limit);
+                else{
+                    string Err = ERR_CHANOPRIVSNEEDED(channelName);
+                    send(clientSocket, Err.c_str(), Err.size(), 0);
+                    throw std::exception();
                 }
-                else if (ProccessMessage.getParams()[1].compare("-l") == 0){
-                    _serverReactor.getChannelManager().getChannelByName(channelName).setLimitFlag(false);
-                    _serverReactor.getChannelManager().getChannelByName(channelName).setLimit(-1);
-                }
-                string message = _serverReactor.getClientManager().getClientData(clientSocket).getUsername();
-                message.append(" has changed mode: ");
-                message.append(ProccessMessage.getParams()[1]);
-                message.append("\n");
-                ExecuteCommands::informMembers(_serverReactor.getChannelManager().getChannelByName(channelName).getClientSockets(), message, clientSocket);
             }
             else{
                 string Err = ERR_NOTONCHANNEL(channelName);

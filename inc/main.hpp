@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 15:07:18 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/04 21:19:11 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/06 15:56:54 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 #include <map>
 #include <string>
 #include <vector>
+#include <cstdarg> // for va_list and related functions
 
 using std::string;
 using std::map;
@@ -52,4 +53,8 @@ using std::endl;
 #define ERR_CHANOPRIVSNEEDED(channel) "482: " + channel + " : You're not channel operator\n"
 #define ERR_NOSUCHCHANNEL(channel) "403: " + channel + " : No such channel\n"
 #define ERR_UNKNOWNMODE(character) "472: " + character + " : is unknown mode char to me\n"
+
+// PRIVMSG Numeric replies to add here.
+
+
 // #define ERR_NEEDMOREPARAMS() 
