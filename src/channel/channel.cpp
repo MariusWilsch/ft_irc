@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 10:02:20 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/05 21:16:45 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/06 10:56:04 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ void		ChannelData::setSecurity( bool stat){
 }
 
 void    	ChannelData::setInviteFlag(bool stat){
-    this->_securityFlag = stat;
+    this->_inviteOnlyFlag = stat;
 }
 
 void		ChannelData::setTopicFlag(bool stat){

@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 00:53:10 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/04 20:51:55 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/06 12:06:54 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,7 @@ void ExecuteCommands::nick(ServerReactor &_serverReactor, Message &ProcessMessag
 {
     string err;
 
-    if (ProcessMessage.getParams().empty() || !NickNameValidation(ProcessMessage.getParams()[0]))
-    {
+    if (ProcessMessage.getParams().empty() || !NickNameValidation(ProcessMessage.getParams()[0])){
         string Err = ERR_NONICKNAMEGIVEN();
         send(clientSocket, Err.c_str(), Err.size(), 0);
         throw std::exception();

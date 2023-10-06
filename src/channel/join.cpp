@@ -6,12 +6,18 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/24 12:13:30 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/05 19:01:44 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/06 10:56:47 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
  
 #include"ExecuteCommands.hpp"
+
+
+/*
+    - JOIN TO THE CHANNEL RESPECTING IT'S MODES
+        + CHECK INVITE ONLY MODE
+*/
 
 int seperateNamesKeys(std::vector<string> &ChannelNames, std::vector<string> &ChannelKeys, Message &ProcessMessage){
     if (ProcessMessage.getParams().size() == 0)

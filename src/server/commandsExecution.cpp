@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 19:02:14 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/04 20:54:59 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/06 11:20:57 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ void ExecuteCommands::execute(ServerReactor &_serverReactor, Message &ProcessMes
         }
         else{
             //~~~~~~~~~~~~~~~~~~~~~~~~~~ ATHENTICATON COMMANDS ~~~~~~~~~~~~~~~~~~~~~~~~~~//
+            // Replace this with a chaine of array of pointer to function and execute it the appropriate function without using if/else statements.
             if (ProcessMessage.getCommand().compare("NICK") == 0){
                 nick(_serverReactor, ProcessMessage, clientSocket);
             }
@@ -69,6 +70,9 @@ void ExecuteCommands::execute(ServerReactor &_serverReactor, Message &ProcessMes
             }
             else if (ProcessMessage.getCommand().compare("KICK") == 0){
                 kick(_serverReactor, ProcessMessage, clientSocket);
+            }
+            else if (ProcessMessage.getCommand().compare("PART") == 0){
+                part(_serverReactor, ProcessMessage, clientSocket);
             }
                 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
             else if (ProcessMessage.getCommand().compare("PRIVMSG") == 0){

@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/04 22:01:31 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/05 21:18:23 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/06 11:22:06 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ void     ExecuteCommands::part(ServerReactor &_serverReactor, Message &ProcessMe
         for (unsigned int i = 0; i < ChannelNames.size(); i++){
             if (_serverReactor.getChannelManager().channelExistence(ChannelNames[i]) == true){
                 // The channel it's exist.
+                cout << "Begin the execution of part command" << endl;
                 if (_serverReactor.getChannelManager().getChannelByName(ChannelNames[i]).isCLient(clientSocket)){
                     _serverReactor.getChannelManager().getChannelByName(ChannelNames[i]).removeClient(clientSocket);
                     if (_serverReactor.getChannelManager().getChannelByName(ChannelNames[i]).isOperator(clientSocket)){

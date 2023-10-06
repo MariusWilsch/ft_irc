@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/01 16:47:40 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/05 19:13:10 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/06 12:00:18 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ bool splitParams(std::vector<string> &ChannelNames, std::vector<string> &Users, 
             + if the user doesn't exist then generate a specific numeric reply and continue.
 */
 
+ // Kick #channel1 #channel2 #InvalidCh a user1 user2 user3
 void     ExecuteCommands::kick(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket){
     std::vector<string> ChannelNames;
     std::vector<string> Users;
@@ -94,7 +95,6 @@ void     ExecuteCommands::kick(ServerReactor &_serverReactor, Message &ProcessMe
                                 send(clientSocket, Err.c_str(), Err.size(), 0);
                             }
                             // NUMERIC REPLY TO INFORM ALL THE CHANNEL MEMBER. "COMMENT"
-                        
                         }
                         else{
                             string Err = ERR_NEEDMOREPARAMS(ProcessMessage.getCommand());

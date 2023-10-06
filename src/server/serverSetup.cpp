@@ -6,13 +6,17 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 10:00:19 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/05 21:23:24 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/06 11:10:35 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "server.hpp"
 
-
+/*
+	Replace in code:
+		+ The number of parameters
+			+ Join: infinite params: you can join many channels at the same time, using the command join with multiple parameters.
+*/
 
 // TODO: Place this appropriately as soon as I fixed the bug
 
@@ -58,11 +62,14 @@ void	ServerReactor::createPropertiesMap( void ) {
 	_properties["USER"] = CommandProperties(4, false);
 	_properties["JOIN"] = CommandProperties(1, true);
 	_properties["PRIVMSG"] = CommandProperties(2, false);
+
 	_properties["OPER"] = CommandProperties(2, true);
+
 	_properties["KICK"] = CommandProperties(2, false);
 	_properties["INVITE"] = CommandProperties(2, true);
 	_properties["TOPIC"] = CommandProperties(1, false);
 	_properties["MODE"] = CommandProperties(2, true);
+	_properties["PART"] = CommandProperties(2, true);
 }
 
 /*			SOCKET & MULTIPLEXING			*/
