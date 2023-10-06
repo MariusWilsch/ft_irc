@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 15:04:15 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/06 11:54:05 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/06 12:08:24 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ class ServerReactor {
 		 
 		/*			SERVER T0 CLIENT COMMUICATION			*/  
 		void sendMsg(int socket, const string &command, const string &param, const string &trailing = "");
+		void sendNumericReply(int socket, string numericReply, const string &param, const string &trailing = "");
 	
 		/*			COMMAND IMPLEMENTATION			*/
 

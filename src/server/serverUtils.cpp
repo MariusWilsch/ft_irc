@@ -9,6 +9,10 @@ void	ServerReactor::writeServerError( std::string function, std::string message,
 void ServerReactor::sendMsg(int socket, const string &command, const string &param, const string &trailing) {
     string message;
 
+		// Check if socket is valid
+		if (socket == -1)
+			return ;
+
     // Append command
     message += command;
 
@@ -24,6 +28,31 @@ void ServerReactor::sendMsg(int socket, const string &command, const string &par
     message += "\r\n";  // IRC messages end with \r\n
 
     send(socket, message.c_str(), message.length(), 0);
+}
+
+void ServerReactor::sendNumericReply(int socket, string numericReply, const string &param, const string &trailing) {
+		string message;
+
+		// Check if socket is valid
+		if (socket == -1)
+			return ;
+
+		// Append command
+		message += ":" + _serverName + " " + numericReply;
+
+		// Append parameters
+		if (!param.empty()) {
+				message += " " + param;
+		}
+
+		// Append trailing message if it exists
+		if (!trailing.empty()) {
+				message += " :" + trailing;
+		}
+
+		message += "\r\n";  // IRC messages end with \r\n
+
+		send(socket, message.c_str(), message.length(), 0);
 }
 
 

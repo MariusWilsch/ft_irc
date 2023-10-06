@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 10:02:23 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/05 14:04:13 by verdant          ###   ########.fr       */
+/*   Updated: 2023/10/06 12:01:56 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,7 +146,7 @@ int	ClientManager::MatchNickName(set <int> ChannelMembers, string nickname) {
 	return (false);
 }
 
-int	ClientManager::doesClientExist(string& nickname) {
+int	ClientManager::getClientSocketByNick(string& nickname) {
 	
 	map<int, ClientData>::iterator it;
 
