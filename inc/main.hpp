@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 15:07:18 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/06 11:15:30 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/07 18:21:43 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 #include <map>
 #include <string>
 #include <vector>
-#include <cstdarg> // for va_list and related functions
+#include <netdb.h>
 
 using std::string;
 using std::map;

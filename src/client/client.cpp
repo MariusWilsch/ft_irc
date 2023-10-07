@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 10:02:23 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/06 12:01:56 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/07 18:48:16 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,14 @@ string	ClientData::getPassword() const{
 	return (this->_password);
 }
 
+string ClientData::getClientIP() const{
+	return (this->_clientIP);
+}
+
+string ClientData::getClientInfo() const{
+	return (getNickname() + "!~" + getUsername() + "@" + getClientIP());
+}
+
 /*			SETTERS			 */
 
 void	ClientData::setmode(int mode){
@@ -103,6 +111,10 @@ void	ClientData::setPassword(string pass){
 	this->_password = pass;
 }
 
+void	ClientData::setClientIP(string clientIP){
+		this->_clientIP = clientIP;
+}
+
 /*					CLIENT MANAGER						*/
 
 ClientManager::ClientManager( void ) {};
@@ -111,10 +123,11 @@ ClientManager::~ClientManager() {};
 
 /*					MEMBER FUNCTIONS					*/
 
-void	ClientManager::addClient( int clientSocket)
+void	ClientManager::addClient( int clientSocket, string clientIP)
 {
 	std::cout << "Creating Client Data and adding client to map container" << std::endl;
 	ClientData newClient(clientSocket, _ClientsBySocket.size());
+	newClient.setClientIP(clientIP);
 	_ClientsBySocket.insert(std::pair<int, ClientData>(clientSocket, newClient));
 }
 

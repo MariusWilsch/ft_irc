@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   serverSetup.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 10:00:19 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/05 14:48:56 by verdant          ###   ########.fr       */
+/*   Updated: 2023/10/07 18:22:21 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,8 +72,9 @@ void	ServerReactor::updateMoinitoring( int fd, int filter, int flags ) {
 
 void	ServerReactor::setupServerSocket( int port ) {
 	struct sockaddr_in	serverAddress;
+	socklen_t						serverAddressSize;
 	int					yes;
-	
+
 	_serverSocket = socket(AF_INET, SOCK_STREAM, 0);
 	if (_serverSocket == -1)
 		writeServerError("socket", "Failed to create socket", errno);
@@ -82,8 +83,19 @@ void	ServerReactor::setupServerSocket( int port ) {
 	serverAddress.sin_family = AF_INET;
 	serverAddress.sin_port = htons(port);
 	serverAddress.sin_addr.s_addr = INADDR_ANY;
-	if (bind(_serverSocket, (struct sockaddr *)&serverAddress, sizeof(serverAddress)) == -1)
+	serverAddressSize = sizeof(serverAddress);
+	if (bind(_serverSocket, (struct sockaddr *)&serverAddress, serverAddressSize) == -1)
 		writeServerError("bind", "Failed to bind socket", errno);
+
+	struct hostent *he = gethostbyname("localhost");
+	if (he == NULL) {
+			writeServerError("gethostbyname", hstrerror(h_errno), errno);
+			return;
+	}
+	
+	char* localIP = inet_ntoa(*(struct in_addr *)he->h_addr);
+	cout << "Localhost IP Address: " << localIP << endl;
+		
 	if (listen(_serverSocket, 10) == -1)
 		writeServerError("listen", "Failed to listen on socket", errno);
 	setToNonBlocking(_serverSocket);

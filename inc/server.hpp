@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 15:04:15 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/06 12:08:24 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/07 18:44:41 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ class ServerReactor {
 	private:
 		int								_serverSocket;
 		int								_kq;
+		string						_serverIP;
 		bool							_isShutdown;
 		string							_connectionPassword;
 		string							_serverName;
@@ -73,6 +74,7 @@ class ServerReactor {
 		void	setToNonBlocking(int fd);
 		void	updateMoinitoring(int clientSocket, int filter, int flags);
 		
+		
 
 		/*			EVENTS			*/
 		
@@ -81,7 +83,8 @@ class ServerReactor {
 		//void	sendMessageToClient(int clientSocket, string message);
 		 
 		/*			SERVER T0 CLIENT COMMUICATION			*/  
-		void sendMsg(int socket, const string &command, const string &param, const string &trailing = "");
+		
+		int sendMsg(int socket, const string& clientInfo ,const string &command, const string &param, const string &trailing = "");
 		void sendNumericReply(int socket, string numericReply, const string &param, const string &trailing = "");
 	
 		/*			COMMAND IMPLEMENTATION			*/
@@ -100,4 +103,5 @@ class ServerReactor {
 			
 		void	writeServerError(string functionName, string errorMessage, int errorNumber);
 		void	createPropertiesMap( void );
+
 };

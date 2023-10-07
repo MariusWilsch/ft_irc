@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   serverEvents.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 10:17:06 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/04 19:02:57 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/07 18:37:51 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,12 +59,21 @@ void	ServerReactor::acceptNewClient( void )
 	std::cout << "Accepting new client" << std::endl;
 	clientAddressSize = sizeof(clientAddress);
 	clientSocket = accept(_serverSocket, (struct sockaddr *)&clientAddress, &clientAddressSize);
+
+
+	string clientIP = inet_ntoa(clientAddress.sin_addr);
+  std::cout << "Client IP Address: " << clientIP << std::endl;
+
+
 	if (clientSocket == -1)
 		writeServerError("accept", "Failed to accept new client", errno);
 	// TODO: Check if above max clients
 	setToNonBlocking(clientSocket);
 	updateMoinitoring(clientSocket, EVFILT_READ, EV_ADD);
-	_clientManager.addClient(clientSocket);
+
+// Convert char * to stirng 
+	
+	_clientManager.addClient(clientSocket, clientIP);
 }
 
 
@@ -86,8 +95,6 @@ void	ServerReactor::run( void )
 				acceptNewClient();
 			if (fd != _serverSocket && filter == EVFILT_READ)
 				recieveIncomingMessage(fd);
-			// if (fd != _serverSocket && filter == EVFILT_WRITE)
-			// 	handleOutgoingMessage(fd);
 		}
 	}
 	cout << "Server: " << this->_serverName << " is shutdown." << endl;

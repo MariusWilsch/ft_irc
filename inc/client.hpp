@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 15:30:13 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/06 12:01:56 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/07 18:47:50 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ class ClientData {
 	private:
 		int									_clientSocket;
 		int									_mode;
+		string								_clientIP;
 		string								_realname;
 		string								_nickname;
 		string								_username;
@@ -58,6 +59,8 @@ class ClientData {
 		string 	getUnused() const;
 		bool	getRegistration() const;
 		string	getPassword() const;
+		string	getClientIP() const;
+		string	getClientInfo() const;
 		
 
 
@@ -70,6 +73,7 @@ class ClientData {
 		void	setUnused(string unused);
 		void	setRegistration( bool b);
 		void	setPassword(string pass);
+		void	setClientIP(string clientIP);
 
 };
 
@@ -92,7 +96,7 @@ class ClientManager {
 
 		/*			MEMBER FUNCTIONS			*/
 		
-		void								addClient( int clientSocket);
+		void								addClient( int clientSocket, string clientIP);
 		void								removeClient( int clientSocket );
 
 		/*			GETTERS			*/
@@ -106,4 +110,5 @@ class ClientManager {
 		// if the nick name founded in the given socket id which represent a member of a channel it means that, the user is a memeber.
 		int	MatchNickName(set <int> ChannelMembers, string nickname);
 		int	getClientSocketByNick(string& nickname);
+		
 };

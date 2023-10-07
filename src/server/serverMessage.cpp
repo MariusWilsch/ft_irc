@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   serverMessage.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 13:27:34 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/04 18:46:51 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/06 13:26:58 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ string Message::getCommand( void ) {
 
 std::vector <string> Message::getParams( void ) {
 	if (_params.empty())
-		return (std::vector <string>());
+		return (std::vector <string> (1, ""));
 	return _params;
 }
 

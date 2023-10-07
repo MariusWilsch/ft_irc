@@ -6,11 +6,12 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/24 22:51:30 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/06 12:15:32 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/07 19:03:48 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ExecuteCommands.hpp"
+
 
 
 
@@ -19,9 +20,12 @@ void	ExecuteCommands::privmsg(ServerReactor &_serverReactor, Message &ProcessMes
 	string target = ProcessMessage.getParams()[0];
 	string trailing = ProcessMessage.getTrailing();
 
+	cout << "ClientSocket: " << clientSocket << endl;
+	
+
 	if (target.empty())
 		return _serverReactor.sendNumericReply(clientSocket, "411", target, "No recipient given (PRIVMSG)");
-	if (trailing.empty()) // If no text to send
+	if (trailing.empty())
 		return _serverReactor.sendNumericReply(clientSocket, "412", target, "No text to send");
 
 	if (_serverReactor.getChannelManager().itsChannel(target)) { // If Channel
@@ -29,10 +33,11 @@ void	ExecuteCommands::privmsg(ServerReactor &_serverReactor, Message &ProcessMes
 			for (set<int>::iterator it = channelMembers.begin(); it != channelMembers.end(); it++) {
 				if (*it == clientSocket)
 					continue ;
-				_serverReactor.sendMsg(*it, "PRIVMSG", target, trailing);
+				_serverReactor.sendMsg(*it, _serverReactor.getClientManager().getClientData(*it).getClientInfo() ,"PRIVMSG", target, trailing);
 			}
-	} else
-			_serverReactor.sendMsg( _serverReactor.getClientManager().getClientSocketByNick(target), "PRIVMSG", target, trailing);
-	// No such nick/channel
-	return _serverReactor.sendNumericReply(clientSocket, "401", target, "No such nick/channel");
+	} else {
+		int targetSocket = _serverReactor.getClientManager().getClientSocketByNick(target);
+		if (_serverReactor.sendMsg(targetSocket,  _serverReactor.getClientManager().getClientData(clientSocket).getClientInfo(), "PRIVMSG", target, trailing) == -1)
+		 	_serverReactor.sendNumericReply(clientSocket, "401", target, "No such nick/channel"); // No such nick/channel
+	}
 }
