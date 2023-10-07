@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   authentication.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
+/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 00:53:10 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/04 20:51:55 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/07 20:25:06 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,9 @@ void     ExecuteCommands::user(ServerReactor &_serverReactor, Message &ProcessMe
             std::cout << "MODE: " << _serverReactor.getClientManager().getClientData(clientSocket).getMode() << std::endl;
             std::cout << "UNUSED: " << _serverReactor.getClientManager().getClientData(clientSocket).getUnused() << std::endl;
             std::cout << "REALNAME: " << _serverReactor.getClientManager().getClientData(clientSocket).getRealname() << std::endl;
+						// Send 001 to the client
+						string nickname = _serverReactor.getClientManager().getClientData(clientSocket).getNickname();
+						_serverReactor.sendNumericReply(clientSocket, "001", nickname , "Welcome to the Internet Relay Network, " + nickname);
         }
         else{
             string Err = ERR_NEEDMOREPARAMS(ProcessMessage.getCommand());
