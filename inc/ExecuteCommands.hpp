@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 19:05:52 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/04 22:05:18 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/07 18:13:32 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,3 +47,41 @@ class ExecuteCommands
 };
 
 #endif
+
+
+
+//    if (ProcessMessage.getCommand().compare("NICK") == 0){
+//         nick(_serverReactor, ProcessMessage, clientSocket);
+//     }
+//     else if (ProcessMessage.getCommand().compare("USER") == 0){
+//         user(_serverReactor, ProcessMessage, clientSocket);
+//     }
+//     else if (ProcessMessage.getCommand().compare("PASS") == 0){
+//         pass(_serverReactor, ProcessMessage, clientSocket);
+//     }
+//     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ CHANNEL COMMANDS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
+//     else if (ProcessMessage.getCommand().compare("JOIN") == 0){
+//         join(_serverReactor, ProcessMessage, clientSocket);
+//     }
+//     else if (ProcessMessage.getCommand().compare("MODE") == 0){
+//         mode(_serverReactor, ProcessMessage, clientSocket);
+//     }
+//     else if (ProcessMessage.getCommand().compare("INVITE") == 0){
+//         invite(_serverReactor, ProcessMessage, clientSocket);
+//     }
+//     else if (ProcessMessage.getCommand().compare("TOPIC") == 0){
+//         topic(_serverReactor, ProcessMessage, clientSocket);
+//     }
+//     else if (ProcessMessage.getCommand().compare("KICK") == 0){
+//         kick(_serverReactor, ProcessMessage, clientSocket);
+//     }
+//     else if (ProcessMessage.getCommand().compare("PART") == 0){
+//         part(_serverReactor, ProcessMessage, clientSocket);
+//     }
+//     else if (ProcessMessage.getCommand().compare("PRIVMSG") == 0){
+//         privmsg(_serverReactor, ProcessMessage, clientSocket);
+//     }
+//     else if (ProcessMessage.getCommand().compare("/HELP") == 0){
+//         cout << "you're using the HELP bot now." << endl;
+//         HelpBot::Help(_serverReactor, ProcessMessage, clientSocket);
+//     }
