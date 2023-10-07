@@ -2,7 +2,7 @@ CXX := clang++
 CXXFLAGS := -std=c++98 # -Wall -Wextra -Werror 
 INC := -I inc/
 
-TARGET := ft_irc
+TARGET := ircserv
 
 SRC_DIR := src/
 OBJ_DIR := obj/
