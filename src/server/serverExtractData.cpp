@@ -3,14 +3,40 @@
 /*                                                        :::      ::::::::   */
 /*   serverExtractData.cpp                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
+/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 14:08:52 by verdant           #+#    #+#             */
-/*   Updated: 2023/10/04 18:46:45 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/08 07:22:18 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "message.hpp"
+
+
+// std::vector<std::string> getArgs(std::string commandLine) {
+//     std::vector<std::string> args;
+//     while (commandLine.length()) {
+//         std::string nextArg;
+//         // if ':' is found, take the remaining chars of the string as one argument
+//         if (commandLine[0] == ':') {
+//             commandLine.erase(0, 1);
+//             nextArg = commandLine;
+//         }
+//         // else take until whitespace
+//         else
+//             nextArg = commandLine.substr(0, commandLine.find(" "));
+//         // remove argument taken from the command line
+//         commandLine.erase(0, nextArg.length());
+//         // skip all spaces
+//         while (commandLine[0] == ' ')
+//             commandLine.erase(0, 1);
+//         // skip arg if empty
+//         if (nextArg.length())
+//             args.push_back(nextArg);
+//     }
+//     return args;
+// }
+
 
 void	Message::extractCommand( void  )
 {

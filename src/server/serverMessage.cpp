@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   serverMessage.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
+/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 13:27:34 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/06 13:26:58 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/08 08:19:59 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,18 +25,37 @@ Message::Message( string rawMessage, map <string, CommandProperties> properties 
 	_rawMessage.erase(std::remove(_rawMessage.begin(), _rawMessage.end(), '\r'), _rawMessage.end());
 	
 
-	cout << "|" << _rawMessage << "|" << endl;
+	// cout << "|" << _rawMessage << "|" << endl;
 
 	// Parse raw message
-	extractCommand( );
-	extractTrailing( );
-	extractParams( );
+		// extractCommand( ); Refactoring
+		// extractTrailing( );Refactoring
+		// extractParams( );Refactoring
+
+	// Get Prefix if exists
+	if (_rawMessage.at(0) == ':') {
+		_prefix = _rawMessage.substr(1, _rawMessage.find(' ', 0) - 1);
+		_rawMessage.erase(0, _rawMessage.find(' ', 0) + 1);
+	}
+	// Get Trailing if exists
+	if (_rawMessage.find(':') != string::npos) {
+		_trailing = _rawMessage.substr(_rawMessage.find(':') + 1, _rawMessage.length());
+		_rawMessage.erase(_rawMessage.find(':'), _rawMessage.length());
+	}
+	// Get Command
+	std::istringstream iss(_rawMessage);
+	string token;
+	if (std::getline(iss, token, ' ') && !token.empty()) {
+		_command = token;
+	}
+	while (std::getline(iss, token, ' ')) {
+		if (!token.empty())
+			_params.push_back(token);
+	}
 
 	// Print extracted data
-	// printData();
+	printData();
 
-	// Execute command
-	// [...]
 }
 
 /*			GETTERS			*/
