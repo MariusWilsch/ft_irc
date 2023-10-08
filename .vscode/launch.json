@@ -6,8 +6,8 @@
       "type": "lldb",
       "request": "launch",
       "args": [],
-      "cwd": "/Users/ahammout/Desktop/ft_irc/src/server",
-      "program": "/Users/ahammout/Desktop/ft_irc/src/server/build/Debug/outDebug"
+      "cwd": "/Users/ahammout/Desktop/ft_irc/src",
+      "program": "/Users/ahammout/Desktop/ft_irc/src/build/Debug/outDebug"
     }
   ]
 }

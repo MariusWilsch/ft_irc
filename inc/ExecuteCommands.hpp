@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 19:05:52 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/07 18:13:32 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/08 15:42:08 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ class ExecuteCommands
 #endif
 
 
-
+/*                      This is the old command chaine                  */
 //    if (ProcessMessage.getCommand().compare("NICK") == 0){
 //         nick(_serverReactor, ProcessMessage, clientSocket);
 //     }

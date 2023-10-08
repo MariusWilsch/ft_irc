@@ -6,26 +6,19 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/04 22:01:31 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/06 15:29:25 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/08 16:56:56 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ExecuteCommands.hpp"
 
 /*
-    This funciton it's about part from single or multiple client in one time, 
+    This funciton it's about part from single or multiple channels in one time, 
     + The first task here is about split the parameters and check if there is multiple channel names and
     initialize the set reference passed to the multipleChannels funciton.
 */
 
-
-
-/*
-    Command: PART
-    Parameters: <channel> *( "," <channel> ) [ <Part Message> ]
-*/
-
-bool    multipleChnnels(std::vector<string> &ChannelNames, std::vector<string> &partMessage, Message &ProcessMessage){
+bool    partParser(std::vector<string> &ChannelNames, std::vector<string> &partMessage, Message &ProcessMessage){
     if (ProcessMessage.getParams().size() == 0)
         return (-1);
     if (ProcessMessage.getParams().size() < 1 || ExecuteCommands::whiteCheck(ProcessMessage.getParams()[0]))
@@ -74,7 +67,7 @@ void     ExecuteCommands::part(ServerReactor &_serverReactor, Message &ProcessMe
     std::vector<string> ChannelNames;
     std::vector<string> partMessage;
 
-    int stat = multipleChnnels(ChannelNames, partMessage, ProcessMessage);
+    int stat = partParser(ChannelNames, partMessage, ProcessMessage);
     if (stat == -1){
         string Err = ERR_NEEDMOREPARAMS(ProcessMessage.getCommand());
         send(clientSocket, Err.c_str(), Err.size(), 0);

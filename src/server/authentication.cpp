@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 00:53:10 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/06 15:38:28 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/08 14:59:33 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,7 @@ void ExecuteCommands::nick(ServerReactor &_serverReactor, Message &ProcessMessag
     }
     map<int, ClientData>::iterator it;
     string nickName = ProcessMessage.getParams()[0];
-    string oldNick =  _serverReactor.getClientManager().getClientData(clientSocket).getNickname();
-    
-    nickName.erase(remove(nickName.begin(), nickName.end(), '\n'), nickName.end());
+    string oldNick =  _serverReactor.getClientManager().getClientData(clientSocket).getNickname();    
     if (nickName.compare(_serverReactor.getClientManager().getClientData(clientSocket).getNickname()) != 0)
     {
         for (it = _serverReactor.getClientManager().getClientBySocket().begin(); it != _serverReactor.getClientManager().getClientBySocket().end(); it++){
@@ -50,6 +48,7 @@ void ExecuteCommands::nick(ServerReactor &_serverReactor, Message &ProcessMessag
                 it = _serverReactor.getClientManager().getClientBySocket().begin();
             }
         }
+        // informing the other members about this event.
         if (nickName.compare(oldNick) != 0)
         {
             string n;

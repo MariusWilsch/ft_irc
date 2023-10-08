@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   supportBot.cpp                                     :+:      :+:    :+:   */
+/*   HelpBot.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/01 18:42:38 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/07 17:19:19 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/08 17:06:38 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,43 +29,6 @@
             + MODE
             + PART
 */
-
-string  strToupper(string str){
-    for(unsigned int i = 0; i < str.size(); i++){
-        if (str[i] >= 'a' && str[i] <= 'z')
-            str[i] = toupper(str[i]);
-    }
-    return (str);
-}
-
-void    HelpBot::Help(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket){
-    std::string commands[10] = {"PASS", "NICK", "USER", "JOIN", "PRIVMSG", "KICK", "INVITE", "TOPIC", "MODE"  , "PART"};
-    string    (*FunctionPointers[10])() = {HelpBot::PassManual, HelpBot::NickManual, HelpBot::UserManual, HelpBot::JoinManual, HelpBot::PrivmsgManual, HelpBot::KickManual, HelpBot::InviteManual, HelpBot::TopicManual, HelpBot::ModeManual, HelpBot::PartManual};
-
-    if (ProcessMessage.getParams().size() == 0)
-        // USE  privmsg to send the manual to the client.
-        send(clientSocket,  HelpBot::BotManual().c_str(),  HelpBot::BotManual().size(), 0);
-    else{
-        bool    flag = false;
-        for (unsigned int i = 0; i < 10; i++){
-            if (strToupper(ProcessMessage.getParams()[0]).compare(commands[i].c_str()) == 0)
-            {
-                string manual = FunctionPointers[i]();
-                    // USE  privmsg to send the manual to the client.
-                send (clientSocket, manual.c_str(), manual.size(), 0);
-                flag = true;
-                break;
-            }
-        }
-        if (!flag){
-            string err = "╳╳╳ You have a bad input: you can follow this manual for more informations!\n";
-            err.append(HelpBot::BotManual().c_str());
-            // Send it using privmsg;
-            send(clientSocket, err.c_str(), err.size(), 0);
-                throw std::exception();
-        }
-    }
-}
 
 string HelpBot::BotManual(){
     string manual;
@@ -153,7 +116,13 @@ string HelpBot::TopicManual(){
 string HelpBot::ModeManual(){
     string manual = " HELP SUPPORT BOT:     MODE COMMAND MANUAL\n\n";
     manual.append("     NAME:    MODE\n\n     SYNOPSIS: MODE [#channel] [+/-] [ i, k, t, l, o ]\n\n");
-    manual.append("     DESCRIPTION: The MODE command is provided so that users may query and change the characteristics of a channel.  \n");
+    manual.append("     DESCRIPTION: The MODE command is provided so that users may query and change the characteristics of a channel.\n\n");
+    manual.append("     The following options are available:\n\n");
+    manual.append("     [ + | - ] i           Set/remove the channel's invite only mode.\n\n");
+    manual.append("     [ + | - ] k           Set/remove the channel's Key [Password].\n\n");
+    manual.append("     [ + | - ] l           Set/remove the channel's members limit.\n\n");
+    manual.append("     [ + | - ] t           Set/remove the channel's topic.\n\n");
+    manual.append("     [ + | - ] o           Give/take operator privilege to/from a client.\n\n");
     manual.append("\nEND\n");
     return (manual);
 }
@@ -166,4 +135,41 @@ string HelpBot::PartManual(){
     manual.append("     parameter string.\n");
     manual.append("\nEND\n");
     return (manual);
+}
+
+string  strToupper(string str){
+    for(unsigned int i = 0; i < str.size(); i++){
+        if (str[i] >= 'a' && str[i] <= 'z')
+            str[i] = toupper(str[i]);
+    }
+    return (str);
+}
+
+void    HelpBot::Help(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket){
+    std::string commands[10] = {"PASS", "NICK", "USER", "JOIN", "PRIVMSG", "KICK", "INVITE", "TOPIC", "MODE"  , "PART"};
+    string    (*FunctionPointers[10])() = {HelpBot::PassManual, HelpBot::NickManual, HelpBot::UserManual, HelpBot::JoinManual, HelpBot::PrivmsgManual, HelpBot::KickManual, HelpBot::InviteManual, HelpBot::TopicManual, HelpBot::ModeManual, HelpBot::PartManual};
+
+    if (ProcessMessage.getParams().size() == 0)
+        // USE  privmsg to send the manual to the client.
+        send(clientSocket,  HelpBot::BotManual().c_str(),  HelpBot::BotManual().size(), 0);
+    else{
+        bool    flag = false;
+        for (unsigned int i = 0; i < 10; i++){
+            if (strToupper(ProcessMessage.getParams()[0]).compare(commands[i].c_str()) == 0)
+            {
+                string manual = FunctionPointers[i]();
+                    // USE  privmsg to send the manual to the client.
+                send (clientSocket, manual.c_str(), manual.size(), 0);
+                flag = true;
+                break;
+            }
+        }
+        if (!flag){
+            string err = "╳╳╳ You have a bad input: you can follow this manual for more informations!\n";
+            err.append(HelpBot::BotManual().c_str());
+            // Send it using privmsg;
+            send(clientSocket, err.c_str(), err.size(), 0);
+                throw std::exception();
+        }
+    }
 }

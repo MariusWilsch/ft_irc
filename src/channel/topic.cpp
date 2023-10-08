@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/30 13:41:28 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/04 20:51:07 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/08 16:57:23 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@
     Parameters  :   #<channel>
     Trailing    :   [ <topic> ] 
 */
-// * Example:       TOPIC #PrivateChannel :Ethics.
 
 void     ExecuteCommands::topic(ServerReactor &_ServerReactor, Message &ProcessMessage, int clientSocket){
     if (ProcessMessage.getParams().size() == 1){

@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 10:00:19 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/07 14:43:40 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/07 18:21:41 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void	ServerReactor::createPropertiesMap( void ) {
 	_properties["MODE"] = CommandProperties(2, true);
 	_properties["PART"] = CommandProperties(2, true);
 
-	_properties["/HELP"] = CommandProperties(1, true);
+	_properties["HELP"] = CommandProperties(1, true);
 }
 
 /*			SOCKET & MULTIPLEXING			*/

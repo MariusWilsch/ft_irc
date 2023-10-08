@@ -6,13 +6,13 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/01 16:47:40 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/06 12:00:18 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/08 16:57:07 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ExecuteCommands.hpp"
 
-bool splitParams(std::vector<string> &ChannelNames, std::vector<string> &Users, Message &ProcessMessage){
+bool kickParser(std::vector<string> &ChannelNames, std::vector<string> &Users, Message &ProcessMessage){
     string param = ProcessMessage.getParams()[0];
     param.erase(remove(param.begin(), param.end(), '\n'), param.end());
     if (ProcessMessage.getParams().size() < 1 || ExecuteCommands::whiteCheck(ProcessMessage.getParams()[0]))
@@ -74,7 +74,7 @@ void     ExecuteCommands::kick(ServerReactor &_serverReactor, Message &ProcessMe
     std::vector<string> ChannelNames;
     std::vector<string> Users;
     
-    int stat = splitParams(ChannelNames, Users, ProcessMessage);
+    int stat = kickParser(ChannelNames, Users, ProcessMessage);
     if (!stat){
         string Err = ERR_NEEDMOREPARAMS(ProcessMessage.getCommand());
             send(clientSocket, Err.c_str(), Err.size(), 0);

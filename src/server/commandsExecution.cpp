@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 19:02:14 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/07 17:27:47 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/08 15:43:20 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,9 @@ void ExecuteCommands::execute(ServerReactor &_serverReactor, Message &ProcessMes
         }
         else{
             std::string commands[10] = {"PASS", "NICK", "USER", "JOIN", "PRIVMSG", "KICK", "INVITE", "TOPIC", "MODE"  , "PART"};
-            void    (*FunctionPointers[10])(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket) = {nick, user, pass, join, mode, invite, topic, kick, part, privmsg};
+            void    (*FunctionPointers[10])(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket) = {pass, nick, user, join, privmsg, kick, invite, topic, mode, part};
     
-            if (ProcessMessage.getCommand().compare("/HELP") == 0)
+            if (ProcessMessage.getCommand().compare("HELP") == 0)
                 HelpBot::Help(_serverReactor, ProcessMessage, clientSocket);
             else{
                for (unsigned int i = 0; i < 10; i++){
