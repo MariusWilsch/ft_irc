@@ -3,16 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 16:01:33 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/05 19:42:30 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/10 15:18:19 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
 #include "main.hpp"
+
+class ServerReactor;
 
 /**
  * @brief 
@@ -43,6 +45,7 @@ class ChannelData {
 		bool			_topicFlag;
 		bool			_limitFlag;
 
+		int						_creatorBySocket;
 		set <int> 		_clientSockets;
 		set <int> 		_operators;
 		set <string> 	_inviteList;
@@ -66,6 +69,7 @@ class ChannelData {
 		set <int> 		getClientSockets( void ) const;
 		set <int> 		getOperators( void ) const;
 		set <string>	getInviteList( void ) const;
+		int						getCreatorBySocket( void ) const;
 
 		/*			SETTERS			 */
 		void 			setName( string name );
@@ -78,6 +82,7 @@ class ChannelData {
 		void			setTopicFlag( bool stat );
 		void			setLimitFlag( bool stat );
 		
+		void			setCreatorBySocket( int socketID );
 		void			addClient( int clientSocket);
 		void			addOperator( int clientSocket);
 		void			addGuest( string nickName);
@@ -86,8 +91,9 @@ class ChannelData {
 		bool			isOperator(int clientSocket);
 		bool			isCLient(int clinetSocket);
 		bool			isInvited(string nickName);
-		void    		removeClient(int SocketID);
+		void			removeClient(int SocketID);
 		void			removeOperator(int SocketID);
+
 };
 
 class ChannelManager {
@@ -112,4 +118,6 @@ class ChannelManager {
 		bool			itsChannel( string name );
 		void			removeChannel(string channelName);
 		void			removeFromChannels(int _clientSocket);
+		
+		string		createUserList(string channelName, ServerReactor &serverReactor, int senderSocket);
 };

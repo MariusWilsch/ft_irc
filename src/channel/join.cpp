@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   join.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/24 12:13:30 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/08 16:43:47 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/10 16:44:33 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
  
-#include"ExecuteCommands.hpp"
+#include "ExecuteCommands.hpp"
 
 int joinParser(std::vector<string> &ChannelNames, std::vector<string> &ChannelKeys, Message &ProcessMessage){
     if (ProcessMessage.getParams().size() == 0)
@@ -64,6 +64,8 @@ int joinParser(std::vector<string> &ChannelNames, std::vector<string> &ChannelKe
     return (1);
 }
 
+
+
 void ExecuteCommands::join(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket)
 {
     std::vector<string> ChannelNames;
@@ -102,12 +104,24 @@ void ExecuteCommands::join(ServerReactor &_serverReactor, Message &ProcessMessag
             NewChannel.setName(ChannelNames[i]);
             NewChannel.addClient(clientSocket);
             NewChannel.addOperator(clientSocket);
+						NewChannel.setCreatorBySocket(clientSocket);
             if (ChannelKeys.size() >= 1 && !ChannelKeys[i].empty()){
                 NewChannel.setKey(ChannelKeys[i]);
                 NewChannel.setSecurity(true);
             }
             _serverReactor.getChannelManager().addChannel(ChannelNames[i], NewChannel);
             Joined = true;
+						string nickname = _serverReactor.getClientManager().getClientData(clientSocket).getNickname();
+						string channelKey;
+						if (NewChannel.getSecurity())
+							 channelKey = "*";
+						else
+							channelKey = "=";
+						_serverReactor.sendMsg(clientSocket, _serverReactor.getClientManager().getClientData(clientSocket).getClientInfo(), "JOIN", NewChannel.getName());
+						_serverReactor.sendNumericReply_FixLater(clientSocket, RPL_NAMREPLY(nickname , channelKey, NewChannel.getName(), _serverReactor.getChannelManager().createUserList(NewChannel.getName(), _serverReactor, clientSocket)));
+						cout << RPL_ENDOFNAMES(nickname, NewChannel.getName()) << endl;
+						_serverReactor.sendNumericReply_FixLater(clientSocket, RPL_ENDOFNAMES(nickname, NewChannel.getName()));
+						
         }
         // Channel is exist, Check Security cases, and inform all the channels clients.
         else {
@@ -127,7 +141,9 @@ void ExecuteCommands::join(ServerReactor &_serverReactor, Message &ProcessMessag
                         throw std::exception();
                     }
                 }
+								
                 // The channel is private.
+							
                 if (Channel.getSecurity() == true){
                     if (ChannelKeys.size() >= 1 && (ChannelKeys[i].c_str() != NULL)){
                         if (Channel.getKey().compare(ChannelKeys[i]) == 0)

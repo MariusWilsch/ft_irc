@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 10:02:20 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/06 10:56:04 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/10 15:27:58 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "channel.hpp"
+#include "server.hpp"
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ CLIENT DATA	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~/
 
@@ -73,6 +74,10 @@ set <int>   ChannelData::getOperators( void ) const{
 
 set <string>	ChannelData::getInviteList( void ) const{
     return (this->_inviteList);
+}
+
+int	ChannelData::getCreatorBySocket( void ) const{
+	return (this->_creatorBySocket);
 }
 
 /********************** SETTERS	***********************/
@@ -151,6 +156,11 @@ bool		ChannelData::isInvited(string nickName){
         return (true);
     return (false);
 }
+
+void	ChannelData::setCreatorBySocket( int socketID ){
+		this->_creatorBySocket = socketID;
+}
+
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ CHANNEL MANAGER	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~/
 
 ChannelManager::ChannelManager(){
@@ -203,4 +213,21 @@ void			ChannelManager::removeFromChannels(int _clientSocket){
 
 void        ChannelManager::removeChannel(string channelName){
     this->_channels.erase(channelName);
+}
+
+string			ChannelManager::createUserList(string channelName, ServerReactor &serverReactor, int senderSocket) {
+		string userList;
+		set<int> clientSockets = getChannelByName(channelName).getClientSockets();
+		ClientManager clientManager = serverReactor.getClientManager();
+
+		if (clientSockets.size() == 1) 
+			return ("@" + serverReactor.getClientManager().getClientData(*clientSockets.begin()).getNickname());
+			
+		userList.append(clientManager.getClientData(senderSocket).getNickname());
+		
+		for (set<int>::const_iterator it = clientSockets.begin(); it != clientSockets.end(); it++) 
+			userList.append(" " + clientManager.getClientData(*it).getNickname());
+		
+		userList.append(" @" + clientManager.getClientData(getChannelByName(channelName).getCreatorBySocket()).getNickname());
+	return userList;
 }

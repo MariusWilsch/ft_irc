@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 00:53:10 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/10 14:24:47 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/10 16:52:20 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ void     ExecuteCommands::user(ServerReactor &_serverReactor, Message &ProcessMe
 {
     if (_serverReactor.getClientManager().getClientData(clientSocket).getRegistration() == false)
     {
-        if (ProcessMessage.getParams().size() == 3 && ProcessMessage.getTrailing().size() > 1)
+        if (ProcessMessage.getParams().size() >= 3 && ProcessMessage.getTrailing().size() > 1)
         {
             _serverReactor.getClientManager().getClientData(clientSocket).setUsername(ProcessMessage.getParams()[0]);
             _serverReactor.getClientManager().getClientData(clientSocket).setmode(atoi(ProcessMessage.getParams()[1].c_str()));
@@ -93,6 +93,8 @@ void     ExecuteCommands::user(ServerReactor &_serverReactor, Message &ProcessMe
             // std::cout << "MODE: " << _serverReactor.getClientManager().getClientData(clientSocket).getMode() << std::endl;
             // std::cout << "UNUSED: " << _serverReactor.getClientManager().getClientData(clientSocket).getUnused() << std::endl;
             // std::cout << "REALNAME: " << _serverReactor.getClientManager().getClientData(clientSocket).getRealname() << std::endl;
+						string nickname = _serverReactor.getClientManager().getClientData(clientSocket).getNickname();
+						_serverReactor.sendNumericReply(clientSocket, "001", nickname, "Welcome to the IRC Network, " + nickname);
         }
         else{
             string Err = ERR_NEEDMOREPARAMS(ProcessMessage.getCommand());

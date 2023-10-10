@@ -36,7 +36,7 @@ $(OBJ_DIR):
 	@mkdir -p $(OBJ_DIR)
 
 run: all
-	@./$(TARGET) 6666 password
+	@./$(TARGET) 8080 password
 
 
 clean:

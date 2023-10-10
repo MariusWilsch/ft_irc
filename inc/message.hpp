@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   message.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 16:04:46 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/08 07:32:08 by verdant          ###   ########.fr       */
+/*   Updated: 2023/10/10 17:17:59 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ class Message {
 		string							_rawMessage;
 		string							_prefix;
 		string							_command;
-		string							_trailing;
+		// string							_trailing;
 		std::vector<string>				_params;
 		map <string, CommandProperties> _properties;
 	public:

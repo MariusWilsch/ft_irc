@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 10:02:23 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/10 14:26:21 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/10 15:10:51 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,3 +174,4 @@ int	ClientManager::getClientSocketByNick(string& nickname) {
 	cout << "Couldn't find the nickname within the map" << endl;
 	return (-1);
 }
+

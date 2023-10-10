@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 15:07:18 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/10 14:24:24 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/10 15:59:04 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,8 @@ using std::endl;
 #define ERR_CHANNELISFULL(channel) "471: " + channel + " :Cannot join channel (+l)\n"
 #define ERR_UNKNOWNMODE(character) "472: " + character + " : is unknown mode char to me\n"
 #define ERR_INVITEONLYCHAN(channel) "473: " + channel + " :Cannot join channel (+i)\n"
+#define RPL_NAMREPLY(nickname, channelType, channel, users) "353: " + nickname + " " + channelType + " " + channel + " :" + users + "\r\n"
+#define RPL_ENDOFNAMES(nickname, channel) "366: " + nickname + " " + channel + " :End of /NAMES list." + "\r\n"
 
 
 // PRIVMSG Numeric replies to add here.

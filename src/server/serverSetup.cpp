@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 10:00:19 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/10 14:26:04 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/10 17:10:56 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,14 +56,14 @@ void	ServerReactor::createPropertiesMap( void ) {
 	_properties["PASS"] = CommandProperties(1, true);
 	_properties["NICK"] = CommandProperties(1, true);
 	_properties["USER"] = CommandProperties(3, false);
-	_properties["JOIN"] = CommandProperties(1, true);
+	_properties["JOIN"] = CommandProperties(1, true); // Unlimited
 	_properties["PRIVMSG"] = CommandProperties(1, false);
 	_properties["OPER"] = CommandProperties(2, true);
-	_properties["KICK"] = CommandProperties(1, false);
-	_properties["INVITE"] = CommandProperties(2, true);
+	_properties["KICK"] = CommandProperties(1, false); // Unlimited
+	_properties["INVITE"] = CommandProperties(2, true); 
 	// _properties["TOPIC"] = CommandProperties(1, false);
 	_properties["MODE"] = CommandProperties(2, true);
-	_properties["PART"] = CommandProperties(2, true);
+	_properties["PART"] = CommandProperties(2, true); // Unlimited
 
 	_properties["HELP"] = CommandProperties(1, true);
 }

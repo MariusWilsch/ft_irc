@@ -34,6 +34,7 @@ int ServerReactor::sendMsg(int socket, const string& clientInfo, const string &c
 		return (0);
 }
 
+
 void ServerReactor::sendNumericReply(int socket, string numericReply, const string &param, const string &trailing) {
 		string message;
 
@@ -59,6 +60,14 @@ void ServerReactor::sendNumericReply(int socket, string numericReply, const stri
 		send(socket, message.c_str(), message.length(), 0);
 }
 
+void ServerReactor::sendNumericReply_FixLater(int socket, const string& reply) {
+		// Check if socket is valid
+		if (socket == -1)
+			return ;
+
+
+		send(socket, reply.c_str(), reply.length(), 0);
+}
 
 
 // void ServerReactor::sendMsg(int socket, const std::string &command, const std::string &trailing, int paramCount, ...) {
