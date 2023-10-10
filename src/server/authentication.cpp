@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 00:53:10 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/08 14:59:33 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/08 23:30:00 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,13 @@ bool    NickNameValidation(string param)
         return (false);
     return (true);
 }
+
+/*
+    ERR_NONICKNAMEGIVEN             ERR_ERRONEUSNICKNAME
+    ERR_NICKNAMEINUSE               ERR_NICKCOLLISION
+    ERR_UNAVAILRESOURCE             ERR_RESTRICTED
+
+*/
 
 void ExecuteCommands::nick(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket)
 {
