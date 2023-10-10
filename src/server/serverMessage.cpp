@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   serverMessage.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 13:27:34 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/10 13:56:08 by verdant          ###   ########.fr       */
+/*   Updated: 2023/10/10 14:04:25 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ Message::Message( string rawMessage, map <string, CommandProperties> properties 
 			_trailing = _params[_properties[_command].mandatoryParams];
 		}
 		_params.resize(_properties[_command].mandatoryParams);
+		
 		// Print extracted data
 		printData();
 
