@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 15:07:18 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/07 18:21:43 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/10 14:24:24 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,5 +52,12 @@ using std::endl;
 #define ERR_USERNOTINCHANNEL(user, channel) "441: " + user + " " + channel + " : They aren't on that channel\n"
 #define ERR_CHANOPRIVSNEEDED(channel) "482: " + channel + " : You're not channel operator\n"
 #define ERR_NOSUCHCHANNEL(channel) "403: " + channel + " : No such channel\n"
+#define ERR_CHANNELISFULL(channel) "471: " + channel + " :Cannot join channel (+l)\n"
 #define ERR_UNKNOWNMODE(character) "472: " + character + " : is unknown mode char to me\n"
+#define ERR_INVITEONLYCHAN(channel) "473: " + channel + " :Cannot join channel (+i)\n"
+
+
+// PRIVMSG Numeric replies to add here.
+
+
 // #define ERR_NEEDMOREPARAMS() 

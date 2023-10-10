@@ -6,11 +6,12 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 19:02:14 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/04 20:54:59 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/08 15:43:20 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ExecuteCommands.hpp"
+#include "HelpBot.hpp"
 
 ExecuteCommands::~ExecuteCommands(){};
 
@@ -37,43 +38,22 @@ void ExecuteCommands::execute(ServerReactor &_serverReactor, Message &ProcessMes
 {
     try 
     {
-        if (ProcessMessage.getFatal())
-        {
+        if (ProcessMessage.getFatal()){
             string Err = ERR_UNKNOWNCOMMAND();
             send(clientSocket, Err.c_str(), Err.size(), 0);
             throw std::exception();
         }
         else{
-            //~~~~~~~~~~~~~~~~~~~~~~~~~~ ATHENTICATON COMMANDS ~~~~~~~~~~~~~~~~~~~~~~~~~~//
-            if (ProcessMessage.getCommand().compare("NICK") == 0){
-                nick(_serverReactor, ProcessMessage, clientSocket);
-            }
-            else if (ProcessMessage.getCommand().compare("USER") == 0){
-                user(_serverReactor, ProcessMessage, clientSocket);
-            }
-            else if (ProcessMessage.getCommand().compare("PASS") == 0){
-                pass(_serverReactor, ProcessMessage, clientSocket);
-            }
-            //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ CHANNEL COMMANDS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
-            else if (ProcessMessage.getCommand().compare("JOIN") == 0){
-                join(_serverReactor, ProcessMessage, clientSocket);
-            }
-            else if (ProcessMessage.getCommand().compare("MODE") == 0){
-                mode(_serverReactor, ProcessMessage, clientSocket);
-            }
-            else if (ProcessMessage.getCommand().compare("INVITE") == 0){
-                invite(_serverReactor, ProcessMessage, clientSocket);
-            }
-            else if (ProcessMessage.getCommand().compare("TOPIC") == 0){
-                topic(_serverReactor, ProcessMessage, clientSocket);
-            }
-            else if (ProcessMessage.getCommand().compare("KICK") == 0){
-                kick(_serverReactor, ProcessMessage, clientSocket);
-            }
-                //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
-            else if (ProcessMessage.getCommand().compare("PRIVMSG") == 0){
-            cout << "Execute PRIVMSG command" << endl;
-                privmsg(_serverReactor, ProcessMessage, clientSocket);
+            std::string commands[10] = {"PASS", "NICK", "USER", "JOIN", "PRIVMSG", "KICK", "INVITE", "TOPIC", "MODE"  , "PART"};
+            void    (*FunctionPointers[10])(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket) = {pass, nick, user, join, privmsg, kick, invite, topic, mode, part};
+    
+            if (ProcessMessage.getCommand().compare("HELP") == 0)
+                HelpBot::Help(_serverReactor, ProcessMessage, clientSocket);
+            else{
+               for (unsigned int i = 0; i < 10; i++){
+                    if (ProcessMessage.getCommand().compare(commands[i].c_str()) == 0)
+                        FunctionPointers[i](_serverReactor, ProcessMessage, clientSocket);
+                }
             }
         }
     }

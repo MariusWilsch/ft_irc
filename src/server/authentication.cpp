@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   authentication.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 00:53:10 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/07 20:25:06 by verdant          ###   ########.fr       */
+/*   Updated: 2023/10/10 14:24:47 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,21 +25,25 @@ bool    NickNameValidation(string param)
     return (true);
 }
 
+/*
+    ERR_NONICKNAMEGIVEN             ERR_ERRONEUSNICKNAME
+    ERR_NICKNAMEINUSE               ERR_NICKCOLLISION
+    ERR_UNAVAILRESOURCE             ERR_RESTRICTED
+
+*/
+
 void ExecuteCommands::nick(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket)
 {
     string err;
 
-    if (ProcessMessage.getParams().empty() || !NickNameValidation(ProcessMessage.getParams()[0]))
-    {
+    if (ProcessMessage.getParams().empty() || !NickNameValidation(ProcessMessage.getParams()[0])){
         string Err = ERR_NONICKNAMEGIVEN();
         send(clientSocket, Err.c_str(), Err.size(), 0);
         throw std::exception();
     }
     map<int, ClientData>::iterator it;
     string nickName = ProcessMessage.getParams()[0];
-    string oldNick =  _serverReactor.getClientManager().getClientData(clientSocket).getNickname();
-    
-    nickName.erase(remove(nickName.begin(), nickName.end(), '\n'), nickName.end());
+    string oldNick =  _serverReactor.getClientManager().getClientData(clientSocket).getNickname();    
     if (nickName.compare(_serverReactor.getClientManager().getClientData(clientSocket).getNickname()) != 0)
     {
         for (it = _serverReactor.getClientManager().getClientBySocket().begin(); it != _serverReactor.getClientManager().getClientBySocket().end(); it++){
@@ -51,6 +55,7 @@ void ExecuteCommands::nick(ServerReactor &_serverReactor, Message &ProcessMessag
                 it = _serverReactor.getClientManager().getClientBySocket().begin();
             }
         }
+        // informing the other members about this event.
         if (nickName.compare(oldNick) != 0)
         {
             string n;
@@ -84,13 +89,10 @@ void     ExecuteCommands::user(ServerReactor &_serverReactor, Message &ProcessMe
             _serverReactor.getClientManager().getClientData(clientSocket).setRegistration(true);
             
             // ~~~~~~~~~~~~~~~~~~~ INFORM THE SERVER  ~~~~~~~~~~~~~~~~~~~ // 
-            std::cout<< "User informations: \n" << std::endl << "USERNAME: " << _serverReactor.getClientManager().getClientData(clientSocket).getUsername() << std::endl;
-            std::cout << "MODE: " << _serverReactor.getClientManager().getClientData(clientSocket).getMode() << std::endl;
-            std::cout << "UNUSED: " << _serverReactor.getClientManager().getClientData(clientSocket).getUnused() << std::endl;
-            std::cout << "REALNAME: " << _serverReactor.getClientManager().getClientData(clientSocket).getRealname() << std::endl;
-						// Send 001 to the client
-						string nickname = _serverReactor.getClientManager().getClientData(clientSocket).getNickname();
-						_serverReactor.sendNumericReply(clientSocket, "001", nickname , "Welcome to the Internet Relay Network, " + nickname);
+            // std::cout<< "User informations: \n" << std::endl << "USERNAME: " << _serverReactor.getClientManager().getClientData(clientSocket).getUsername() << std::endl;
+            // std::cout << "MODE: " << _serverReactor.getClientManager().getClientData(clientSocket).getMode() << std::endl;
+            // std::cout << "UNUSED: " << _serverReactor.getClientManager().getClientData(clientSocket).getUnused() << std::endl;
+            // std::cout << "REALNAME: " << _serverReactor.getClientManager().getClientData(clientSocket).getRealname() << std::endl;
         }
         else{
             string Err = ERR_NEEDMOREPARAMS(ProcessMessage.getCommand());

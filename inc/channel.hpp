@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 16:01:33 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/04 18:56:38 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/05 19:42:30 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,6 @@ class ChannelManager {
 		/*			METHODS			*/
 		bool			channelExistence(string name);
 		bool			itsChannel( string name );
-
+		void			removeChannel(string channelName);
 		void			removeFromChannels(int _clientSocket);
 };

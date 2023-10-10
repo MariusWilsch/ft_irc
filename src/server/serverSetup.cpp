@@ -3,16 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   serverSetup.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 10:00:19 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/10 13:55:22 by verdant          ###   ########.fr       */
+/*   Updated: 2023/10/10 14:26:04 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "server.hpp"
 
-
+/*
+	Replace in code:
+		+ The number of parameters
+			+ Join: infinite params: you can join many channels at the same time, using the command join with multiple parameters.
+*/
 
 // TODO: Place this appropriately as soon as I fixed the bug
 
@@ -47,6 +51,7 @@ ServerReactor::~ServerReactor( void ) {
 // TODO: Put this into a utils file
 
 
+// How to add a command to _properties, 
 void	ServerReactor::createPropertiesMap( void ) {
 	_properties["PASS"] = CommandProperties(1, true);
 	_properties["NICK"] = CommandProperties(1, true);
@@ -58,6 +63,9 @@ void	ServerReactor::createPropertiesMap( void ) {
 	_properties["INVITE"] = CommandProperties(2, true);
 	// _properties["TOPIC"] = CommandProperties(1, false);
 	_properties["MODE"] = CommandProperties(2, true);
+	_properties["PART"] = CommandProperties(2, true);
+
+	_properties["HELP"] = CommandProperties(1, true);
 }
 
 

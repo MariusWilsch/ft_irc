@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 10:02:23 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/07 18:48:16 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/10 14:26:21 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,7 +156,7 @@ int	ClientManager::MatchNickName(set <int> ChannelMembers, string nickname) {
 			}
 		}
 	}
-	return (false);
+	return (-1);
 }
 
 int	ClientManager::getClientSocketByNick(string& nickname) {

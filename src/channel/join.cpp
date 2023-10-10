@@ -6,18 +6,17 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/24 12:13:30 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/04 11:49:32 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/08 16:43:47 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
  
 #include"ExecuteCommands.hpp"
 
-int seperateNamesKeys(std::vector<string> &ChannelNames, std::vector<string> &ChannelKeys, Message &ProcessMessage){
+int joinParser(std::vector<string> &ChannelNames, std::vector<string> &ChannelKeys, Message &ProcessMessage){
     if (ProcessMessage.getParams().size() == 0)
         return (-1);
     string param = ProcessMessage.getParams()[0];
-    param.erase(remove(param.begin(), param.end(), '\n'), param.end());
     if (ProcessMessage.getParams().size() == 1 && param.compare("0") == 0){
         return (0);
     }
@@ -27,7 +26,6 @@ int seperateNamesKeys(std::vector<string> &ChannelNames, std::vector<string> &Ch
     {
         param = ProcessMessage.getParams()[i];
         param.erase(std::remove(param.begin(), param.end(), ' '), param.end());
-        param.erase(std::remove(param.begin(), param.end(), '\n'), param.end());
         unsigned int c = 0;
         for (unsigned int i = 0; i < param.size(); i++){
             if (param[i] == ',')
@@ -48,7 +46,6 @@ int seperateNamesKeys(std::vector<string> &ChannelNames, std::vector<string> &Ch
                 string sub = param.substr(0, e);
                 sub.erase(std::remove(sub.begin(), sub.end(), ' '), sub.end());
                 param = param.substr(e + 1);
-            
                 if (sub[0] == '#'){
                     sub.erase(0, 1);
                     ChannelNames.push_back(sub);
@@ -72,7 +69,7 @@ void ExecuteCommands::join(ServerReactor &_serverReactor, Message &ProcessMessag
     std::vector<string> ChannelNames;
     std::vector<string> ChannelKeys;
 
-    int stat = seperateNamesKeys(ChannelNames, ChannelKeys, ProcessMessage);
+    int stat = joinParser(ChannelNames, ChannelKeys, ProcessMessage);
     if (stat == -1){
         string Err = ERR_NEEDMOREPARAMS(ProcessMessage.getCommand());
         send(clientSocket, Err.c_str(), Err.size(), 0);
@@ -97,7 +94,6 @@ void ExecuteCommands::join(ServerReactor &_serverReactor, Message &ProcessMessag
                 ++it;
         }
     }
-
     for (unsigned int i = 0; i < ChannelNames.size(); i++){
         bool Joined = false;
         // Create the channel if it's not exist, and make the current client as the operator of the channel.
@@ -117,14 +113,17 @@ void ExecuteCommands::join(ServerReactor &_serverReactor, Message &ProcessMessag
         else {
             ChannelData& Channel = _serverReactor.getChannelManager().getChannelByName(ChannelNames[i]);
             if (!Channel.isCLient(clientSocket)){
+                if (Channel.getLimitFlag()){
+                    if (Channel.getClientSockets().size() >= Channel.getLimit()){
+                        string Err = ERR_CHANNELISFULL(Channel.getName());
+                        send (clientSocket, Err.c_str(), Err.size(), 0);
+                        throw std::exception();
+                    }
+                }
                 if (Channel.getInviteFlag()){
                     if (!Channel.isInvited(_serverReactor.getClientManager().getClientData(clientSocket).getNickname())){
-                        // Don't accecpt it's joining to channel.
-                        //! REPLACE THIS BY AN APPROPRIATE NUMERIC REPLY.
-                        string buffer = "error: ";
-                        buffer.append(" this channel is Invite only");
-                        buffer.append("\n");
-                        send(clientSocket, buffer.c_str(), buffer.size(), 0);
+                        string Err = ERR_INVITEONLYCHAN(Channel.getName());
+                        send(clientSocket, Err.c_str(), Err.size(), 0);
                         throw std::exception();
                     }
                 }
