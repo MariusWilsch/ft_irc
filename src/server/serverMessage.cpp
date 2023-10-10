@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 13:27:34 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/08 08:19:59 by verdant          ###   ########.fr       */
+/*   Updated: 2023/10/10 13:56:08 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,43 +18,52 @@ Message::~Message( void ) {};
 
 Message::Message( string rawMessage, map <string, CommandProperties> properties ) : _rawMessage(rawMessage), _properties(properties) {
 
-	_isFatal = false;
-	// Earse \n // TODO: I later need to figure out what to do with \r\n at the end of messages
-	
-	_rawMessage.erase(std::remove(_rawMessage.begin(), _rawMessage.end(), '\n'), _rawMessage.end());
-	_rawMessage.erase(std::remove(_rawMessage.begin(), _rawMessage.end(), '\r'), _rawMessage.end());
-	
+		_isFatal = false;
+		// Earse \n // TODO: I later need to figure out what to do with \r\n at the end of messages
+		
+		_rawMessage.erase(std::remove(_rawMessage.begin(), _rawMessage.end(), '\n'), _rawMessage.end());
+		_rawMessage.erase(std::remove(_rawMessage.begin(), _rawMessage.end(), '\r'), _rawMessage.end());
+		
 
-	// cout << "|" << _rawMessage << "|" << endl;
+		cout << "|" << _rawMessage << "|" << endl;
 
-	// Parse raw message
-		// extractCommand( ); Refactoring
-		// extractTrailing( );Refactoring
-		// extractParams( );Refactoring
+		// Parse raw message
+				// extractCommand( ); Refactoring
+				// extractTrailing( );Refactoring
+				// extractParams( );Refactoring
 
-	// Get Prefix if exists
-	if (_rawMessage.at(0) == ':') {
-		_prefix = _rawMessage.substr(1, _rawMessage.find(' ', 0) - 1);
-		_rawMessage.erase(0, _rawMessage.find(' ', 0) + 1);
-	}
-	// Get Trailing if exists
-	if (_rawMessage.find(':') != string::npos) {
-		_trailing = _rawMessage.substr(_rawMessage.find(':') + 1, _rawMessage.length());
-		_rawMessage.erase(_rawMessage.find(':'), _rawMessage.length());
-	}
-	// Get Command
-	std::istringstream iss(_rawMessage);
-	string token;
-	if (std::getline(iss, token, ' ') && !token.empty()) {
-		_command = token;
-	}
-	while (std::getline(iss, token, ' ')) {
-		if (!token.empty())
-			_params.push_back(token);
-	}
-
-	// Print extracted data
-	printData();
+		// Get Prefix if exists
+		if (_rawMessage.at(0) == ':') {
+				_prefix = _rawMessage.substr(1, _rawMessage.find(' ', 0) - 1);
+				_rawMessage.erase(0, _rawMessage.find(' ') + 1);
+		}
+		// Get Trailing if exists
+		if (_rawMessage.find(':') != string::npos) {
+				_trailing = _rawMessage.substr(_rawMessage.find(':') + 1, _rawMessage.length());
+				_rawMessage.erase(_rawMessage.find(':'), _rawMessage.length());
+		}
+		// Get Command
+		std::istringstream iss(_rawMessage);
+		string token;
+		if (std::getline(iss, token, ' ') && !token.empty())
+				_command = token;
+		// Convert _command to uppercase
+		std::transform(_command.begin(), _command.end(), _command.begin(), ::toupper);
+		if (_properties.count(_command) == 0) {
+				_isFatal = true; // send numeric reply
+				_responseCode = "421";
+				return ;
+		}
+		while (std::getline(iss, token, ' ')) {
+				if (!token.empty())
+						_params.push_back(token);
+		}
+		if (!_properties[_command].ignoreTrailing && _trailing.empty()) {
+			_trailing = _params[_properties[_command].mandatoryParams];
+		}
+		_params.resize(_properties[_command].mandatoryParams);
+		// Print extracted data
+		printData();
 
 }
 
@@ -100,3 +109,4 @@ void Message::printData( void )
 	std::cout << std::endl;
 	std::cout << "Trailing: " << _trailing << std::endl;
 }
+
