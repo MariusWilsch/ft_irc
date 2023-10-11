@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   authentication.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 00:53:10 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/10 16:52:20 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/10 21:35:22 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,8 +93,8 @@ void     ExecuteCommands::user(ServerReactor &_serverReactor, Message &ProcessMe
             // std::cout << "MODE: " << _serverReactor.getClientManager().getClientData(clientSocket).getMode() << std::endl;
             // std::cout << "UNUSED: " << _serverReactor.getClientManager().getClientData(clientSocket).getUnused() << std::endl;
             // std::cout << "REALNAME: " << _serverReactor.getClientManager().getClientData(clientSocket).getRealname() << std::endl;
-						string nickname = _serverReactor.getClientManager().getClientData(clientSocket).getNickname();
-						_serverReactor.sendNumericReply(clientSocket, "001", nickname, "Welcome to the IRC Network, " + nickname);
+            string nickname = _serverReactor.getClientManager().getClientData(clientSocket).getNickname();
+            _serverReactor.sendNumericReply(clientSocket, "001", nickname, "Welcome to the IRC Network, " + nickname);
         }
         else{
             string Err = ERR_NEEDMOREPARAMS(ProcessMessage.getCommand());
