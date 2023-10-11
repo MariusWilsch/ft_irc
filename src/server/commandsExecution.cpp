@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 19:02:14 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/08 15:43:20 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/11 21:41:24 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,9 @@ void ExecuteCommands::execute(ServerReactor &_serverReactor, Message &ProcessMes
                 HelpBot::Help(_serverReactor, ProcessMessage, clientSocket);
             else{
                for (unsigned int i = 0; i < 10; i++){
-                    if (ProcessMessage.getCommand().compare(commands[i].c_str()) == 0)
-                        FunctionPointers[i](_serverReactor, ProcessMessage, clientSocket);
+                    if (ProcessMessage.getCommand().compare(commands[i].c_str()) == 0){
+                            FunctionPointers[i](_serverReactor, ProcessMessage, clientSocket);
+                    }
                 }
             }
         }

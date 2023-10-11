@@ -19,3 +19,6 @@
         ERR_NEEDMOREPARAMS              ERR_NOSUCHCHANNEL
         ERR_BADCHANMASK                 ERR_CHANOPRIVSNEEDED
         ERR_USERNOTINCHANNEL            ERR_NOTONCHANNEL
+
+
+Join #a, #b, #c  :Key1 Key2 Ley3

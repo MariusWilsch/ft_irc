@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 20:17:01 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/08 16:47:44 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/11 21:45:27 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -264,32 +264,34 @@ void    ChannelOperatorPrivilege(ServerReactor &_serverReactor, Message &Procces
 
 void     ExecuteCommands::mode(ServerReactor &_serverReactor, Message &ProccessMessage, int clientSocket)
 {
-    if (ProccessMessage.getParams().size() >= 2){
-        string mode = ProccessMessage.getParams()[1];
-        if (mode.compare("+i") == 0 || mode.compare("-i") == 0){
-            inviteOnly(_serverReactor, ProccessMessage, clientSocket);
-        }
-        else if (mode.compare("+k") == 0 || mode.compare("-k") == 0){
-            ChannelSecureMode (_serverReactor, ProccessMessage, clientSocket);
-        }
-        else if (mode.compare("+t") == 0 || mode.compare("-t") == 0){
-            ChannelTopicMode(_serverReactor, ProccessMessage, clientSocket);
-        }
-        else if (mode.compare("+l") == 0 || mode.compare("-l") == 0){
-            ChanneLimitMode(_serverReactor, ProccessMessage, clientSocket);
-        }
-        else if (mode.compare("+o") == 0 || mode.compare("-o") == 0){
-            ChannelOperatorPrivilege(_serverReactor, ProccessMessage, clientSocket);
+    if (_serverReactor.getClientManager().getClientData(clientSocket).getRegistration()){
+        if (ProccessMessage.getParams().size() >= 2){
+            string mode = ProccessMessage.getParams()[1];
+            if (mode.compare("+i") == 0 || mode.compare("-i") == 0){
+                inviteOnly(_serverReactor, ProccessMessage, clientSocket);
+            }
+            else if (mode.compare("+k") == 0 || mode.compare("-k") == 0){
+                ChannelSecureMode (_serverReactor, ProccessMessage, clientSocket);
+            }
+            else if (mode.compare("+t") == 0 || mode.compare("-t") == 0){
+                ChannelTopicMode(_serverReactor, ProccessMessage, clientSocket);
+            }
+            else if (mode.compare("+l") == 0 || mode.compare("-l") == 0){
+                ChanneLimitMode(_serverReactor, ProccessMessage, clientSocket);
+            }
+            else if (mode.compare("+o") == 0 || mode.compare("-o") == 0){
+                ChannelOperatorPrivilege(_serverReactor, ProccessMessage, clientSocket);
+            }
+            else{
+                string Err = ERR_UNKNOWNMODE(mode);
+                send(clientSocket, Err.c_str(), Err.size(), 0);
+                throw std::exception();
+            }
         }
         else{
-            string Err = ERR_UNKNOWNMODE(mode);
+            string Err = ERR_NEEDMOREPARAMS(ProccessMessage.getCommand());
             send(clientSocket, Err.c_str(), Err.size(), 0);
             throw std::exception();
         }
-    }
-    else{
-        string Err = ERR_NEEDMOREPARAMS(ProccessMessage.getCommand());
-        send(clientSocket, Err.c_str(), Err.size(), 0);
-        throw std::exception();
     }
 }

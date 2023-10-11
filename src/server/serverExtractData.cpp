@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   serverExtractData.cpp                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 14:08:52 by verdant           #+#    #+#             */
-/*   Updated: 2023/10/08 07:22:18 by verdant          ###   ########.fr       */
+/*   Updated: 2023/10/11 16:16:44 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ void	Message::extractTrailing( void  )
 	pos = _rawMessage.find_last_of(':');
 	if (pos != std::string::npos)
 	{
-		_trailing = _rawMessage.substr(pos + 1);
+		// _trailing = _rawMessage.substr(pos + 1);
 		_rawMessage.erase(pos);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/01 16:47:40 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/08 16:57:07 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/11 21:44:45 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,51 +71,53 @@ bool kickParser(std::vector<string> &ChannelNames, std::vector<string> &Users, M
 
  // Kick #channel1 #channel2 #InvalidCh a user1 user2 user3
 void     ExecuteCommands::kick(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket){
-    std::vector<string> ChannelNames;
-    std::vector<string> Users;
-    
-    int stat = kickParser(ChannelNames, Users, ProcessMessage);
-    if (!stat){
-        string Err = ERR_NEEDMOREPARAMS(ProcessMessage.getCommand());
-            send(clientSocket, Err.c_str(), Err.size(), 0);
-        throw std::exception();
-    }
-    else{
-        for (unsigned int i = 0; i < ChannelNames.size(); i++){
-            if (_serverReactor.getChannelManager().channelExistence(ChannelNames[i]) == true){
-                if (_serverReactor.getChannelManager().getChannelByName(ChannelNames[i]).isCLient(clientSocket)){
-                    if (_serverReactor.getChannelManager().getChannelByName(ChannelNames[i]).isOperator(clientSocket)){
-                        if (Users[i].c_str() != NULL){
-                            set<int> ChannelMembers = _serverReactor.getChannelManager().getChannelByName(ChannelNames[i]).getClientSockets();
-                            int kickedID = _serverReactor.getClientManager().MatchNickName(ChannelMembers, Users[i]);
-                            if (kickedID != -1)
-                                _serverReactor.getChannelManager().getChannelByName(ChannelNames[i]).removeClient(kickedID);
+    if (_serverReactor.getClientManager().getClientData(clientSocket).getRegistration()){
+        std::vector<string> ChannelNames;
+        std::vector<string> Users;
+        
+        int stat = kickParser(ChannelNames, Users, ProcessMessage);
+        if (!stat){
+            string Err = ERR_NEEDMOREPARAMS(ProcessMessage.getCommand());
+                send(clientSocket, Err.c_str(), Err.size(), 0);
+            throw std::exception();
+        }
+        else{
+            for (unsigned int i = 0; i < ChannelNames.size(); i++){
+                if (_serverReactor.getChannelManager().channelExistence(ChannelNames[i]) == true){
+                    if (_serverReactor.getChannelManager().getChannelByName(ChannelNames[i]).isCLient(clientSocket)){
+                        if (_serverReactor.getChannelManager().getChannelByName(ChannelNames[i]).isOperator(clientSocket)){
+                            if (Users[i].c_str() != NULL){
+                                set<int> ChannelMembers = _serverReactor.getChannelManager().getChannelByName(ChannelNames[i]).getClientSockets();
+                                int kickedID = _serverReactor.getClientManager().MatchNickName(ChannelMembers, Users[i]);
+                                if (kickedID != -1)
+                                    _serverReactor.getChannelManager().getChannelByName(ChannelNames[i]).removeClient(kickedID);
+                                else{
+                                    string Err = ERR_USERNOTINCHANNEL(Users[i], ChannelNames[i]);
+                                    send(clientSocket, Err.c_str(), Err.size(), 0);
+                                }
+                                // NUMERIC REPLY TO INFORM ALL THE CHANNEL MEMBER. "COMMENT"
+                            }
                             else{
-                                string Err = ERR_USERNOTINCHANNEL(Users[i], ChannelNames[i]);
+                                string Err = ERR_NEEDMOREPARAMS(ProcessMessage.getCommand());
                                 send(clientSocket, Err.c_str(), Err.size(), 0);
                             }
-                            // NUMERIC REPLY TO INFORM ALL THE CHANNEL MEMBER. "COMMENT"
                         }
                         else{
-                            string Err = ERR_NEEDMOREPARAMS(ProcessMessage.getCommand());
+                            string Err = ERR_CHANOPRIVSNEEDED(ChannelNames[i]);
                             send(clientSocket, Err.c_str(), Err.size(), 0);
+                            throw std::exception();
                         }
                     }
                     else{
-                        string Err = ERR_CHANOPRIVSNEEDED(ChannelNames[i]);
+                        string Err = ERR_NOTONCHANNEL(ChannelNames[i]);
                         send(clientSocket, Err.c_str(), Err.size(), 0);
                         throw std::exception();
                     }
                 }
                 else{
-                    string Err = ERR_NOTONCHANNEL(ChannelNames[i]);
+                    string Err = ERR_NOSUCHCHANNEL(ChannelNames[i]);
                     send(clientSocket, Err.c_str(), Err.size(), 0);
-                    throw std::exception();
                 }
-            }
-            else{
-                string Err = ERR_NOSUCHCHANNEL(ChannelNames[i]);
-                send(clientSocket, Err.c_str(), Err.size(), 0);
             }
         }
     }

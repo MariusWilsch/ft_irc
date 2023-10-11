@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   serverMessage.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 13:27:34 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/10 17:18:05 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/11 16:17:31 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,9 +139,9 @@ bool	Message::getFatal( void ){
 	return (this->_isFatal);
 }
 
-string	Message::getTrailing( void ){
-	return (this->_trailing);
-}
+// string	Message::getTrailing( void ){
+// 	return (this->_trailing);
+// }
 
 /*			SETTERS			*/
 
@@ -163,6 +163,6 @@ void Message::printData( void )
 		std::cout << "|" << *it << "| ";
 	}
 	std::cout << std::endl;
-	std::cout << "Trailing: " << _trailing << std::endl;
+	// std::cout << "Trailing: " << _trailing << std::endl;
 }
 

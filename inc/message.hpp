@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   message.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 16:04:46 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/10 17:17:59 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/11 16:17:56 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ class Message {
 		string							getCommand( void );
 		std::vector<string> 			getParams( void );
 		bool							getFatal( void );
-		string							getTrailing( void );
+		// string							getTrailing( void );
 
 		/*			SETTERS			*/
 

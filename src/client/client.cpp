@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 10:02:23 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/10 15:10:51 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/11 17:56:54 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,21 +20,15 @@ ClientData::ClientData( void )
 	_realname = "";
 	_nickname = "";
 	_username = "";
-	// _userType = USER;
 	_unused = "*";
 }
 
 ClientData::ClientData( int clientSocket, unsigned int clientsNumber)
 {
-	// Give the user an initial authentication.
-	string user;
-
-	user = "User";
-	user.append(std::to_string(clientsNumber));
 	_clientSocket = clientSocket;
-	_realname = user;
-	_nickname = user;
-	_username = user;
+	_realname = "";
+	_nickname = "";
+	_username = "";
 	_registration = false;
 }
 
