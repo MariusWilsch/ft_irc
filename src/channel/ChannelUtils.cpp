@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 20:19:29 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/12 20:41:10 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/12 21:08:26 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,4 +24,9 @@
 
 
 //* MODE CHANGE TOPIC
-// :klfjndsfew!~t@5c8c-aff4-7127-3c3-1c20.230.197.ip MODE #Ch12 +t 
+// :klfjndsfew!~t@5c8c-aff4-7127-3c3-1c20.230.197.ip MODE #Ch12 +t
+
+// / ! Join for the first time to a channel
+// :WldL3arbi!~Aissam@5c8c-aff4-7127-3c3-1c20.230.197.ip JOIN :#HDI
+// :punch.wa.us.dal.net 353 WldL3arbi = #HDI :@WldL3arbi
+// :punch.wa.us.dal.net 366 WldL3arbi #HDI :End of /NAMES list.

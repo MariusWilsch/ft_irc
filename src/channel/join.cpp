@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/24 12:13:30 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/12 20:54:47 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/12 21:19:27 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ bool    createNewChannel(ServerReactor &_serverReactor, Message &ProcessMessage,
     _serverReactor.getChannelManager().addChannel(ChannelName, NewChannel);
     string nickname = _serverReactor.getClientManager().getClientData(clientSocket).getNickname();
     string channelKey = "=";
-    // _serverReactor.sendMsg(clientSocket, _serverReactor.getClientManager().getClientData(clientSocket).getClientInfo(), "JOIN", NewChannel.getName());
+    _serverReactor.sendMsg(clientSocket, _serverReactor.getClientManager().getClientData(clientSocket).getClientInfo(), "JOIN", NewChannel.getName());
     _serverReactor.sendNumericReply_FixLater(clientSocket, RPL_NAMREPLY(nickname , channelKey, NewChannel.getName(), _serverReactor.getChannelManager().createUserList(NewChannel.getName(), _serverReactor, clientSocket)));
     // cout << RPL_ENDOFNAMES(nickname, NewChannel.getName()) << endl;
     _serverReactor.sendNumericReply_FixLater(clientSocket, RPL_ENDOFNAMES(nickname, NewChannel.getName()));
@@ -187,7 +187,7 @@ void ExecuteCommands::join(ServerReactor &_serverReactor, Message &ProcessMessag
                     if (Channel.getSecurity() == true)
                         Joined = joinPrivateChannel(_serverReactor, ProcessMessage, clientSocket, Channel, ChannelKeys[i]);
                     else
-                        joinPublicChannel(_serverReactor, ProcessMessage, clientSocket, Channel, ChannelKeys[i]);            
+                        Joined = joinPublicChannel(_serverReactor, ProcessMessage, clientSocket, Channel, ChannelKeys[i]);
                     if (Joined == true){
                         if (Channel.getTopicFlag()){
                             string Rpl =  RPL_TOPIC(Channel.getName() ,Channel.getTopic());
@@ -197,7 +197,7 @@ void ExecuteCommands::join(ServerReactor &_serverReactor, Message &ProcessMessag
                             string Rpl =  RPL_NOTOPIC(Channel.getName());
                             send(clientSocket, Rpl.c_str(), Rpl.size(), 0);
                         }
-                        // Inform the channel.
+                        informMembers(Channel.getClientSockets(), (_serverReactor.getClientManager().getClientData(clientSocket).getClientInfo() + " JOIN :" + Channel.getName() + "\r\n"), clientSocket);
                     }
                 }
             }
