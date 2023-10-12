@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/24 12:13:30 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/11 21:43:40 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/12 20:54:47 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ int joinParser(std::vector<string> &ChannelNames, std::vector<string> &ChannelKe
                 }
             }
         }
-    }   
+    }
     if (ChannelKeys.size() > ChannelNames.size())
         return (-1);
     for (unsigned int i = ChannelKeys.size(); i < ChannelNames.size(); i++){
@@ -100,7 +100,6 @@ void    leaveChannels(ServerReactor &_serverReactor, Message &ProcessMessage, in
     }
 }
 
-// The channels are always public in thier creation.
 bool    createNewChannel(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket, string ChannelName){
     ChannelData    NewChannel;
     NewChannel.setName(ChannelName);
@@ -109,13 +108,16 @@ bool    createNewChannel(ServerReactor &_serverReactor, Message &ProcessMessage,
     _serverReactor.getChannelManager().addChannel(ChannelName, NewChannel);
     string nickname = _serverReactor.getClientManager().getClientData(clientSocket).getNickname();
     string channelKey = "=";
-    _serverReactor.sendMsg(clientSocket, _serverReactor.getClientManager().getClientData(clientSocket).getClientInfo(), "JOIN", NewChannel.getName());
+    // _serverReactor.sendMsg(clientSocket, _serverReactor.getClientManager().getClientData(clientSocket).getClientInfo(), "JOIN", NewChannel.getName());
     _serverReactor.sendNumericReply_FixLater(clientSocket, RPL_NAMREPLY(nickname , channelKey, NewChannel.getName(), _serverReactor.getChannelManager().createUserList(NewChannel.getName(), _serverReactor, clientSocket)));
     // cout << RPL_ENDOFNAMES(nickname, NewChannel.getName()) << endl;
     _serverReactor.sendNumericReply_FixLater(clientSocket, RPL_ENDOFNAMES(nickname, NewChannel.getName()));
+
     return (true);
 }
 
+
+// :AMSKLDN!~t@5c8c-aff4-7127-3c3-1c20.230.197.ip JOIN :#ChannelNadia
 bool    joinPrivateChannel(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket, ChannelData& Channel, string inputKey){
     if (inputKey.c_str() != NULL){
         if (Channel.getKey().compare(inputKey) == 0){
@@ -131,6 +133,7 @@ bool    joinPrivateChannel(ServerReactor &_serverReactor, Message &ProcessMessag
     return (false);
 }
 
+// :AMSKLDN!~t@5c8c-aff4-7127-3c3-1c20.230.197.ip JOIN :#ChannelNadia
 bool    joinPublicChannel(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket, ChannelData& Channel, string inputKey){
     if (inputKey.empty()){
         Channel.addClient(clientSocket);
@@ -194,6 +197,7 @@ void ExecuteCommands::join(ServerReactor &_serverReactor, Message &ProcessMessag
                             string Rpl =  RPL_NOTOPIC(Channel.getName());
                             send(clientSocket, Rpl.c_str(), Rpl.size(), 0);
                         }
+                        // Inform the channel.
                     }
                 }
             }

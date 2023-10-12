@@ -6,11 +6,20 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 10:02:23 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/11 17:56:54 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/12 18:46:15 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "client.hpp"
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <errno.h>
+#include <netdb.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
 
 /*			CLASS DEFAULT FUNCTIONS: CLIENT DATA			*/
 
@@ -71,8 +80,18 @@ string ClientData::getClientIP() const{
 	return (this->_clientIP);
 }
 
+// std::string get_hosname()
+// {
+// 	char hostbuffer[256];
+
+// 	gethostname(hostbuffer, sizeof(hostbuffer));
+// 	return (hostbuffer);
+// }
+
 string ClientData::getClientInfo() const{
+	char buffer[NI_MAXHOST];
 	return (getNickname() + "!~" + getUsername() + "@" + getClientIP());
+	// return (getNickname() + "!~" + getUsername() + "@" + get_hosname());
 }
 
 /*			SETTERS			 */

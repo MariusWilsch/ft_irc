@@ -16,6 +16,9 @@
 #include "channel.hpp"
 #include "message.hpp"
 
+// for "NI_MAXHOST"
+#include <netdb.h>
+
 #include "ExecuteCommands.hpp"
 
 struct CommandProperties {
@@ -39,17 +42,20 @@ struct CommandProperties {
  * @param _channelManager The channel manager where all the channels are stored
  * @param _serverName The name of the server.
  */
+
 class ServerReactor {
 	private:
 		int								_serverSocket;
 		int								_kq;
-		string						_serverIP;
+		string							_serverIP;
 		bool							_isShutdown;
 		string							_connectionPassword;
 		string							_serverName;
 		ClientManager					_clientManager;
 		ChannelManager					_channelManager;
 		map <string, CommandProperties> _properties;
+		// ading a host buffer
+		char buffer[NI_MAXHOST];
 	public:
 		/*			Class Default Functions			*/
 		

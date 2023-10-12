@@ -61,12 +61,15 @@ void ServerReactor::sendNumericReply(int socket, string numericReply, const stri
 }
 
 void ServerReactor::sendNumericReply_FixLater(int socket, const string& reply) {
-		// Check if socket is valid
-		if (socket == -1)
-			return ;
+	string message;
+	// Check if socket is valid
+	if (socket == -1)
+		return ;
 
+	message += "001" + reply;
 
-		send(socket, reply.c_str(), reply.length(), 0);
+	message += "\r\n";  // IRC messages end with \r\n
+	send(socket, reply.c_str(), reply.length(), 0);
 }
 
 

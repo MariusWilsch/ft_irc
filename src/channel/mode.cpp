@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 20:17:01 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/11 21:45:27 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/12 20:00:05 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 // ~~~~~~~~~~~~~ ONLY THE OPERATORS ARE ALLOWED TO PERFORM SUCH OPERATION ~~~~~~~~~~/ 
 // ! Send back the message to the channel member when the Mode is been changed by an operator.
+// ignore this MODE it's send by limeChat
 
 bool    isDecimal(string str){
     for (unsigned int i = 0; i < str.size(); i++){
