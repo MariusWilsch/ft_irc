@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 10:00:19 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/12 17:19:34 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/13 13:12:07 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,4 +131,8 @@ ChannelManager&	ServerReactor::getChannelManager(){
 
 string	ServerReactor::getServerName(){
 	return (this->_serverName);
+}
+
+string					ServerReactor::getServerPassword( void ){
+	return (this->_connectionPassword);
 }

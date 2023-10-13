@@ -85,9 +85,10 @@ class ServerReactor {
 		/*			COMMAND IMPLEMENTATION			*/
 
 		/* 					GETTERS					*/
-		ClientManager&	getClientManager( void );
-		ChannelManager&	getChannelManager( void );
+		ClientManager&			getClientManager( void );
+		ChannelManager&			getChannelManager( void );
 		string					getServerName( void );
+		string					getServerPassword( void );
 
 		/*			SMART GETTERS			*/
 		bool	doesChannelExist( string& channelName );

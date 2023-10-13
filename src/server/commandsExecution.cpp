@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   commandsExecution.cpp                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 19:02:14 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/13 12:52:20 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/13 13:33:08 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void ExecuteCommands::execute(ServerReactor &_serverReactor, Message &ProcessMes
 					_serverReactor.sendNumericReply_FixLater(clientSocket, ERR_UNKNOWNCOMMAND(nickname, command));
 					throw std::exception();
 			}
-			if ((command.compare("USER") != 0 && command.compare("NICK") != 0) && !clientData.getRegistration()) {
+			if ((command.compare("PASS") != 0 && command.compare("USER") != 0 && command.compare("NICK") != 0) && !clientData.getRegistration()) {
 					if (nickname.empty())
 						nickname = "*";
 					_serverReactor.sendNumericReply_FixLater(clientSocket, ERR_NOTREGISTERED(nickname, command));

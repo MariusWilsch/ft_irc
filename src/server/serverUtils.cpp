@@ -10,6 +10,8 @@ ClientData& ServerReactor::getClientDataFast(int clientSocket) {
 	return (_clientManager.getClientData(clientSocket));
 }
 
+
+
 void	ServerReactor::writeServerError( std::string function, std::string message, int error ) {
 	std::cout << "Error: " << function << " - " << message << std::endl;
 	std::cout << "Error: " << function << " - " << strerror(error) << std::endl;

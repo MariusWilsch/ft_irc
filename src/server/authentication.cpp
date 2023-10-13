@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   authentication.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 00:53:10 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/13 12:37:25 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/13 13:51:14 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,8 +75,8 @@ void     ExecuteCommands::user(ServerReactor &_serverReactor, Message &ProcessMe
             _serverReactor.getClientManager().getClientData(clientSocket).setRealname(ProcessMessage.getParams()[3]);
             string nickname = _serverReactor.getClientManager().getClientData(clientSocket).getNickname();
             if (!nickname.empty()){
-								_serverReactor.getClientManager().getClientData(clientSocket).setRegistration(true);
-								_serverReactor.sendNumericReply(clientSocket, "001", nickname, "Welcome to the IRC Network, " + nickname);
+                _serverReactor.getClientManager().getClientData(clientSocket).setRegistration(true);
+                _serverReactor.sendNumericReply(clientSocket, "001", nickname, "Welcome to the IRC Network, " + nickname);
             } 
         }
         else{
@@ -92,15 +92,19 @@ void     ExecuteCommands::user(ServerReactor &_serverReactor, Message &ProcessMe
     }
 }
 
+// Manda
 void ExecuteCommands::pass(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket)
 {
-    if (ProcessMessage.getParams().size() == 1){
-        if (_serverReactor.getClientManager().getClientData(clientSocket).getRegistration() == false){
-             _serverReactor.getClientManager().getClientData(clientSocket).setPassword(ProcessMessage.getParams()[0]);
+    ClientData  &client = _serverReactor.getClientDataFast(clientSocket);
+    if (ProcessMessage.getParams().size() >= 1){
+        if (client.getRegistration() == false){
+            if (_serverReactor.getServerPassword().compare(ProcessMessage.getParams()[0]) != 0){
+                _serverReactor.sendNumericReply_FixLater(clientSocket, ERR_PASSWDMISMATCH());
+                throw std::exception();
+            }
         }
         else{
-            // string Err = ERR_ALREADYREGISTRED();
-            // send(clientSocket, Err.c_str(), Err.size(), 0);
+            _serverReactor.sendNumericReply_FixLater(clientSocket, ERR_ALREADYREGISTRED());
             throw std::exception();
         }
     }
