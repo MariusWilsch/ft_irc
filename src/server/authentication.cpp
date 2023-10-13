@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   authentication.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 00:53:10 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/13 13:51:14 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/13 15:05:13 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void ExecuteCommands::nick(ServerReactor &_serverReactor, Message &ProcessMessag
     }
     map<int, ClientData>::iterator it;
     string nickName = ProcessMessage.getParams()[0];
-    string oldNick =  client.getNickname();    
+    string oldNick =  client.getNickname();
     if (nickName.compare(client.getNickname()) != 0)
     {
         map <int, ClientData> &clientSet = _serverReactor.getClientManager().getClientBySocket();
@@ -55,7 +55,6 @@ void ExecuteCommands::nick(ServerReactor &_serverReactor, Message &ProcessMessag
             if (client.getRegistration())
                 _serverReactor.sendMsg(clientSocket, client.getClientInfo(), "NICK:", nickName);
         }
-				
         if ((!client.getUsername().empty()) && (!client.getRegistration())){
             client.setRegistration(true);
             _serverReactor.sendNumericReply(clientSocket, "001", client.getNickname(), "Welcome to the IRC Network, " + client.getNickname());
@@ -100,6 +99,7 @@ void ExecuteCommands::pass(ServerReactor &_serverReactor, Message &ProcessMessag
         if (client.getRegistration() == false){
             if (_serverReactor.getServerPassword().compare(ProcessMessage.getParams()[0]) != 0){
                 _serverReactor.sendNumericReply_FixLater(clientSocket, ERR_PASSWDMISMATCH());
+								close(clientSocket);
                 throw std::exception();
             }
         }

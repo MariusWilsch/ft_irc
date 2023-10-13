@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 15:07:18 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/13 13:43:06 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/13 15:09:11 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,14 @@
 #include <map>
 #include <string>
 #include <vector>
+// #include <array>
 #include <netdb.h>
 
 using std::string;
 using std::map;
 using std::set;
 using std::vector;
+// usign std::array;
 using std::cout;
 using std::endl;
 

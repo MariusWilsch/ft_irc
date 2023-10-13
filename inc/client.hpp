@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 15:30:13 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/13 11:51:55 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/13 15:09:38 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,15 +29,15 @@
  */
 class ClientData {
 	private:
-		int									_clientSocket;
-		int									_mode;
+		int										_clientSocket;
+		int										_mode;
 		string								_clientIP;
 		string								_realname;
 		string								_nickname;
 		string								_username;
 		string								_unused;
 		string								_password;
-		bool								_registration;
+		bool									_registration;
 	public:
 		/*			CLASS DEFAULT FUNCTIONS			*/
 		
