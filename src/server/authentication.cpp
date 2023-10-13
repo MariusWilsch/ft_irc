@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   authentication.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 00:53:10 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/12 14:33:44 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/13 12:37:25 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ void ExecuteCommands::nick(ServerReactor &_serverReactor, Message &ProcessMessag
             if (client.getRegistration())
                 _serverReactor.sendMsg(clientSocket, client.getClientInfo(), "NICK:", nickName);
         }
+				
         if ((!client.getUsername().empty()) && (!client.getRegistration())){
             client.setRegistration(true);
             _serverReactor.sendNumericReply(clientSocket, "001", client.getNickname(), "Welcome to the IRC Network, " + client.getNickname());
@@ -74,9 +75,9 @@ void     ExecuteCommands::user(ServerReactor &_serverReactor, Message &ProcessMe
             _serverReactor.getClientManager().getClientData(clientSocket).setRealname(ProcessMessage.getParams()[3]);
             string nickname = _serverReactor.getClientManager().getClientData(clientSocket).getNickname();
             if (!nickname.empty()){
-                _serverReactor.getClientManager().getClientData(clientSocket).setRegistration(true);
-                _serverReactor.sendNumericReply(clientSocket, "001", nickname, "Welcome to the IRC Network, " + nickname);
-            }
+								_serverReactor.getClientManager().getClientData(clientSocket).setRegistration(true);
+								_serverReactor.sendNumericReply(clientSocket, "001", nickname, "Welcome to the IRC Network, " + nickname);
+            } 
         }
         else{
             string Err = ERR_NEEDMOREPARAMS(ProcessMessage.getCommand());
@@ -85,8 +86,8 @@ void     ExecuteCommands::user(ServerReactor &_serverReactor, Message &ProcessMe
         }
     }
     else {
-        string Err = ERR_ALREADYREGISTRED();
-        send(clientSocket, Err.c_str(), Err.size(), 0);
+        // string Err = ERR_ALREADYREGISTRED();
+        // send(clientSocket, Err.c_str(), Err.size(), 0);
         throw std::exception();
     }
 }
@@ -98,8 +99,8 @@ void ExecuteCommands::pass(ServerReactor &_serverReactor, Message &ProcessMessag
              _serverReactor.getClientManager().getClientData(clientSocket).setPassword(ProcessMessage.getParams()[0]);
         }
         else{
-            string Err = ERR_ALREADYREGISTRED();
-            send(clientSocket, Err.c_str(), Err.size(), 0);
+            // string Err = ERR_ALREADYREGISTRED();
+            // send(clientSocket, Err.c_str(), Err.size(), 0);
             throw std::exception();
         }
     }

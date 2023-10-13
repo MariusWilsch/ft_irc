@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   join.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/24 12:13:30 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/12 21:19:27 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/13 11:10:11 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,6 @@ bool    createNewChannel(ServerReactor &_serverReactor, Message &ProcessMessage,
     string channelKey = "=";
     _serverReactor.sendMsg(clientSocket, _serverReactor.getClientManager().getClientData(clientSocket).getClientInfo(), "JOIN", NewChannel.getName());
     _serverReactor.sendNumericReply_FixLater(clientSocket, RPL_NAMREPLY(nickname , channelKey, NewChannel.getName(), _serverReactor.getChannelManager().createUserList(NewChannel.getName(), _serverReactor, clientSocket)));
-    // cout << RPL_ENDOFNAMES(nickname, NewChannel.getName()) << endl;
     _serverReactor.sendNumericReply_FixLater(clientSocket, RPL_ENDOFNAMES(nickname, NewChannel.getName()));
 
     return (true);
@@ -228,3 +227,13 @@ void ExecuteCommands::join(ServerReactor &_serverReactor, Message &ProcessMessag
         }
     }
 }
+
+
+
+// :nickname123!~user123@127.0.0.1 JOIN ch2
+// 353: nickname123 = ch2 :@nickname123
+// 366: nickname123 ch2 :End of /NAMES list.
+
+// :nickname123!~user123@5c8c-aff4-7127-3c3-1c20.230.197.ip JOIN :#ch1
+// :punch.wa.us.dal.net 353 nickname123 = #ch1 :@nickname123 
+// :punch.wa.us.dal.net 366 nickname123 #ch1 :End of /NAMES list.

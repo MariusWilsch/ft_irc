@@ -89,6 +89,9 @@ class ServerReactor {
 		ChannelManager&	getChannelManager( void );
 		string					getServerName( void );
 
+		/*			SMART GETTERS			*/
+		bool	doesChannelExist( string& channelName );
+		ClientData& getClientDataFast( int clientSocket );
 
 		/*			MAIN			*/
 

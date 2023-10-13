@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   serverEvents.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 10:17:06 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/11 17:12:44 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/13 11:49:39 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,9 @@ void	ServerReactor::recieveIncomingMessage( int clientSocket )
 	// cout << "In ServerReactor::recieveIncomingMessage: " << message << endl;
 	
 	Message processMessage(message, _properties);
-	// TODO: Implement command execution
+	// if (processMessage.getFatal())
+	// 		sendNumericReply_FixLater(clientSocket, ERR_UNKNOWNCOMMAND())
+
 
 	//****************************************************************************************/
 	// initialize all the clients by giving them a default authentication.

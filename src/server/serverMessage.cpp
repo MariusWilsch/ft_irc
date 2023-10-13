@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   serverMessage.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 13:27:34 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/11 16:17:31 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/13 12:14:47 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,12 @@ Message::Message( string rawMessage, map <string, CommandProperties> properties 
 		string token;
 		if (std::getline(iss, token, ' ') && !token.empty())
 				_command = token;
-		// Convert _command to uppercase
 		std::transform(_command.begin(), _command.end(), _command.begin(), ::toupper);
+		if (_properties.count(_command) == 0) {
+				_isFatal = true; // send numeric reply
+				return ;
+		}
+		// Convert _command to uppercase
 
 		while (std::getline(iss, token, ' ')) {
 				if (token.find(':') != string::npos) {

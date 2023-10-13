@@ -1,5 +1,15 @@
 #include "server.hpp"
 
+bool	ServerReactor::doesChannelExist(string& channelName) {
+	if (!channelName.empty() && channelName[0] == '#')
+    channelName.erase(channelName.begin());
+	return (_channelManager.getChannels().count(channelName));
+}
+
+ClientData& ServerReactor::getClientDataFast(int clientSocket) {
+	return (_clientManager.getClientData(clientSocket));
+}
+
 void	ServerReactor::writeServerError( std::string function, std::string message, int error ) {
 	std::cout << "Error: " << function << " - " << message << std::endl;
 	std::cout << "Error: " << function << " - " << strerror(error) << std::endl;
@@ -61,14 +71,10 @@ void ServerReactor::sendNumericReply(int socket, string numericReply, const stri
 }
 
 void ServerReactor::sendNumericReply_FixLater(int socket, const string& reply) {
-	string message;
 	// Check if socket is valid
 	if (socket == -1)
 		return ;
 
-	message += "001" + reply;
-
-	message += "\r\n";  // IRC messages end with \r\n
 	send(socket, reply.c_str(), reply.length(), 0);
 }
 

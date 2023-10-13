@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   message.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 16:04:46 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/11 16:17:56 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/13 12:06:07 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ struct	CommandProperties;
 class Message {
 	private:
 		bool							_isFatal;
-		string							_responseCode; // Maybe make this an int?
 		string							_rawMessage;
 		string							_prefix;
 		string							_command;

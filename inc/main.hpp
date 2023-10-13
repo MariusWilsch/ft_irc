@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 15:07:18 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/12 16:32:57 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/13 12:43:04 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ using std::endl;
 #define RPL_TOPIC(channel, topic) "332: " + channel + ": "  + topic + "\n"
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ERRORS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
-#define ERR_UNKNOWNCOMMAND() "421: Unknown command\n"
+#define ERR_UNKNOWNCOMMAND(nickname, wrongCommand) "421 " + nickname + " " + wrongCommand + " :Unknown command\r\n"
 #define ERR_NONICKNAMEGIVEN() "431: No nickname given\n"
 #define ERR_NICKNAMEINUSE(nick) "433: " + nick + " :Nickname is already in use\n"
 #define ERR_NEEDMOREPARAMS(command) "461: " + command + " : Not enough parameters\n"
@@ -56,11 +56,10 @@ using std::endl;
 #define ERR_UNKNOWNMODE(character) "472: " + character + " : is unknown mode char to me\n"
 #define ERR_INVITEONLYCHAN(channel) "473: " + channel + " :Cannot join channel (+i)\n"
 
-#define RPL_NAMREPLY(nickname, channelType, channel, users) "353: " + nickname + " " + channelType + " " + channel + " :" + users + "\r\n"
-#define RPL_ENDOFNAMES(nickname, channel) "366: " + nickname + " " + channel + " :End of /NAMES list." + "\r\n"
-
+#define RPL_NAMREPLY(nickname, channelType, channel, users) "353 " + nickname + " " + channelType + " #" + channel + " :" + users + "\r\n"
+#define RPL_ENDOFNAMES(nickname, channel) "366 " + nickname + " #" + channel + " :End of /NAMES list." + "\r\n"
+#define ERR_NOTREGISTERED(nickname, command) "451 " + nickname + " " + command + " :You must finish connecting with another nickname first.\r\n"
 
 // PRIVMSG Numeric replies to add here.
-
 
 // #define ERR_NEEDMOREPARAMS() 
