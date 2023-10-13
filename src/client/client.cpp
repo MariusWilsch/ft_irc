@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 10:02:23 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/13 12:38:47 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/13 17:27:59 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,9 @@ ClientData::ClientData( int clientSocket, unsigned int clientsNumber)
 	_realname = "";
 	_nickname = "";
 	_username = "";
-	_registration = false;
+	for (unsigned int i = 0; i < 3; i++){
+		this->_Registration.push_back(false);
+	}
 }
 
 ClientData::~ClientData() {};
@@ -68,8 +70,8 @@ string 	ClientData::getUnused() const{
 	return (this->_unused);
 }
 
-bool	ClientData::getRegistration() const{
-	return (this->_registration);
+vector<bool>&	ClientData::getRegistration(){
+	return (this->_Registration);
 }
 
 string	ClientData::getPassword() const{
@@ -116,8 +118,16 @@ void	ClientData::setUnused(string unused){
 	this->_unused = unused;
 }
 
-void	ClientData::setRegistration( bool b){
-	this->_registration = b;
+void	ClientData::setRegisteration( bool b, int index){
+	this->_Registration[index] = b;
+}
+
+bool	ClientData::isRegistered(){
+	for (unsigned int i = 0; i < 3; i++){
+		if (this->_Registration[i] == false)
+			return (false);
+  	}
+	return (true);
 }
 
 void	ClientData::setPassword(string pass){

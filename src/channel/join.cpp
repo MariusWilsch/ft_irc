@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   join.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/24 12:13:30 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/13 11:10:11 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/13 16:01:28 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,84 +146,81 @@ bool    joinPublicChannel(ServerReactor &_serverReactor, Message &ProcessMessage
     return (false);
 }
 
-void ExecuteCommands::join(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket)
-{
-    if (_serverReactor.getClientManager().getClientData(clientSocket).getRegistration()){
-        std::vector<string> ChannelNames;
-        std::vector<string> ChannelKeys;
+void ExecuteCommands::join(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket){
+    std::vector<string> ChannelNames;
+    std::vector<string> ChannelKeys;
 
-        int stat = joinParser(ChannelNames, ChannelKeys, ProcessMessage);
-        if (stat == -1){
-            string Err = ERR_NEEDMOREPARAMS(ProcessMessage.getCommand());
-            send(clientSocket, Err.c_str(), Err.size(), 0);
-            throw std::exception();
+    int stat = joinParser(ChannelNames, ChannelKeys, ProcessMessage);
+    if (stat == -1){
+        string Err = ERR_NEEDMOREPARAMS(ProcessMessage.getCommand());
+        send(clientSocket, Err.c_str(), Err.size(), 0);
+        throw std::exception();
+    }
+    if (stat == 0){ 
+        leaveChannels(_serverReactor, ProcessMessage, clientSocket);
+    }
+    for (unsigned int i = 0; i < ChannelNames.size(); i++){
+        bool Joined = false;
+        if (_serverReactor.getChannelManager().channelExistence(ChannelNames[i]) == false){
+            Joined = createNewChannel(_serverReactor, ProcessMessage, clientSocket, ChannelNames[i]);
         }
-        if (stat == 0){ 
-            leaveChannels(_serverReactor, ProcessMessage, clientSocket);
-        }
-        for (unsigned int i = 0; i < ChannelNames.size(); i++){
-            bool Joined = false;
-            if (_serverReactor.getChannelManager().channelExistence(ChannelNames[i]) == false){
-                Joined = createNewChannel(_serverReactor, ProcessMessage, clientSocket, ChannelNames[i]);
-            }
-            else {
-                ChannelData& Channel = _serverReactor.getChannelManager().getChannelByName(ChannelNames[i]);
-                if (!Channel.isCLient(clientSocket)){
-                    if (Channel.getLimitFlag()){
-                        if (Channel.getClientSockets().size() >= Channel.getLimit()){
-                            string Err = ERR_CHANNELISFULL(Channel.getName());
-                            send (clientSocket, Err.c_str(), Err.size(), 0);
-                            throw std::exception();
-                        }
+        else {
+            ChannelData& Channel = _serverReactor.getChannelManager().getChannelByName(ChannelNames[i]);
+            if (!Channel.isCLient(clientSocket)){
+                if (Channel.getLimitFlag()){
+                    if (Channel.getClientSockets().size() >= Channel.getLimit()){
+                        string Err = ERR_CHANNELISFULL(Channel.getName());
+                        send (clientSocket, Err.c_str(), Err.size(), 0);
+                        throw std::exception();
                     }
-                    if (Channel.getInviteFlag()){
-                        if (!Channel.isInvited(_serverReactor.getClientManager().getClientData(clientSocket).getNickname())){
-                            string Err = ERR_INVITEONLYCHAN(Channel.getName());
-                            send(clientSocket, Err.c_str(), Err.size(), 0);
-                            throw std::exception();
-                        }
+                }
+                if (Channel.getInviteFlag()){
+                    if (!Channel.isInvited(_serverReactor.getClientManager().getClientData(clientSocket).getNickname())){
+                        string Err = ERR_INVITEONLYCHAN(Channel.getName());
+                        send(clientSocket, Err.c_str(), Err.size(), 0);
+                        throw std::exception();
                     }
-                    if (Channel.getSecurity() == true)
-                        Joined = joinPrivateChannel(_serverReactor, ProcessMessage, clientSocket, Channel, ChannelKeys[i]);
-                    else
-                        Joined = joinPublicChannel(_serverReactor, ProcessMessage, clientSocket, Channel, ChannelKeys[i]);
-                    if (Joined == true){
-                        if (Channel.getTopicFlag()){
-                            string Rpl =  RPL_TOPIC(Channel.getName() ,Channel.getTopic());
-                            send(clientSocket, Rpl.c_str(), Rpl.size(), 0);
-                        }
-                        else{
-                            string Rpl =  RPL_NOTOPIC(Channel.getName());
-                            send(clientSocket, Rpl.c_str(), Rpl.size(), 0);
-                        }
-                        informMembers(Channel.getClientSockets(), (_serverReactor.getClientManager().getClientData(clientSocket).getClientInfo() + " JOIN :" + Channel.getName() + "\r\n"), clientSocket);
+                }
+                if (Channel.getSecurity() == true)
+                    Joined = joinPrivateChannel(_serverReactor, ProcessMessage, clientSocket, Channel, ChannelKeys[i]);
+                else
+                    Joined = joinPublicChannel(_serverReactor, ProcessMessage, clientSocket, Channel, ChannelKeys[i]);
+                if (Joined == true){
+                    if (Channel.getTopicFlag()){
+                        string Rpl =  RPL_TOPIC(Channel.getName() ,Channel.getTopic());
+                        send(clientSocket, Rpl.c_str(), Rpl.size(), 0);
                     }
+                    else{
+                        string Rpl =  RPL_NOTOPIC(Channel.getName());
+                        send(clientSocket, Rpl.c_str(), Rpl.size(), 0);
+                    }
+                    informMembers(Channel.getClientSockets(), (_serverReactor.getClientManager().getClientData(clientSocket).getClientInfo() + " JOIN :" + Channel.getName() + "\r\n"), clientSocket);
                 }
             }
         }
+    }
+    
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ DISPLAY CHANNELS INFORMATIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
+    map<string, ChannelData>::iterator  it;
+    std::cout << "Number of channels: " << _serverReactor.getChannelManager().getChannels().size() << std::endl;
+    map<string, ChannelData> m = _serverReactor.getChannelManager().getChannels();
+    for (it = m.begin(); it != m.end(); it++)
+    {
+        std::cout << "Channel name: " << it->second.getName() << std::endl;
+        if (it->second.getSecurity())
+            cout << "~~~> Channel is private " << endl;
+        else
+            cout << "~~~> Channel is public " << endl;
+        set<int>::iterator cl;
+        set<int> s = it->second.getClientSockets();
+        for (cl = s.begin(); cl != s.end(); cl++){
+            std::cout << "  >>> Client: " << *cl << endl;
+        } 
         
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ DISPLAY CHANNELS INFORMATIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
-        map<string, ChannelData>::iterator  it;
-        std::cout << "Number of channels: " << _serverReactor.getChannelManager().getChannels().size() << std::endl;
-        map<string, ChannelData> m = _serverReactor.getChannelManager().getChannels();
-        for (it = m.begin(); it != m.end(); it++)
-        {
-            std::cout << "Channel name: " << it->second.getName() << std::endl;
-            if (it->second.getSecurity())
-                cout << "~~~> Channel is private " << endl;
-            else
-                cout << "~~~> Channel is public " << endl;
-            set<int>::iterator cl;
-            set<int> s = it->second.getClientSockets();
-            for (cl = s.begin(); cl != s.end(); cl++){
-                std::cout << "  >>> Client: " << *cl << endl;
-            } 
-            
-            set<int>::iterator op;
-            set<int> f = it->second.getOperators();
-            for (op = f.begin(); op != f.end(); op++){
-                std::cout << "  >>> operator: " << *op << endl;
-            }
+        set<int>::iterator op;
+        set<int> f = it->second.getOperators();
+        for (op = f.begin(); op != f.end(); op++){
+            std::cout << "  >>> operator: " << *op << endl;
         }
     }
 }

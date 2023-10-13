@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/04 22:01:31 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/11 21:45:50 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/13 16:02:28 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,46 +64,44 @@ bool    partParser(std::vector<string> &ChannelNames, std::vector<string> &partM
 }
 
 void     ExecuteCommands::part(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket){
-    if (_serverReactor.getClientManager().getClientData(clientSocket).getRegistration()){
-        std::vector<string> ChannelNames;
-        std::vector<string> partMessage;
+    std::vector<string> ChannelNames;
+    std::vector<string> partMessage;
 
-        int stat = partParser(ChannelNames, partMessage, ProcessMessage);
-        if (stat == -1){
-            string Err = ERR_NEEDMOREPARAMS(ProcessMessage.getCommand());
-            send(clientSocket, Err.c_str(), Err.size(), 0);
-            throw std::exception();
-        }
-        else{
-            // After knowing that everything is good with parameters then The part process from the specified channels it's ready to be done.
-            // The part command is available for all the members of the channel to use.
-            for (unsigned int i = 0; i < ChannelNames.size(); i++){
-                if (_serverReactor.getChannelManager().channelExistence(ChannelNames[i]) == true){
-                    // The channel it's exist.
-                    if (_serverReactor.getChannelManager().getChannelByName(ChannelNames[i]).isCLient(clientSocket)){
-                        _serverReactor.getChannelManager().getChannelByName(ChannelNames[i]).removeClient(clientSocket);
-                        if (_serverReactor.getChannelManager().getChannelByName(ChannelNames[i]).isOperator(clientSocket)){
-                            _serverReactor.getChannelManager().getChannelByName(ChannelNames[i]).removeOperator(clientSocket);
-                        }
-                        // ! Do i need to inform the channels members about this action.
-                        // Check if the channel empty.
-                        // if (_serverReactor.getChannelManager().getChannelByName(ChannelNames[i]).)
-                        if (_serverReactor.getChannelManager().getChannelByName(ChannelNames[i]).getClientSockets().size() == 0){
-                            // remove the channel from channel manager.
-                            _serverReactor.getChannelManager().removeChannel(ChannelNames[i]);
-                        }
+    int stat = partParser(ChannelNames, partMessage, ProcessMessage);
+    if (stat == -1){
+        string Err = ERR_NEEDMOREPARAMS(ProcessMessage.getCommand());
+        send(clientSocket, Err.c_str(), Err.size(), 0);
+        throw std::exception();
+    }
+    else{
+        // After knowing that everything is good with parameters then The part process from the specified channels it's ready to be done.
+        // The part command is available for all the members of the channel to use.
+        for (unsigned int i = 0; i < ChannelNames.size(); i++){
+            if (_serverReactor.getChannelManager().channelExistence(ChannelNames[i]) == true){
+                // The channel it's exist.
+                if (_serverReactor.getChannelManager().getChannelByName(ChannelNames[i]).isCLient(clientSocket)){
+                    _serverReactor.getChannelManager().getChannelByName(ChannelNames[i]).removeClient(clientSocket);
+                    if (_serverReactor.getChannelManager().getChannelByName(ChannelNames[i]).isOperator(clientSocket)){
+                        _serverReactor.getChannelManager().getChannelByName(ChannelNames[i]).removeOperator(clientSocket);
                     }
-                    else{
-                        string Err = ERR_NOTONCHANNEL(ChannelNames[i]);
-                        send(clientSocket, Err.c_str(), Err.size(), 0);
-                        throw std::exception();
+                    // ! Do i need to inform the channels members about this action.
+                    // Check if the channel empty.
+                    // if (_serverReactor.getChannelManager().getChannelByName(ChannelNames[i]).)
+                    if (_serverReactor.getChannelManager().getChannelByName(ChannelNames[i]).getClientSockets().size() == 0){
+                        // remove the channel from channel manager.
+                        _serverReactor.getChannelManager().removeChannel(ChannelNames[i]);
                     }
-                    
                 }
                 else{
-                    string Err = ERR_NOSUCHCHANNEL(ChannelNames[i]);
+                    string Err = ERR_NOTONCHANNEL(ChannelNames[i]);
                     send(clientSocket, Err.c_str(), Err.size(), 0);
+                    throw std::exception();
                 }
+                
+            }
+            else{
+                string Err = ERR_NOSUCHCHANNEL(ChannelNames[i]);
+                send(clientSocket, Err.c_str(), Err.size(), 0);
             }
         }
     }

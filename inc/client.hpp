@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 15:30:13 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/13 15:09:38 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/13 17:25:59 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,15 +29,15 @@
  */
 class ClientData {
 	private:
-		int										_clientSocket;
-		int										_mode;
+	int										_clientSocket;
+int											_mode;
 		string								_clientIP;
 		string								_realname;
 		string								_nickname;
 		string								_username;
 		string								_unused;
 		string								_password;
-		bool									_registration;
+		vector<bool>						_Registration;
 	public:
 		/*			CLASS DEFAULT FUNCTIONS			*/
 		
@@ -51,29 +51,31 @@ class ClientData {
 
 		/*			GETTERS			*/
 
-		int		getClientSocket( void ) const;
-		int		getMode() const;
-		string	getRealname() const;
-		string	getNickname() const;
-		string	getUsername() const;
-		string 	getUnused() const;
-		bool	getRegistration() const;
-		string	getPassword() const;
-		string	getClientIP() const;
-		string	getClientInfo() const;
+		int				getClientSocket( void ) const;
+		int				getMode() const;
+		string			getRealname() const;
+		string			getNickname() const;
+		string			getUsername() const;
+		string 			getUnused() const;
+		vector<bool>&	getRegistration();
+		string			getPassword() const;
+		string			getClientIP() const;
+		string			getClientInfo() const;
 		
 
 
 		/*			SETTERS			 */
 
-		void	setmode(int mode);
-		void	setRealname(string realname);
-		void	setNickname(string nickname);
-		void	setUsername(string username);
-		void	setUnused(string unused);
-		void	setRegistration( bool b);
-		void	setPassword(string pass);
-		void	setClientIP(string clientIP);
+		void			setmode(int mode);
+		void			setRealname(string realname);
+		void			setNickname(string nickname);
+		void			setUsername(string username);
+		void			setUnused(string unused);
+		void			setRegisteration( bool b, int index);
+		void			setPassword(string pass);
+		void			setClientIP(string clientIP);
+
+		bool	isRegistered();
 
 };
 
@@ -110,5 +112,5 @@ class ClientManager {
 		// if the nick name founded in the given socket id which represent a member of a channel it means that, the user is a memeber.
 		int				MatchNickName(set <int> ChannelMembers, string nickname);
 		int				getClientSocketByNick(string& nickname);
-		string		createUserList(set<int> channelMembers);
+		string			createUserList(set<int> channelMembers);
 };
