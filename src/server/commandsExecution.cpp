@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 19:02:14 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/13 15:04:35 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/13 18:11:56 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,9 @@ bool    ExecuteCommands::whiteCheck(string str)
 
 void    ExecuteCommands::informMembers(set <int> clientSockets, string message, int clientSocket){
 		for (set<int>::iterator it = clientSockets.begin() ; it !=  clientSockets.end() ; it++){
-				if (*it != clientSocket)
-						send(*it, message.c_str(), message.size(), 0);
+				if (*it == clientSocket)
+						continue;
+				// send(*it, message.c_str(), message.size(), 0);
 		}
 }
 
@@ -50,7 +51,7 @@ void ExecuteCommands::execute(ServerReactor &_serverReactor, Message &ProcessMes
 					_serverReactor.sendNumericReply_FixLater(clientSocket, ERR_NOTREGISTERED(nickname, command));
 					throw std::exception();
 			}
-			std::string commands[10] = {"PASS", "NICK", "USER", "JOIN", "PRIVMSG", "KICK", "INVITE", "TOPIC", "MODE"  , "PART"}; // TODO: Add function to Command Properties
+			std::string commands[10] = {"PASS", "NICK", "USER", "JOIN", "PRIVMSG", "KICK", "INVITE", "TOPIC", "MODE"  , "PART", }; // TODO: Add function to Command Properties
 			void(*FunctionPointers[10])(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket) = {pass, nick, user, join, privmsg, kick, invite, topic, mode, part};
 		
 			if (ProcessMessage.getCommand().compare("HELP") == 0)

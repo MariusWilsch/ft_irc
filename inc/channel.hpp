@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 16:01:33 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/10 15:18:19 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/13 16:34:48 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ class ChannelData {
 
 	public:
 		ChannelData( void );
+		ChannelData( string channelName, int clientSocket );
 		~ChannelData( void );
 		
 		/*			GETTERS			*/

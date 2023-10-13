@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 15:30:13 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/13 15:09:38 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/13 15:24:26 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ class ClientData {
 		string								_unused;
 		string								_password;
 		bool									_registration;
+		
 	public:
 		/*			CLASS DEFAULT FUNCTIONS			*/
 		

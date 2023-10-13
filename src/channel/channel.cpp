@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 10:02:20 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/10 15:27:58 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/13 16:37:41 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,22 @@ ChannelData::ChannelData( void ){
     _clientSockets = set<int>();
     _operators = set<int>();
 }
+
+// TODO: Implement this to remove lines in join.cpp
+// ChannelData::ChannelData(const string& channelName, const int socketFD ) {
+// 		this->_name = channelName;
+// 		this->_topic = "";
+// 		this->_key = "";
+// 		this->_limit = -1;
+// 		this->_securityFlag = false;
+// 		this->_inviteOnlyFlag = false;
+// 		this->_topicFlag = false;
+// 		this->_limitFlag = false;
+// 		this->_clientSockets = set<int>();
+// 		this->_operators = set<int>();
+// 		this->_inviteList = set<string>();
+// 		this->_creatorBySocket = socketFD;
+// }
 
 ChannelData::~ChannelData( void ){}
 

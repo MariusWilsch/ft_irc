@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   serverSetup.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 10:00:19 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/13 13:12:07 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/13 17:46:49 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void	ServerReactor::createPropertiesMap( void ) {
 	// _properties["TOPIC"] = CommandProperties(1, false);
 	_properties["MODE"] = CommandProperties(2, true);
 	_properties["PART"] = CommandProperties(2, true); // Unlimited
-
+	_properties["QUIT"] = CommandProperties(1, false);
 	_properties["HELP"] = CommandProperties(1, true);
 }
 

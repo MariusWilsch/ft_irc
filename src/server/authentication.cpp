@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 00:53:10 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/13 15:05:13 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/13 15:40:04 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void ExecuteCommands::nick(ServerReactor &_serverReactor, Message &ProcessMessag
         if (nickName.compare(oldNick) != 0){
             client.setNickname(nickName);
             if (client.getRegistration())
-                _serverReactor.sendMsg(clientSocket, client.getClientInfo(), "NICK:", nickName);
+                _serverReactor.sendMsg(clientSocket, client.getClientInfo(), "NICK", nickName);
         }
         if ((!client.getUsername().empty()) && (!client.getRegistration())){
             client.setRegistration(true);

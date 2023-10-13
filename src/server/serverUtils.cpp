@@ -1,8 +1,8 @@
 #include "server.hpp"
 
 bool	ServerReactor::doesChannelExist(string& channelName) {
-	if (!channelName.empty() && channelName[0] == '#')
-    channelName.erase(channelName.begin());
+	if (channelName[0] != '#') // For NC because LimeChat always sends a channel name with a # in front
+		return (false);
 	return (_channelManager.getChannels().count(channelName));
 }
 
@@ -11,14 +11,13 @@ ClientData& ServerReactor::getClientDataFast(int clientSocket) {
 }
 
 
-
 void	ServerReactor::writeServerError( std::string function, std::string message, int error ) {
 	std::cout << "Error: " << function << " - " << message << std::endl;
 	std::cout << "Error: " << function << " - " << strerror(error) << std::endl;
 	exit(1);
 }
 
-int ServerReactor::sendMsg(int socket, const string& clientInfo, const string &command, const string &param, const string &trailing) {
+int ServerReactor::sendMsg(int socket, const string& clientInfo, const string &command, string param, const string &trailing) {
     string message;
 
 		// Check if socket is valid
@@ -33,8 +32,13 @@ int ServerReactor::sendMsg(int socket, const string& clientInfo, const string &c
 
     // Append parameters
 
-    message += " " + param;
 
+		if (command == "NICK") {
+			message += " :" + param;
+		} else {
+				message += " " + param;
+		}
+			
     // Append trailing message if it exists
     if (!trailing.empty()) {
         message += " :" + trailing;
@@ -79,6 +83,16 @@ void ServerReactor::sendNumericReply_FixLater(int socket, const string& reply) {
 
 	send(socket, reply.c_str(), reply.length(), 0);
 }
+
+vector <string> ServerReactor::processItems(const string& channelName, const string& item2, const string& item3) {
+	vector <string> vec;
+	
+	if (!channelName.empty()) vec.push_back(channelName);
+  if (!item2.empty()) vec.push_back(item2);
+  if (!item3.empty()) vec.push_back(item3);	
+	return (vec);
+}
+
 
 
 // void ServerReactor::sendMsg(int socket, const std::string &command, const std::string &trailing, int paramCount, ...) {
