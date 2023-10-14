@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   join.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/24 12:13:30 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/14 15:27:52 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/14 17:04:38 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,110 +20,103 @@
 :punch.wa.us.dal.net 451 * join :You must finish connecting with another nickname first.
 
 / ! Join for the first time to a channel
+
 :WldL3arbi!~Aissam@5c8c-aff4-7127-3c3-1c20.230.197.ip JOIN :#HDI
 :punch.wa.us.dal.net 353 WldL3arbi = #HDI :@WldL3arbi
 :punch.wa.us.dal.net 366 WldL3arbi #HDI :End of /NAMES list.
 
 */
 
-
-
 int joinParser(std::vector<string> &ChannelNames, std::vector<string> &ChannelKeys, Message &ProcessMessage){
-		if (ProcessMessage.getParams().size() == 0)
-				return (-1);
-		string param = ProcessMessage.getParams()[0];
-		if (ProcessMessage.getParams().size() == 1 && param.compare("0") == 0){
-				return (0);
-		}
-		if (ProcessMessage.getParams().size() < 1 || ExecuteCommands::whiteCheck(ProcessMessage.getParams()[0]))
-				return (-1);
-
-		for (size_t i = 0; i < ProcessMessage.getParams().size(); i++) {
-				param = ProcessMessage.getParams()[i];
-				if (param[0] == '#')
-						ChannelNames.push_back(param);
-				else if (!ExecuteCommands::whiteCheck(param))
-						ChannelKeys.push_back(param);
-		}
-
-		if (ChannelKeys.size() > ChannelNames.size())
-				return (-1);
-		for (unsigned int i = ChannelKeys.size(); i < ChannelNames.size(); i++){
-				ChannelKeys.push_back("");
-		}
-		return (1);
+    if (ProcessMessage.getParams().size() == 0)
+            return (-1);
+    string param = ProcessMessage.getParams()[0];
+    if (ProcessMessage.getParams().size() == 1 && param.compare("0") == 0){
+            return (0);
+    }
+    if (ProcessMessage.getParams().size() < 1 || ExecuteCommands::whiteCheck(ProcessMessage.getParams()[0]))
+            return (-1);
+    for (size_t i = 0; i < ProcessMessage.getParams().size(); i++) {
+            param = ProcessMessage.getParams()[i];
+            if (param[0] == '#')
+                    ChannelNames.push_back(param);
+            else if (!ExecuteCommands::whiteCheck(param))
+                    ChannelKeys.push_back(param);
+    }
+    if (ChannelKeys.size() > ChannelNames.size())
+            return (-1);
+    for (unsigned int i = ChannelKeys.size(); i < ChannelNames.size(); i++){
+            ChannelKeys.push_back("");
+    }
+    return (1);
 }
 
 
 void    leaveChannels(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket){
-		map<string, ChannelData>::iterator  it;
-		map<string, ChannelData> &m = _serverReactor.getChannelManager().getChannels();
-		for (it = m.begin(); it != m.end();)
-		{
-				set<int>::iterator RemoveIt;
-				RemoveIt = it->second.getClientSockets().find(clientSocket);
-				if (RemoveIt != it->second.getClientSockets().end())
-						it->second.removeClient(*RemoveIt);
-				RemoveIt = it->second.getOperators().find(clientSocket);
-				if (RemoveIt != it->second.getOperators().end())
-						it->second.removeOperator(*RemoveIt);
-				if (it->second.getOperators().size() == 0 && it->second.getClientSockets().size() == 0){
-						_serverReactor.getChannelManager().getChannels().erase(it++);
-				}
-				else
-						++it;
-		}
+    map<string, ChannelData>::iterator  it;
+    map<string, ChannelData> &m = _serverReactor.getChannelManager().getChannels();
+    for (it = m.begin(); it != m.end();)
+    {
+        set<int>::iterator RemoveIt;
+        RemoveIt = it->second.getClientSockets().find(clientSocket);
+        if (RemoveIt != it->second.getClientSockets().end())
+                it->second.removeClient(*RemoveIt);
+        RemoveIt = it->second.getOperators().find(clientSocket);
+        if (RemoveIt != it->second.getOperators().end())
+                it->second.removeOperator(*RemoveIt);
+        if (it->second.getOperators().size() == 0 && it->second.getClientSockets().size() == 0)
+                _serverReactor.getChannelManager().getChannels().erase(it++);
+        else
+            ++it;
+    }
 }
-
-
 
 bool	createNewChannel(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket, string ChannelName){
-		ChannelData    NewChannel;
-		// ChannelData    NewChannel(ChannelName, clientSocket);
-		NewChannel.setName(ChannelName);
-		NewChannel.addClient(clientSocket);
-		NewChannel.addOperator(clientSocket);
-		NewChannel.setCreatorBySocket(clientSocket);
-		
-		_serverReactor.getChannelManager().addChannel(ChannelName, NewChannel);
-		string nickname = _serverReactor.getClientManager().getClientData(clientSocket).getNickname();
-		string channelKey = "=";
-		_serverReactor.sendMsg(clientSocket, _serverReactor.getClientManager().getClientData(clientSocket).getClientInfo(), "JOIN", NewChannel.getName());
-		_serverReactor.sendNumericReply_FixLater(clientSocket, RPL_NAMREPLY(nickname , channelKey, NewChannel.getName(), _serverReactor.getChannelManager().createUserList(NewChannel.getName(), _serverReactor, clientSocket)));
-		_serverReactor.sendNumericReply_FixLater(clientSocket, RPL_ENDOFNAMES(nickname, NewChannel.getName()));
+    ChannelData    NewChannel;
+    // ChannelData    NewChannel(ChannelName, clientSocket);
+    NewChannel.setName(ChannelName);
+    NewChannel.addClient(clientSocket);
+    NewChannel.addOperator(clientSocket);
+    NewChannel.setCreatorBySocket(clientSocket);
 
-		return (true);
+    _serverReactor.getChannelManager().addChannel(ChannelName, NewChannel);
+    string nickname = _serverReactor.getClientManager().getClientData(clientSocket).getNickname();
+    string channelKey = "=";
+    _serverReactor.sendMsg(clientSocket, _serverReactor.getClientManager().getClientData(clientSocket).getClientInfo(), "JOIN", NewChannel.getName());
+    _serverReactor.sendNumericReply_FixLater(clientSocket, RPL_NAMREPLY(nickname , channelKey, NewChannel.getName(), _serverReactor.getChannelManager().createUserList(NewChannel.getName(), _serverReactor, clientSocket)));
+    _serverReactor.sendNumericReply_FixLater(clientSocket, RPL_ENDOFNAMES(nickname, NewChannel.getName()));
+
+    return (true);
 }
-
 
 // :AMSKLDN!~t@5c8c-aff4-7127-3c3-1c20.230.197.ip JOIN :#ChannelNadia
 bool	joinPrivateChannel(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket, ChannelData& Channel, string inputKey){
-		if (inputKey.c_str() != NULL){
-				if (Channel.getKey().compare(inputKey) == 0){
-						Channel.addClient(clientSocket);
-						return(true);
-				}
-				else{
-						string Err = ERR_BADCHANNELKEY(Channel.getName());
-						send(clientSocket, Err.c_str(), Err.size(), 0);
-						throw std::exception();
-				}
-		}
-		return (false);
+    if (inputKey.c_str() != NULL){
+        if (Channel.getKey().compare(inputKey) == 0){
+            Channel.addClient(clientSocket);
+            return(true);
+        }
+        else{
+            string Err = ERR_BADCHANNELKEY(Channel.getName());
+            send(clientSocket, Err.c_str(), Err.size(), 0);
+            throw std::exception();
+        }
+    }
+    return (false);
 }
 
 // :AMSKLDN!~t@5c8c-aff4-7127-3c3-1c20.230.197.ip JOIN :#ChannelNadia
 bool	joinPublicChannel(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket, ChannelData& Channel, string inputKey){
-		if (inputKey.empty()){
-				Channel.addClient(clientSocket);
-				return (true);
-		}
-		else{
-				string  Err = ERR_BADCHANNELKEY(Channel.getName());
-				send(clientSocket, Err.c_str(), Err.size(), 0);
-				throw std::exception();
-		}
-		return (false);
+    if (inputKey.empty()){
+        Channel.addClient(clientSocket);
+        return (true);
+    }
+    else{
+        string  Err = ERR_BADCHANNELKEY(Channel.getName());
+        send(clientSocket, Err.c_str(), Err.size(), 0);
+        throw std::exception();
+    }
+    return (false);
 }
 
 void ExecuteCommands::join(ServerReactor &_server, Message &ProcessMessage, int clientSocket){
@@ -131,11 +124,10 @@ void ExecuteCommands::join(ServerReactor &_server, Message &ProcessMessage, int 
     std::vector<string> ChannelKeys;
 
 		int stat = joinParser(ChannelNames, ChannelKeys, ProcessMessage);
-		
 		// Handle missing parameters or malformed command
 		if (stat == -1) {
-				_server.sendNumericReply_FixLater(clientSocket, ERR_NEEDMOREPARAMS(ProcessMessage.getCommand()));
-				return;
+            _server.sendNumericReply_FixLater(clientSocket, ERR_NEEDMOREPARAMS(ProcessMessage.getCommand()));
+            return;
 		}
 
 		// Handle request to leave all channels

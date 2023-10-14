@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 10:02:20 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/14 15:04:25 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/14 17:02:32 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,21 +28,20 @@ ChannelData::ChannelData( void ){
     _operators = set<int>();
 }
 
-// TODO: Implement this to remove lines in join.cpp
-// ChannelData::ChannelData(const string& channelName, const int socketFD ) {
-// 		this->_name = channelName;
-// 		this->_topic = "";
-// 		this->_key = "";
-// 		this->_limit = -1;
-// 		this->_securityFlag = false;
-// 		this->_inviteOnlyFlag = false;
-// 		this->_topicFlag = false;
-// 		this->_limitFlag = false;
-// 		this->_clientSockets = set<int>();
-// 		this->_operators = set<int>();
-// 		this->_inviteList = set<string>();
-// 		this->_creatorBySocket = socketFD;
-// }
+ChannelData::ChannelData(const string& channelName, const int socketFD ) {
+    this->_name = channelName;
+    this->_creatorBySocket = socketFD;
+    this->_topic = "";
+    this->_key = "";
+    this->_limit = -1;
+    this->_securityFlag = false;
+    this->_inviteOnlyFlag = false;
+    this->_topicFlag = false;
+    this->_limitFlag = false;
+    this->_clientSockets = set<int>();
+    this->_operators = set<int>();
+    this->_inviteList = set<string>();
+}
 
 ChannelData::~ChannelData( void ){}
 

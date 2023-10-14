@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/01 16:47:40 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/13 16:01:52 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/14 14:49:23 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,43 +14,17 @@
 
 bool kickParser(std::vector<string> &ChannelNames, std::vector<string> &Users, Message &ProcessMessage){
     string param = ProcessMessage.getParams()[0];
-    param.erase(remove(param.begin(), param.end(), '\n'), param.end());
-    if (ProcessMessage.getParams().size() < 1 || ExecuteCommands::whiteCheck(ProcessMessage.getParams()[0]))
+    if (ProcessMessage.getParams().size() < 1)
         return (false);
     for (unsigned int i = 0; i < ProcessMessage.getParams().size(); i++){
         param = ProcessMessage.getParams()[i];
-        param.erase(std::remove(param.begin(), param.end(), ' '), param.end());
-        param.erase(std::remove(param.begin(), param.end(), '\n'), param.end());
-        unsigned int c = 0;
-        for (unsigned int i = 0; i < param.size(); i++){
-            if (param[i] == ',')
-                c++;
+        if (param[0] == '#'){
+            ChannelNames.push_back(param);
         }
-        if (c == 0){
-            if (param[0] == '#'){
-                param.erase(0, 1);
-                ChannelNames.push_back(param);
-            }
-            else if (!ExecuteCommands::whiteCheck(param)){
-                Users.push_back(param);
-            }
+        else if (!ExecuteCommands::whiteCheck(param)){
+            Users.push_back(param);
         }
-        else{
-            for (unsigned int j = 0; j <= c; j++){
-                unsigned int  e = param.find(',');
-                string sub = param.substr(0, e);
-                sub.erase(std::remove(sub.begin(), sub.end(), ' '), sub.end());
-                param = param.substr(e + 1);
-                if (sub[0] == '#'){
-                    sub.erase(0, 1);
-                    ChannelNames.push_back(sub);
-                }
-                else if (!ExecuteCommands::whiteCheck(sub)){
-                    Users.push_back(sub);
-                }
-            }
-        }
-    }   
+    }
     if (Users.size() > ChannelNames.size())
         return (false);
     for (unsigned int i = Users.size(); i < ChannelNames.size(); i++){
