@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 10:17:06 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/13 11:49:39 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/14 17:14:16 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ void	ServerReactor::recieveIncomingMessage( int clientSocket )
 	// if (processMessage.getFatal())
 	// 		sendNumericReply_FixLater(clientSocket, ERR_UNKNOWNCOMMAND())
 
+	cout << "Params size " << processMessage.getParams().size() << endl;
 
 	//****************************************************************************************/
 	// initialize all the clients by giving them a default authentication.

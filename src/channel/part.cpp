@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/04 22:01:31 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/14 16:41:15 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/14 17:27:16 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,15 @@
 */
 
 bool    partParser(std::vector<string> &ChannelNames, std::vector<string> &partMessage, Message &ProcessMessage){
-		if (ProcessMessage.getParams().size() == 0)
-				return (-1);
-		for (unsigned int i = 0; i < ProcessMessage.getParams().size(); i++) {
+		
+		vector<string> params = ProcessMessage.getParams();
+		
+		if (params.size() == 0)
+				return (false);
+		if (params[0].empty())
+				return (false);
+		
+		for (unsigned int i = 0; i < params.size(); i++) {
 				string param = ProcessMessage.getParams()[i];
 				// SINGLE CHANNEL PARAMETER
 				if (param[0] == '#')
@@ -29,9 +35,7 @@ bool    partParser(std::vector<string> &ChannelNames, std::vector<string> &partM
 				else if (!ExecuteCommands::whiteCheck(param))
 						partMessage.push_back(param);
 		}
-		if (partMessage.size() != 1)
-				return (-1);
-		return (0);
+		return (true);
 }
 
 void     ExecuteCommands::part(ServerReactor &_server, Message &ProcessMessage, int clientSocket) {
@@ -40,7 +44,7 @@ void     ExecuteCommands::part(ServerReactor &_server, Message &ProcessMessage, 
 	std::vector<string> partMessage;
 
 	int stat = partParser(ChannelNames, partMessage, ProcessMessage);
-	if (stat == -1){
+	if (stat == false){
 			string Err = ERR_NEEDMOREPARAMS(ProcessMessage.getCommand());
 			send(clientSocket, Err.c_str(), Err.size(), 0);
 			throw std::exception();

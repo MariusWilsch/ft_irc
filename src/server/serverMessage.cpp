@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 13:27:34 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/14 16:34:22 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/14 17:26:36 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ Message::Message( string rawMessage, map <string, CommandProperties> properties 
 				_prefix = _rawMessage.substr(1, _rawMessage.find(' ', 0) - 1);
 				_rawMessage.erase(0, _rawMessage.find(' ') + 1);
 		}
+		
 		std::istringstream iss(_rawMessage);
 		string token;
 		if (std::getline(iss, token, ' ') && !token.empty())
@@ -44,27 +45,31 @@ Message::Message( string rawMessage, map <string, CommandProperties> properties 
 				_isFatal = true; // send numeric reply
 				return ;
 		}
+		
+
+
 		while (std::getline(iss, token, ' ')) {
-				if (token.find(':') != string::npos) {
-					_params.push_back(_rawMessage.substr(_rawMessage.find(':') + 1, _rawMessage.length()));
-					break ;
+				if (token.empty())
+						continue;
+				if (token.size() != 1 && token.find(':') != string::npos) {
+						_params.push_back(_rawMessage.substr(_rawMessage.find(':') + 1));
+						break;
 				}
-				if (token.find(',')) {
-						// cout << "Token1" << token << endl;
+				if (token.find(',') != string::npos) {
 						std::istringstream iss2(token);
 						string token2;
 						while (std::getline(iss2, token2, ',')) {
 								if (!token2.empty())
 										_params.push_back(token2);
 						}
-						continue ;
+						continue;
 				}
-				if (!token.empty())
-						_params.push_back(token);
+				if (token != ":")
+				_params.push_back(token);
 		}
+	
 		// Print extracted data
-		// printData();
-
+		printData();
 }
 // Message::Message( string rawMessage, map <string, CommandProperties> properties ) : _rawMessage(rawMessage), _properties(properties) {
 
