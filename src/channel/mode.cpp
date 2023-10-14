@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 20:17:01 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/14 14:19:34 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/14 15:29:50 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void    inviteOnly(ServerReactor &_serverReactor, Message &ProccessMessage, int 
                     message.append(" has changed mode: ");
                     message.append(ProccessMessage.getParams()[1]);
                     message.append("\n");
-                    ExecuteCommands::informMembers(_serverReactor.getChannelManager().getChannelByName(channelName).getClientSockets(), message, clientSocket);
+                    ExecuteCommands::informMembers(_serverReactor.getChannelManager().getChannelByName(channelName).getClientSockets(), message);
                 }
                 else{
                     string Err = ERR_CHANOPRIVSNEEDED(channelName);
@@ -92,7 +92,7 @@ void    ChannelSecureMode(ServerReactor &_serverReactor, Message &ProccessMessag
                     message.append(" has changed mode: ");
                     message.append(ProccessMessage.getParams()[1]);
                     message.append("\n");
-                    ExecuteCommands::informMembers(_serverReactor.getChannelManager().getChannelByName(channelName).getClientSockets(), message, clientSocket);
+                    ExecuteCommands::informMembers(_serverReactor.getChannelManager().getChannelByName(channelName).getClientSockets(), message);
                 }
                 else{
                     string Err = ERR_CHANOPRIVSNEEDED(channelName);
@@ -143,7 +143,7 @@ void    ChannelTopicMode(ServerReactor &_serverReactor, Message &ProccessMessage
                     message.append(" has changed mode: ");
                     message.append(ProccessMessage.getParams()[1]);
                     message.append("\n");
-                    ExecuteCommands::informMembers(_serverReactor.getChannelManager().getChannelByName(channelName).getClientSockets(), message, clientSocket);
+                    ExecuteCommands::informMembers(_serverReactor.getChannelManager().getChannelByName(channelName).getClientSockets(), message);
                 }
                 else{
                     string Err = ERR_CHANOPRIVSNEEDED(channelName);
@@ -200,7 +200,7 @@ void ChanneLimitMode(ServerReactor &_serverReactor, Message &ProccessMessage, in
                     message.append(" has changed mode: ");
                     message.append(ProccessMessage.getParams()[1]);
                     message.append("\n");
-                    ExecuteCommands::informMembers(_serverReactor.getChannelManager().getChannelByName(channelName).getClientSockets(), message, clientSocket);
+                    ExecuteCommands::informMembers(_serverReactor.getChannelManager().getChannelByName(channelName).getClientSockets(), message);
                 }
                 else{
                     string Err = ERR_CHANOPRIVSNEEDED(channelName);

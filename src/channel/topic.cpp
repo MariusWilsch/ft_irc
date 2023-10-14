@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   topic.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/30 13:41:28 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/13 16:02:45 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/14 15:31:06 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void     ExecuteCommands::topic(ServerReactor &_ServerReactor, Message &ProcessM
                     message.append(" has set topic to: ");
                     message.append(topic);
                     message.append("\n");
-                    ExecuteCommands::informMembers(_ServerReactor.getChannelManager().getChannelByName(channelName).getClientSockets(), message, clientSocket);
+                    ExecuteCommands::informMembers(_ServerReactor.getChannelManager().getChannelByName(channelName).getClientSockets(), message);
                 }
             }
             else{

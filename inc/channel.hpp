@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 16:01:33 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/14 14:53:32 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/14 17:03:04 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,15 +35,15 @@ class ServerReactor;
 */
 class ChannelData {
 	private:
-		string			_name;
-		string			_topic;
-		string			_key;
-		size_t			_limit;
+		string				_name;
+		string				_topic;
+		string				_key;
+		size_t				_limit;
 
-		bool			_securityFlag;
-		bool			_inviteOnlyFlag;
-		bool			_topicFlag;
-		bool			_limitFlag;
+		bool					_securityFlag;
+		bool					_inviteOnlyFlag;
+		bool					_topicFlag;
+		bool					_limitFlag;
 
 		int				_creatorBySocket;
 		set <int> 		_clientSockets;

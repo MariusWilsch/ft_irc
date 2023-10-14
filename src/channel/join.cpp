@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/24 12:13:30 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/14 14:59:43 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/14 17:04:38 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,12 @@ void    leaveChannels(ServerReactor &_serverReactor, Message &ProcessMessage, in
 }
 
 bool	createNewChannel(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket, string ChannelName){
-    ChannelData    NewChannel(ChannelName, clientSocket);
+    ChannelData    NewChannel;
+    // ChannelData    NewChannel(ChannelName, clientSocket);
+    NewChannel.setName(ChannelName);
+    NewChannel.addClient(clientSocket);
+    NewChannel.addOperator(clientSocket);
+    NewChannel.setCreatorBySocket(clientSocket);
 
     _serverReactor.getChannelManager().addChannel(ChannelName, NewChannel);
     string nickname = _serverReactor.getClientManager().getClientData(clientSocket).getNickname();
@@ -132,48 +137,49 @@ void ExecuteCommands::join(ServerReactor &_server, Message &ProcessMessage, int 
 		}
 
 		for (unsigned int i = 0; i < ChannelNames.size(); i++) {
-            bool Joined = false;  // Moved the declaration here to avoid re-declaration
-            if (!_server.getChannelManager().channelExistence(ChannelNames[i])) {
-                    Joined = createNewChannel(_server, ProcessMessage, clientSocket, ChannelNames[i]);
-                    continue;  // Ensure we move to the next channel
-            }
+				bool Joined = false;  // Moved the declaration here to avoid re-declaration
+				if (!_server.getChannelManager().channelExistence(ChannelNames[i])) {
+						Joined = createNewChannel(_server, ProcessMessage, clientSocket, ChannelNames[i]);
+						continue;  // Ensure we move to the next channel
+				}
 
-            ChannelData&	Channel = _server.getChannelManager().getChannelByName(ChannelNames[i]);
-            string				ChannelName = Channel.getName();
+				ChannelData&	Channel = _server.getChannelManager().getChannelByName(ChannelNames[i]);
+				string				ChannelName = Channel.getName();
 
-            // If the client is already in the channel, move to the next channel
-            if (Channel.isCLient(clientSocket))
-                    continue;
+				// If the client is already in the channel, move to the next channel
+				if (Channel.isCLient(clientSocket))
+						continue;
 
-            // Various checks and error handling
-            if (Channel.getLimitFlag() && Channel.getClientSockets().size() >= Channel.getLimit()) {
-                    _server.sendNumericReply_FixLater(clientSocket, ERR_CHANNELISFULL(ChannelName));
-                    continue;
-            }
+				// Various checks and error handling
+				if (Channel.getLimitFlag() && Channel.getClientSockets().size() >= Channel.getLimit()) {
+						_server.sendNumericReply_FixLater(clientSocket, ERR_CHANNELISFULL(ChannelName));
+						continue;
+				}
 
-            if (Channel.getInviteFlag() && !Channel.isInvited(_server.getClientDataFast(clientSocket).getNickname())) {
-                    _server.sendNumericReply_FixLater(clientSocket, ERR_INVITEONLYCHAN(ChannelName));
-                    continue;
-            }
+				if (Channel.getInviteFlag() && !Channel.isInvited(_server.getClientDataFast(clientSocket).getNickname())) {
+						_server.sendNumericReply_FixLater(clientSocket, ERR_INVITEONLYCHAN(ChannelName));
+						continue;
+				}
 
-            // Join either a private or public channel based on its security setting
-            Joined = (Channel.getSecurity()) ? 
-                    joinPrivateChannel(_server, ProcessMessage, clientSocket, Channel, ChannelKeys[i]) : 
-                    joinPublicChannel(_server, ProcessMessage, clientSocket, Channel, ChannelKeys[i]);
+				// Join either a private or public channel based on its security setting
+				Joined = (Channel.getSecurity()) ? 
+						joinPrivateChannel(_server, ProcessMessage, clientSocket, Channel, ChannelKeys[i]) : 
+						joinPublicChannel(_server, ProcessMessage, clientSocket, Channel, ChannelKeys[i]);
 
-            // If the client joined the channel, send the topic and inform members
-            if (Joined) {
-                if (Channel.getTopicFlag())
-                    _server.sendNumericReply_FixLater(clientSocket, RPL_TOPIC(ChannelName, Channel.getTopic()));
-                else
-                    _server.sendNumericReply_FixLater(clientSocket, RPL_NOTOPIC(ChannelName));
-                
-                informMembers(Channel.getClientSockets(), _server.createInfoMsg(_server.getClientDataFast(clientSocket), "JOIN", ProcessMessage.getParams()), clientSocket);
-                // string nickname = _server.getClientManager().getClientData(clientSocket).getNickname();
-                // string channelKey = "=";
-                // _server.sendNumericReply_FixLater(clientSocket, RPL_NAMREPLY(nickname , channelKey, ChannelName, _server.getChannelManager().createUserList(ChannelName, _server, clientSocket)));
-                // _server.sendNumericReply_FixLater(clientSocket, RPL_ENDOFNAMES(nickname, ChannelName));
-            }
+				// If the client joined the channel, send the topic and inform members
+				if (Joined) {
+						if (Channel.getTopicFlag())
+							_server.sendNumericReply_FixLater(clientSocket, RPL_TOPIC(ChannelName, Channel.getTopic()));
+						else
+							_server.sendNumericReply_FixLater(clientSocket, RPL_NOTOPIC(ChannelName));
+						
+						informMembers(Channel.getClientSockets(), _server.createInfoMsg(_server.getClientDataFast(clientSocket), "JOIN", ProcessMessage.getParams()));
+						string nickname = _server.getClientManager().getClientData(clientSocket).getNickname();
+						string channelKey = "=";
+						// _server.sendMsg(clientSocket, _server.getClientManager().getClientData(clientSocket).getClientInfo(), "JOIN", ChannelName);
+						_server.sendNumericReply_FixLater(clientSocket, RPL_NAMREPLY(nickname , channelKey, ChannelName, _server.getChannelManager().createUserList(ChannelName, _server, clientSocket)));
+						_server.sendNumericReply_FixLater(clientSocket, RPL_ENDOFNAMES(nickname, ChannelName));
+				}
 		}
 
 		// Print user information

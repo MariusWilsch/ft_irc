@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/04 22:01:31 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/14 14:26:50 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/14 16:41:15 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,48 +34,39 @@ bool    partParser(std::vector<string> &ChannelNames, std::vector<string> &partM
 		return (0);
 }
 
-void     ExecuteCommands::part(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket) {
+void     ExecuteCommands::part(ServerReactor &_server, Message &ProcessMessage, int clientSocket) {
 		
-				std::vector<string> ChannelNames;
-				std::vector<string> partMessage;
+	std::vector<string> ChannelNames;
+	std::vector<string> partMessage;
 
-				int stat = partParser(ChannelNames, partMessage, ProcessMessage);
-				if (stat == -1){
-						string Err = ERR_NEEDMOREPARAMS(ProcessMessage.getCommand());
-						send(clientSocket, Err.c_str(), Err.size(), 0);
-						throw std::exception();
-				}
-				else{
-						// After knowing that everything is good with parameters then The part process from the specified channels it's ready to be done.
-						// The part command is available for all the members of the channel to use.
-						for (unsigned int i = 0; i < ChannelNames.size(); i++){
-								if (_serverReactor.doesChannelExist(ChannelNames[i])){
-										// The channel it's exist.
-										ChannelData &channelData = _serverReactor.getChannelManager().getChannelByName(ChannelNames[i]);
-										if (channelData.isCLient(clientSocket)) {
-												channelData.removeClient(clientSocket);
-												
-												if (channelData.isOperator(clientSocket))
-														channelData.removeOperator(clientSocket);
-														
-												_serverReactor.sendMsg(clientSocket, _serverReactor.getClientDataFast(clientSocket).getClientInfo(), "PART", ChannelNames[i]);
-					
-												// ! Do i need to inform the channels members about this action.
-												// Check if the channel empty.
-												if (channelData.getClientSockets().size() == 0) // remove the channel from channel manager.
-														_serverReactor.getChannelManager().removeChannel(ChannelNames[i]);
-										else {
-												string Err = ERR_NOTONCHANNEL(ChannelNames[i]);
-												send(clientSocket, Err.c_str(), Err.size(), 0);
-												throw std::exception();
-										}
-										
-								}
-								else{
-										string Err = ERR_NOSUCHCHANNEL(ChannelNames[i]);
-										send(clientSocket, Err.c_str(), Err.size(), 0);
-								}
-						}
-				}
+	int stat = partParser(ChannelNames, partMessage, ProcessMessage);
+	if (stat == -1){
+			string Err = ERR_NEEDMOREPARAMS(ProcessMessage.getCommand());
+			send(clientSocket, Err.c_str(), Err.size(), 0);
+			throw std::exception();
+	}
+	// After knowing that everything is good with parameters then The part process from the specified channels it's ready to be done.
+	// The part command is available for all the members of the channel to use.
+	for (unsigned int i = 0; i < ChannelNames.size(); i++) {
+		// If the channel doesn't exist then send ERR_NOSUCHCHANNEL
+		if (!_server.doesChannelExist(ChannelNames[i])){
+				_server.sendNumericReply_FixLater(clientSocket, ERR_NOSUCHCHANNEL(ChannelNames[i]));
+				continue ;
+		}
+		ChannelData &channel = _server.getChannelManager().getChannelByName(ChannelNames[i]);
+		// If the client isn't a member of the channel then send ERR_NOTONCHANNEL
+		if (!channel.isCLient(clientSocket)){
+				_server.sendNumericReply_FixLater(clientSocket, ERR_NOTONCHANNEL(ChannelNames[i]));
+				continue ;
+		}
+		// Send the part message to all the members of the channel.
+		informMembers(channel.getClientSockets(), _server.createInfoMsg(_server.getClientDataFast(clientSocket), "PART", ProcessMessage.getParams()));
+		// Remove the client from the channel.
+		channel.removeClient(clientSocket);
+		if (channel.isOperator(clientSocket))
+				channel.removeOperator(clientSocket);
+		// Check if the channel empty.
+		if (channel.getClientSockets().size() == 0) // remove the channel from channel manager.
+			_server.getChannelManager().removeChannel(ChannelNames[i]);
 		}
 }

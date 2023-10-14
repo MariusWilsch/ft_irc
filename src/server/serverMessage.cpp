@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 13:27:34 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/13 17:40:13 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/14 16:34:22 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ Message::Message( string rawMessage, map <string, CommandProperties> properties 
 						_params.push_back(token);
 		}
 		// Print extracted data
-		printData();
+		// printData();
 
 }
 // Message::Message( string rawMessage, map <string, CommandProperties> properties ) : _rawMessage(rawMessage), _properties(properties) {

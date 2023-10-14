@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 10:02:20 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/14 14:55:26 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/14 17:02:32 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -234,15 +234,23 @@ string			ChannelManager::createUserList(string channelName, ServerReactor &serve
 		string userList;
 		set<int> clientSockets = getChannelByName(channelName).getClientSockets();
 		ClientManager clientManager = serverReactor.getClientManager();
+		int creatorSocket = getChannelByName(channelName).getCreatorBySocket();
 
 		if (clientSockets.size() == 1) 
 			return ("@" + serverReactor.getClientManager().getClientData(*clientSockets.begin()).getNickname());
 			
 		userList.append(clientManager.getClientData(senderSocket).getNickname());
+
 		
-		for (set<int>::const_iterator it = clientSockets.begin(); it != clientSockets.end(); it++) 
+
+		for (set<int>::const_iterator it = clientSockets.begin(); it != clientSockets.end(); it++) {
+			if (*it == senderSocket || creatorSocket == *it)
+				continue;
 			userList.append(" " + clientManager.getClientData(*it).getNickname());
+		}
 		
-		userList.append(" @" + clientManager.getClientData(getChannelByName(channelName).getCreatorBySocket()).getNickname());
+		userList.append(" @" + clientManager.getClientData(creatorSocket).getNickname());
+
+		cout << "userList: " << userList << endl;
 	return userList;
 }
