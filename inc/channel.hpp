@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 16:01:33 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/14 14:04:09 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/14 14:53:32 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,14 +45,14 @@ class ChannelData {
 		bool			_topicFlag;
 		bool			_limitFlag;
 
-		int						_creatorBySocket;
+		int				_creatorBySocket;
 		set <int> 		_clientSockets;
 		set <int> 		_operators;
 		set <string> 	_inviteList;
 
 	public:
 		ChannelData( void );
-		ChannelData( string channelName, int clientSocket );
+		ChannelData( const string& channelName, const int socketFD );
 		~ChannelData( void );
 		
 		/*			GETTERS			*/

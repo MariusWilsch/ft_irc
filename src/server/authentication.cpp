@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   authentication.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 00:53:10 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/14 14:30:56 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/14 14:38:19 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,6 @@ void     ExecuteCommands::user(ServerReactor &_serverReactor, Message &ProcessMe
             string nickname = _serverReactor.getClientManager().getClientData(clientSocket).getNickname();
             _serverReactor.getClientManager().getClientData(clientSocket).setRegisteration(true, 1);
             if (client.getRegistration()[0] && client.getRegistration()[2]){
-                cout << "++++++ SET BOOL FOR PASS: " <<  client.getRegistration()[0] << endl;
                 _serverReactor.sendNumericReply(clientSocket, "001", nickname, "Welcome to the IRC Network, " + nickname);
             } 
         }
