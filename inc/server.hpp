@@ -76,11 +76,16 @@ class ServerReactor {
 		void	recieveIncomingMessage( int clientSocket );
 		//void	sendMessageToClient(int clientSocket, string message);
 		 
-		/*			SERVER T0 CLIENT COMMUICATION			*/  
-		
-		int		sendMsg(int socket, const string& clientInfo ,const string &command, const string &param, const string &trailing = "");
-		void	sendNumericReply(int socket, string numericReply, const string &param, const string &trailing = "");
-		void	sendNumericReply_FixLater(int socket, const string& reply);
+		/*			SERVER T0 CLIENT COMMUICATION			*/
+
+		vector<string> processItems(const std::string &channelName = "", const std::string &item2 = "", const std::string &item3 = "");
+
+		string	createInfoMsg(ClientData& clientData, const string &command, const vector <string> &params);
+	
+
+		int			sendMsg(int socket, const string& clientInfo ,const string &command, string param, const string &trailing = "");
+		void		sendNumericReply(int socket, string numericReply, const string &param, const string &trailing = "");
+		void		sendNumericReply_FixLater(int socket, const string& reply);
 
 		/*			COMMAND IMPLEMENTATION			*/
 
@@ -91,7 +96,7 @@ class ServerReactor {
 		string					getServerPassword( void );
 
 		/*			SMART GETTERS			*/
-		bool	doesChannelExist( string& channelName );
+		bool				doesChannelExist( string& channelName );
 		ClientData& getClientDataFast( int clientSocket );
 
 		/*			MAIN			*/
@@ -103,4 +108,6 @@ class ServerReactor {
 		void	writeServerError(string functionName, string errorMessage, int errorNumber);
 		void	createPropertiesMap( void );
 
+
+		void			printUserInformation(int clientSocket);
 };

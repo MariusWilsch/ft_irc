@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ExecuteCommands.hpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 19:05:52 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/08 15:42:08 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/14 13:10:53 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,11 @@ class Message;
 class ServerReactor;
 class ExecuteCommands
 {
+		private:
+			// ServerReactor&		_serverReactor;
     public:
     ExecuteCommands();
+		// ExecuteCommands(ServerReactor& reactor) : _serverReactor(reactor) {};
     ~ExecuteCommands();
 
     //*********************************** AUTHENTICATION COMMANDS ***********************************//

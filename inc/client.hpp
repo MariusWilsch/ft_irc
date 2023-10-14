@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 15:30:13 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/13 17:25:59 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/14 14:20:09 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,9 @@ int											_mode;
 		string								_unused;
 		string								_password;
 		vector<bool>						_Registration;
-	public:
+		bool									_registration;
 		/*			CLASS DEFAULT FUNCTIONS			*/
 		
-		ClientData( void );
 		ClientData( int clientSocket, unsigned int clientsNumber);
 		~ClientData();
 

@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 16:01:33 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/10 15:18:19 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/14 14:04:09 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ class ChannelData {
 
 	public:
 		ChannelData( void );
+		ChannelData( string channelName, int clientSocket );
 		~ChannelData( void );
 		
 		/*			GETTERS			*/
@@ -119,5 +120,6 @@ class ChannelManager {
 		void			removeChannel(string channelName);
 		void			removeFromChannels(int _clientSocket);
 		
+		// void			joinSequence()
 		string		createUserList(string channelName, ServerReactor &serverReactor, int senderSocket);
 };

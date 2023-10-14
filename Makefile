@@ -1,5 +1,5 @@
 CXX := clang++
-CXXFLAGS := -std=c++98 # -Wall -Wextra -Werror 
+CXXFLAGS := -std=c++98 # Del +g when finsihed # -Wall -Wextra -Werror 
 INC := -I inc/
 
 TARGET := ircserv

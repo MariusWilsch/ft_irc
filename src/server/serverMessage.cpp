@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 13:27:34 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/13 12:14:47 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/13 17:40:13 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,16 @@ Message::Message( string rawMessage, map <string, CommandProperties> properties 
 
 		_isFatal = false;
 		// Earse \n // TODO: I later need to figure out what to do with \r\n at the end of messages
-		
+
+
 		_rawMessage.erase(std::remove(_rawMessage.begin(), _rawMessage.end(), '\n'), _rawMessage.end());
 		_rawMessage.erase(std::remove(_rawMessage.begin(), _rawMessage.end(), '\r'), _rawMessage.end());
 		
+		if (_rawMessage.empty())
+			return ;
 
 		cout << "|" << _rawMessage << "|" << endl;
+
 
 		if (_rawMessage.at(0) == ':') {
 				_prefix = _rawMessage.substr(1, _rawMessage.find(' ', 0) - 1);
@@ -40,14 +44,13 @@ Message::Message( string rawMessage, map <string, CommandProperties> properties 
 				_isFatal = true; // send numeric reply
 				return ;
 		}
-		// Convert _command to uppercase
-
 		while (std::getline(iss, token, ' ')) {
 				if (token.find(':') != string::npos) {
 					_params.push_back(_rawMessage.substr(_rawMessage.find(':') + 1, _rawMessage.length()));
 					break ;
 				}
 				if (token.find(',')) {
+						// cout << "Token1" << token << endl;
 						std::istringstream iss2(token);
 						string token2;
 						while (std::getline(iss2, token2, ',')) {

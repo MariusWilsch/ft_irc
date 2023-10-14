@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   authentication.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 00:53:10 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/13 17:21:45 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/14 14:17:34 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,8 @@ void ExecuteCommands::nick(ServerReactor &_serverReactor, Message &ProcessMessag
         }
         if (nickName.compare(oldNick) != 0){
             client.setNickname(nickName);
-            if (client.isRegistered())
-                _serverReactor.sendMsg(clientSocket, client.getClientInfo(), "NICK:", nickName);
+            if (client.getRegistration())
+                _serverReactor.sendMsg(clientSocket, client.getClientInfo(), "NICK", nickName);
         }
         client.setRegisteration(true, 2);
         if (client.getRegistration()[0] && client.getRegistration()[1]){
