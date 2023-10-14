@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/24 12:13:30 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/14 14:26:08 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/14 15:27:52 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ bool	createNewChannel(ServerReactor &_serverReactor, Message &ProcessMessage, in
 		NewChannel.setName(ChannelName);
 		NewChannel.addClient(clientSocket);
 		NewChannel.addOperator(clientSocket);
+		NewChannel.setCreatorBySocket(clientSocket);
 		
 		_serverReactor.getChannelManager().addChannel(ChannelName, NewChannel);
 		string nickname = _serverReactor.getClientManager().getClientData(clientSocket).getNickname();
@@ -180,11 +181,12 @@ void ExecuteCommands::join(ServerReactor &_server, Message &ProcessMessage, int 
 						else
 							_server.sendNumericReply_FixLater(clientSocket, RPL_NOTOPIC(ChannelName));
 						
-						informMembers(Channel.getClientSockets(), _server.createInfoMsg(_server.getClientDataFast(clientSocket), "JOIN", ProcessMessage.getParams()), clientSocket);
-						// string nickname = _server.getClientManager().getClientData(clientSocket).getNickname();
-						// string channelKey = "=";
-						// _server.sendNumericReply_FixLater(clientSocket, RPL_NAMREPLY(nickname , channelKey, ChannelName, _server.getChannelManager().createUserList(ChannelName, _server, clientSocket)));
-						// _server.sendNumericReply_FixLater(clientSocket, RPL_ENDOFNAMES(nickname, ChannelName));
+						informMembers(Channel.getClientSockets(), _server.createInfoMsg(_server.getClientDataFast(clientSocket), "JOIN", ProcessMessage.getParams()));
+						string nickname = _server.getClientManager().getClientData(clientSocket).getNickname();
+						string channelKey = "=";
+						// _server.sendMsg(clientSocket, _server.getClientManager().getClientData(clientSocket).getClientInfo(), "JOIN", ChannelName);
+						_server.sendNumericReply_FixLater(clientSocket, RPL_NAMREPLY(nickname , channelKey, ChannelName, _server.getChannelManager().createUserList(ChannelName, _server, clientSocket)));
+						_server.sendNumericReply_FixLater(clientSocket, RPL_ENDOFNAMES(nickname, ChannelName));
 				}
 		}
 

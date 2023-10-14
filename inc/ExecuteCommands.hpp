@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 19:05:52 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/14 13:10:53 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/14 15:28:24 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ class ExecuteCommands
     static void     privmsg(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket);
     
     //****************************************** UTILS METHODS ***************************************//
-    static void     informMembers(set <int> clientSockets, string message, int clientSocket);
+    static void     informMembers(set <int> clientSockets, string message);
     static bool     whiteCheck(string str);
 };
 
