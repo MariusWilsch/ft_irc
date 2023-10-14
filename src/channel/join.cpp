@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/24 12:13:30 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/14 14:20:39 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/14 14:26:08 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,8 +125,7 @@ bool	joinPublicChannel(ServerReactor &_serverReactor, Message &ProcessMessage, i
 		return (false);
 }
 
-<<<<<<< HEAD
-void ExecuteCommands::join(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket){
+void ExecuteCommands::join(ServerReactor &_server, Message &ProcessMessage, int clientSocket){
     std::vector<string> ChannelNames;
     std::vector<string> ChannelKeys;
 

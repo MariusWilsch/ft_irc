@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/04 22:01:31 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/14 14:18:46 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/14 14:26:50 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ bool    partParser(std::vector<string> &ChannelNames, std::vector<string> &partM
 }
 
 void     ExecuteCommands::part(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket) {
-		if (_serverReactor.getClientManager().getClientData(clientSocket).getRegistration()){
+		
 				std::vector<string> ChannelNames;
 				std::vector<string> partMessage;
 
@@ -78,5 +78,4 @@ void     ExecuteCommands::part(ServerReactor &_serverReactor, Message &ProcessMe
 						}
 				}
 		}
-	}
 }

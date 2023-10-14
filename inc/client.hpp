@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 15:30:13 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/14 14:20:09 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/14 14:29:32 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,17 +30,17 @@
 class ClientData {
 	private:
 	int										_clientSocket;
-int											_mode;
+	int											_mode;
 		string								_clientIP;
 		string								_realname;
 		string								_nickname;
 		string								_username;
 		string								_unused;
 		string								_password;
-		vector<bool>						_Registration;
-		bool									_registration;
+		vector<bool>					_Registration;
 		/*			CLASS DEFAULT FUNCTIONS			*/
-		
+	public:
+		ClientData( void );
 		ClientData( int clientSocket, unsigned int clientsNumber);
 		~ClientData();
 
@@ -50,16 +50,16 @@ int											_mode;
 
 		/*			GETTERS			*/
 
-		int				getClientSocket( void ) const;
-		int				getMode() const;
-		string			getRealname() const;
-		string			getNickname() const;
-		string			getUsername() const;
-		string 			getUnused() const;
+		int						getClientSocket( void ) const;
+		int						getMode() const;
+		string				getRealname() const;
+		string				getNickname() const;
+		string				getUsername() const;
+		string 				getUnused() const;
 		vector<bool>&	getRegistration();
-		string			getPassword() const;
-		string			getClientIP() const;
-		string			getClientInfo() const;
+		string				getPassword() const;
+		string				getClientIP() const;
+		string				getClientInfo() const;
 		
 
 

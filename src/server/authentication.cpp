@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 00:53:10 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/14 14:17:34 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/14 14:30:56 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void ExecuteCommands::nick(ServerReactor &_serverReactor, Message &ProcessMessag
         }
         if (nickName.compare(oldNick) != 0){
             client.setNickname(nickName);
-            if (client.getRegistration())
+            if (client.isRegistered())
                 _serverReactor.sendMsg(clientSocket, client.getClientInfo(), "NICK", nickName);
         }
         client.setRegisteration(true, 2);
@@ -68,8 +68,7 @@ void ExecuteCommands::nick(ServerReactor &_serverReactor, Message &ProcessMessag
     }
 }
 
-void     ExecuteCommands::user(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket)
-{
+void     ExecuteCommands::user(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket) {
     ClientData  &client = _serverReactor.getClientManager().getClientData(clientSocket);
     
     if (!client.isRegistered()){
