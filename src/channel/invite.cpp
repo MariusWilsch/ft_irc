@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 13:58:39 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/14 17:39:29 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/14 20:55:02 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void     ExecuteCommands::invite(ServerReactor &_serverReactor, Message &Procces
 
     string channelName = ProccessMessage.getParams()[1];
     if (ProccessMessage.getParams().size() < 2){
-        _serverReactor.sendNumericReply_FixLater(clientSocket, ERR_NEEDMOREPARAMS(ProcessMessage.getCommand()));
+        _serverReactor.sendNumericReply_FixLater(clientSocket, ERR_NEEDMOREPARAMS(ProccessMessage.getCommand()));
         std::exception();
     }
     if (!_serverReactor.getChannelManager().itsChannel(channelName)){
