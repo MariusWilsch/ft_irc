@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/24 12:13:30 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/13 18:47:46 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/14 14:11:34 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ int joinParser(std::vector<string> &ChannelNames, std::vector<string> &ChannelKe
 		}
 		if (ProcessMessage.getParams().size() < 1 || ExecuteCommands::whiteCheck(ProcessMessage.getParams()[0]))
 				return (-1);
-
 
 		for (size_t i = 0; i < ProcessMessage.getParams().size(); i++) {
 				param = ProcessMessage.getParams()[i];
@@ -76,12 +75,15 @@ void    leaveChannels(ServerReactor &_serverReactor, Message &ProcessMessage, in
 		}
 }
 
-bool    createNewChannel(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket, string ChannelName){
+
+
+bool	createNewChannel(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket, string ChannelName){
 		ChannelData    NewChannel;
 		// ChannelData    NewChannel(ChannelName, clientSocket);
 		NewChannel.setName(ChannelName);
 		NewChannel.addClient(clientSocket);
 		NewChannel.addOperator(clientSocket);
+		
 		_serverReactor.getChannelManager().addChannel(ChannelName, NewChannel);
 		string nickname = _serverReactor.getClientManager().getClientData(clientSocket).getNickname();
 		string channelKey = "=";
@@ -94,7 +96,7 @@ bool    createNewChannel(ServerReactor &_serverReactor, Message &ProcessMessage,
 
 
 // :AMSKLDN!~t@5c8c-aff4-7127-3c3-1c20.230.197.ip JOIN :#ChannelNadia
-bool    joinPrivateChannel(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket, ChannelData& Channel, string inputKey){
+bool	joinPrivateChannel(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket, ChannelData& Channel, string inputKey){
 		if (inputKey.c_str() != NULL){
 				if (Channel.getKey().compare(inputKey) == 0){
 						Channel.addClient(clientSocket);
@@ -110,7 +112,7 @@ bool    joinPrivateChannel(ServerReactor &_serverReactor, Message &ProcessMessag
 }
 
 // :AMSKLDN!~t@5c8c-aff4-7127-3c3-1c20.230.197.ip JOIN :#ChannelNadia
-bool    joinPublicChannel(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket, ChannelData& Channel, string inputKey){
+bool	joinPublicChannel(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket, ChannelData& Channel, string inputKey){
 		if (inputKey.empty()){
 				Channel.addClient(clientSocket);
 				return (true);
@@ -123,95 +125,147 @@ bool    joinPublicChannel(ServerReactor &_serverReactor, Message &ProcessMessage
 		return (false);
 }
 
-void ExecuteCommands::join(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket)
-{
-				std::vector<string> ChannelNames;
-				std::vector<string> ChannelKeys;
+void ExecuteCommands::join(ServerReactor &_server, Message &ProcessMessage, int clientSocket) {
+	
+		std::vector<string> ChannelNames;
+		std::vector<string> ChannelKeys;
 
-				int stat = joinParser(ChannelNames, ChannelKeys, ProcessMessage);
-				if (stat == -1){
-						string Err = ERR_NEEDMOREPARAMS(ProcessMessage.getCommand());
-						send(clientSocket, Err.c_str(), Err.size(), 0);
-						throw std::exception();
+		int stat = joinParser(ChannelNames, ChannelKeys, ProcessMessage);
+		
+		// Handle missing parameters or malformed command
+		if (stat == -1) {
+				_server.sendNumericReply_FixLater(clientSocket, ERR_NEEDMOREPARAMS(ProcessMessage.getCommand()));
+				return;
+		}
+
+		// Handle request to leave all channels
+		if (stat == 0) {
+				leaveChannels(_server, ProcessMessage, clientSocket);
+				return;
+		}
+
+		for (unsigned int i = 0; i < ChannelNames.size(); i++) {
+				bool Joined = false;  // Moved the declaration here to avoid re-declaration
+				if (!_server.getChannelManager().channelExistence(ChannelNames[i])) {
+						Joined = createNewChannel(_server, ProcessMessage, clientSocket, ChannelNames[i]);
+						continue;  // Ensure we move to the next channel
 				}
-				if (stat == 0){ 
-						leaveChannels(_serverReactor, ProcessMessage, clientSocket);
+
+				ChannelData&	Channel = _server.getChannelManager().getChannelByName(ChannelNames[i]);
+				string				ChannelName = Channel.getName();
+
+				// If the client is already in the channel, move to the next channel
+				if (Channel.isCLient(clientSocket))
+						continue;
+
+				// Various checks and error handling
+				if (Channel.getLimitFlag() && Channel.getClientSockets().size() >= Channel.getLimit()) {
+						_server.sendNumericReply_FixLater(clientSocket, ERR_CHANNELISFULL(ChannelName));
+						continue;
 				}
-				for (unsigned int i = 0; i < ChannelNames.size(); i++){
-						bool Joined = false;
-						if (_serverReactor.getChannelManager().channelExistence(ChannelNames[i]) == false){
-								Joined = createNewChannel(_serverReactor, ProcessMessage, clientSocket, ChannelNames[i]);
-						}
-						else {
-								ChannelData& Channel = _serverReactor.getChannelManager().getChannelByName(ChannelNames[i]);
-								if (!Channel.isCLient(clientSocket)){
-										if (Channel.getLimitFlag()){
-												if (Channel.getClientSockets().size() >= Channel.getLimit()){
-														string Err = ERR_CHANNELISFULL(Channel.getName());
-														send (clientSocket, Err.c_str(), Err.size(), 0);
-														throw std::exception();
-												}
-										}
-										if (Channel.getInviteFlag()){
-												if (!Channel.isInvited(_serverReactor.getClientManager().getClientData(clientSocket).getNickname())){
-														string Err = ERR_INVITEONLYCHAN(Channel.getName());
-														send(clientSocket, Err.c_str(), Err.size(), 0);
-														throw std::exception();
-												}
-										}
-										if (Channel.getSecurity() == true)
-												Joined = joinPrivateChannel(_serverReactor, ProcessMessage, clientSocket, Channel, ChannelKeys[i]);
-										else
-												Joined = joinPublicChannel(_serverReactor, ProcessMessage, clientSocket, Channel, ChannelKeys[i]);
-										if (Joined == true){
-												if (Channel.getTopicFlag()){
-														string Rpl =  RPL_TOPIC(Channel.getName() ,Channel.getTopic());
-														send(clientSocket, Rpl.c_str(), Rpl.size(), 0);
-												}
-												else{
-														string Rpl =  RPL_NOTOPIC(Channel.getName());
-														send(clientSocket, Rpl.c_str(), Rpl.size(), 0);
-												}
-												// FIXME: use createInfoMessage and processItems to create the message
-												informMembers(Channel.getClientSockets(), _serverReactor.createInfoMsg(
-													_serverReactor.getClientDataFast(clientSocket).getClientInfo(), 
-													ProcessMessage.getCommand(), _serverReactor.processItems(Channel.getName())), clientSocket);
-										}
-								}
-						}
-				
-				// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ DISPLAY CHANNELS INFORMATIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
-				map<string, ChannelData>::iterator  it;
-				std::cout << "Number of channels: " << _serverReactor.getChannelManager().getChannels().size() << std::endl;
-				map<string, ChannelData> m = _serverReactor.getChannelManager().getChannels();
-				for (it = m.begin(); it != m.end(); it++)
-				{
-						std::cout << "Channel name: " << it->second.getName() << std::endl;
-						if (it->second.getSecurity())
-								cout << "~~~> Channel is private " << endl;
+
+				if (Channel.getInviteFlag() && !Channel.isInvited(_server.getClientDataFast(clientSocket).getNickname())) {
+						_server.sendNumericReply_FixLater(clientSocket, ERR_INVITEONLYCHAN(ChannelName));
+						continue;
+				}
+
+				// Join either a private or public channel based on its security setting
+				Joined = (Channel.getSecurity()) ? 
+						joinPrivateChannel(_server, ProcessMessage, clientSocket, Channel, ChannelKeys[i]) : 
+						joinPublicChannel(_server, ProcessMessage, clientSocket, Channel, ChannelKeys[i]);
+
+				// If the client joined the channel, send the topic and inform members
+				if (Joined) {
+						if (Channel.getTopicFlag())
+							_server.sendNumericReply_FixLater(clientSocket, RPL_TOPIC(ChannelName, Channel.getTopic()));
 						else
-								cout << "~~~> Channel is public " << endl;
-						set<int>::iterator cl;
-						set<int> s = it->second.getClientSockets();
-						for (cl = s.begin(); cl != s.end(); cl++){
-								std::cout << "  >>> Client: " << *cl << endl;
-						} 
+							_server.sendNumericReply_FixLater(clientSocket, RPL_NOTOPIC(ChannelName));
 						
-						set<int>::iterator op;
-						set<int> f = it->second.getOperators();
-						for (op = f.begin(); op != f.end(); op++){
-								std::cout << "  >>> operator: " << *op << endl;
-						}
+						informMembers(Channel.getClientSockets(), _server.createInfoMsg(_server.getClientDataFast(clientSocket), "JOIN", ProcessMessage.getParams()), clientSocket);
+						// string nickname = _server.getClientManager().getClientData(clientSocket).getNickname();
+						// string channelKey = "=";
+						// _server.sendNumericReply_FixLater(clientSocket, RPL_NAMREPLY(nickname , channelKey, ChannelName, _server.getChannelManager().createUserList(ChannelName, _server, clientSocket)));
+						// _server.sendNumericReply_FixLater(clientSocket, RPL_ENDOFNAMES(nickname, ChannelName));
 				}
 		}
+
+		// Print user information
+		_server.printUserInformation(clientSocket);
 }
 
+// void ExecuteCommands::join(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket)
+// {
+// 				std::vector<string> ChannelNames;
+// 				std::vector<string> ChannelKeys;
+
+// 				int stat = joinParser(ChannelNames, ChannelKeys, ProcessMessage);
+// 				if (stat == -1)
+// 						return (_serverReactor.sendNumericReply_FixLater(clientSocket, ERR_NEEDMOREPARAMS(ProcessMessage.getCommand()));)
+						
+// 				if (stat == 0)
+// 						leaveChannels(_serverReactor, ProcessMessage, clientSocket);
+		
+// 				for (unsigned int i = 0; i < ChannelNames.size(); i++){
+// 						bool Joined = false;
+// 						if (_serverReactor.getChannelManager().channelExistence(ChannelNames[i]) == false){
+// 								Joined = createNewChannel(_serverReactor, ProcessMessage, clientSocket, ChannelNames[i]);
+// 						} else {
+// 								ChannelData& Channel = _serverReactor.getChannelManager().getChannelByName(ChannelNames[i]);
+// 								if (!Channel.isCLient(clientSocket)) {
+									
+// 									if (Channel.getLimitFlag() && Channel.getClientSockets().size() >= Channel.getLimit())
+// 										return (_serverReactor.sendNumericReply_FixLater(clientSocket, ERR_CHANNELISFULL(Channel.getName())));
+
+// 										if (Channel.getInviteFlag()){
+// 												if (!Channel.isInvited(_serverReactor.getClientManager().getClientData(clientSocket).getNickname())){
+// 														string Err = ERR_INVITEONLYCHAN(Channel.getName());
+// 														send(clientSocket, Err.c_str(), Err.size(), 0);
+// 														throw std::exception();
+// 												}
+// 										}
+// 										if (Channel.getSecurity() == true)
+// 												Joined = joinPrivateChannel(_serverReactor, ProcessMessage, clientSocket, Channel, ChannelKeys[i]);
+// 										else
+// 												Joined = joinPublicChannel(_serverReactor, ProcessMessage, clientSocket, Channel, ChannelKeys[i]);
+// 										if (Joined == true){
+// 												if (Channel.getTopicFlag()){
+// 														string Rpl =  RPL_TOPIC(Channel.getName() ,Channel.getTopic());
+// 														send(clientSocket, Rpl.c_str(), Rpl.size(), 0);
+// 												}
+// 												else{
+// 														string Rpl =  RPL_NOTOPIC(Channel.getName());
+// 														send(clientSocket, Rpl.c_str(), Rpl.size(), 0);
+// 												}
+// 												// FIXME: use createInfoMessage and processItems to create the message
+// 												informMembers(Channel.getClientSockets(), _serverReactor.createInfoMsg(clientSocket, "JOIN", ProcessMessage.getParams()), clientSocket);
+// 										}
+// 								}
+// 						}
+				
+// 				// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ DISPLAY CHANNELS INFORMATIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
+// 				map<string, ChannelData>::iterator  it;
+// 				std::cout << "Number of channels: " << _serverReactor.getChannelManager().getChannels().size() << std::endl;
+// 				map<string, ChannelData> m = _serverReactor.getChannelManager().getChannels();
+// 				for (it = m.begin(); it != m.end(); it++)
+// 				{
+// 						std::cout << "Channel name: " << it->second.getName() << std::endl;
+// 						if (it->second.getSecurity())
+// 								cout << "~~~> Channel is private " << endl;
+// 						else
+// 								cout << "~~~> Channel is public " << endl;
+// 						set<int>::iterator cl;
+// 						set<int> s = it->second.getClientSockets();
+// 						for (cl = s.begin(); cl != s.end(); cl++){
+// 								std::cout << "  >>> Client: " << *cl << endl;
+// 						} 
+						
+// 						set<int>::iterator op;
+// 						set<int> f = it->second.getOperators();
+// 						for (op = f.begin(); op != f.end(); op++){
+// 								std::cout << "  >>> operator: " << *op << endl;
+// 						}
+// 				}
+// 		}
+// }
 
 
-// :nickname123!~user123@127.0.0.1 JOIN ch2
-// 353: nickname123 = ch2 :@nickname123
-// 366: nickname123 ch2 :End of /NAMES list.
-
-// :nickname123!~user123@5c8c-aff4-7127-3c3-1c20.230.197.ip JOIN :#ch1
-// :punch.wa.us.dal.net 353 nickname123 = #ch1 :@nickname123 
-// :punch.wa.us.dal.net 366 nickname123 #ch1 :End of /NAMES list.

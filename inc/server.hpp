@@ -80,7 +80,7 @@ class ServerReactor {
 
 		vector<string> processItems(const std::string &channelName = "", const std::string &item2 = "", const std::string &item3 = "");
 
-		string	createInfoMsg(const string& getClientInfo, const string &command, const vector& vec, const string &trailing = "");
+		string	createInfoMsg(ClientData& clientData, const string &command, const vector <string> &params);
 	
 
 		int			sendMsg(int socket, const string& clientInfo ,const string &command, string param, const string &trailing = "");
@@ -108,4 +108,6 @@ class ServerReactor {
 		void	writeServerError(string functionName, string errorMessage, int errorNumber);
 		void	createPropertiesMap( void );
 
+
+		void			printUserInformation(int clientSocket);
 };

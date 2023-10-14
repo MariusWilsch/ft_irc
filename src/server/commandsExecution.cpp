@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 19:02:14 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/13 18:11:56 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/14 13:16:27 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,14 @@ bool    ExecuteCommands::whiteCheck(string str)
 		return true;
 }
 
-void    ExecuteCommands::informMembers(set <int> clientSockets, string message, int clientSocket){
+void    ExecuteCommands::informMembers(set <int> clientSockets, string message, int clientSocket) {
+
+	
+	
 		for (set<int>::iterator it = clientSockets.begin() ; it !=  clientSockets.end() ; it++){
 				if (*it == clientSocket)
 						continue;
-				// send(*it, message.c_str(), message.size(), 0);
+				send(*it, message.c_str(), message.length(), 0);
 		}
 }
 

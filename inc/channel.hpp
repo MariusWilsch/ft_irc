@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 16:01:33 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/13 16:34:48 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/14 14:04:09 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,5 +120,6 @@ class ChannelManager {
 		void			removeChannel(string channelName);
 		void			removeFromChannels(int _clientSocket);
 		
+		// void			joinSequence()
 		string		createUserList(string channelName, ServerReactor &serverReactor, int senderSocket);
 };
