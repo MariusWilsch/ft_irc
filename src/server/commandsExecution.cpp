@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 19:02:14 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/15 13:29:10 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/15 14:03:22 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,12 +47,12 @@ void ExecuteCommands::execute(ServerReactor &_serverReactor, Message &ProcessMes
 					throw std::exception();
 			}
 			
-			// if (command != "PASS" && command != "USER" && command != "NICK" && !clientData.isRegistered()) {
-			// 		if (nickname.empty())
-			// 			nickname = "*";
-			// 		_serverReactor.sendNumericReply_FixLater(clientSocket, ERR_NOTREGISTERED(nickname, command));
-			// 		throw std::exception();
-			// }
+			if (command != "PASS" && command != "USER" && command != "NICK" && !clientData.isRegistered()) {
+					if (nickname.empty())
+						nickname = "*";
+					_serverReactor.sendNumericReply_FixLater(clientSocket, ERR_NOTREGISTERED(nickname, command));
+					throw std::exception();
+			}
 			
 			std::string commands[10] = {"PASS", "NICK", "USER", "JOIN", "PRIVMSG", "KICK", "INVITE", "TOPIC", "MODE" , "PART", }; // TODO: Add function to Command Properties (REFACTOR)
 			void(*FunctionPointers[10])(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket) = {pass, nick, user, join, privmsg, kick, invite, topic, mode, part};
@@ -65,4 +65,7 @@ void ExecuteCommands::execute(ServerReactor &_serverReactor, Message &ProcessMes
 					FunctionPointers[i](_serverReactor, ProcessMessage, clientSocket);
 			}
 			} catch (std::exception &ex){}
+		// 	 catch (const ServerException &e) {
+    //     _server.sendNumericReply_FixLater(clientSocket, e.what());
+    // }
 }

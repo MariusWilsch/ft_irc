@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 15:30:13 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/15 10:58:22 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/15 13:39:12 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,6 @@ class ClientData {
  */
 class ClientManager {
 	private:
-		// set <string>						_usedNicknames;
 		map <int, ClientData>				_ClientsBySocket;
 	public:
 		/*			CLASS DEFAULT FUNCTIONS			*/
