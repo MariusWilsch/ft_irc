@@ -3,37 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   invite.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 13:58:39 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/15 07:13:29 by verdant          ###   ########.fr       */
+/*   Updated: 2023/10/15 10:27:51 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ExecuteCommands.hpp"
 
-
 // New design to remove if / else  if /else forest >.. 
-    // *
-
-	// :Archer159263!~t@5c8c-aff4-7127-3c3-1c20.230.197.ip INVITE Archer159 :#ch1
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   invite.cpp                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/28 13:58:39 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/15 06:34:14 by verdant          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-#include "ExecuteCommands.hpp"
-
-
-// New design to remove if / else  if /else forest >.. 
-    // *
 
 	// :Archer159263!~t@5c8c-aff4-7127-3c3-1c20.230.197.ip INVITE Archer159 :#ch1
 

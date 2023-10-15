@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HelpBot.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/01 18:42:38 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/08 17:06:38 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/15 10:54:06 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,7 +145,7 @@ string  strToupper(string str){
     return (str);
 }
 
-void    HelpBot::Help(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket){
+void    HelpBot::Help(Message &ProcessMessage, int clientSocket){
     std::string commands[10] = {"PASS", "NICK", "USER", "JOIN", "PRIVMSG", "KICK", "INVITE", "TOPIC", "MODE"  , "PART"};
     string    (*FunctionPointers[10])() = {HelpBot::PassManual, HelpBot::NickManual, HelpBot::UserManual, HelpBot::JoinManual, HelpBot::PrivmsgManual, HelpBot::KickManual, HelpBot::InviteManual, HelpBot::TopicManual, HelpBot::ModeManual, HelpBot::PartManual};
 

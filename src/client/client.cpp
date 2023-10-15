@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 10:02:23 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/15 06:53:50 by verdant          ###   ########.fr       */
+/*   Updated: 2023/10/15 10:59:06 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,8 @@ ClientData::ClientData( void )
 	_unused = "*";
 }
 
-ClientData::ClientData( int clientSocket, unsigned int clientsNumber)
+ClientData::ClientData( int clientSocket) : _clientSocket(clientSocket)
 {
-	_clientSocket = clientSocket;
 	_realname = "";
 	_nickname = "";
 	_username = "";
@@ -90,10 +89,8 @@ string ClientData::getClientIP() const{
 // 	return (hostbuffer);
 // }
 
-string ClientData::getClientInfo() const{
-	char buffer[NI_MAXHOST];
+string ClientData::getClientInfo() const {
 	return (getNickname() + "!~" + getUsername() + "@" + getClientIP());
-	// return (getNickname() + "!~" + getUsername() + "@" + get_hosname());
 }
 
 /*			SETTERS			 */
@@ -149,7 +146,7 @@ ClientManager::~ClientManager() {};
 void	ClientManager::addClient( int clientSocket, string clientIP)
 {
 	std::cout << "Creating Client Data and adding client to map container" << std::endl;
-	ClientData newClient(clientSocket, _ClientsBySocket.size());
+	ClientData newClient(clientSocket);
 	newClient.setClientIP(clientIP);
 	_ClientsBySocket.insert(std::pair<int, ClientData>(clientSocket, newClient));
 }

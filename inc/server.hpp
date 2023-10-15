@@ -99,7 +99,7 @@ class ServerReactor {
 
 		void			sendMsg(int socket, const string& clientInfo ,const string &command, string param, const string &trailing = "");
 		int 		sendMsg_FixLater(int socket, const string &message);
-		void sendNumericReply(int socket, string numericReply, const string &param, const string &trailing = "");
+		void sendNumericReply(int socket, const string &param, const string &trailing = "");
 		void		sendNumericReply_FixLater(int socket, const string& reply);
 
 		/*			COMMAND IMPLEMENTATION			*/
@@ -124,5 +124,5 @@ class ServerReactor {
 		void	createPropertiesMap( void );
 
 
-		void			printUserInformation(int clientSocket);
+		void			printUserInformation();
 };

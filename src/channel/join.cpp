@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   join.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/24 12:13:30 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/14 17:04:38 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/15 11:19:50 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int joinParser(std::vector<string> &ChannelNames, std::vector<string> &ChannelKe
 }
 
 
-void    leaveChannels(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket){
+void    leaveChannels(ServerReactor &_serverReactor, int clientSocket){
     map<string, ChannelData>::iterator  it;
     map<string, ChannelData> &m = _serverReactor.getChannelManager().getChannels();
     for (it = m.begin(); it != m.end();)
@@ -71,7 +71,7 @@ void    leaveChannels(ServerReactor &_serverReactor, Message &ProcessMessage, in
     }
 }
 
-bool	createNewChannel(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket, string ChannelName){
+bool	createNewChannel(ServerReactor &_serverReactor, int clientSocket, string ChannelName){
     ChannelData    NewChannel;
     // ChannelData    NewChannel(ChannelName, clientSocket);
     NewChannel.setName(ChannelName);
@@ -90,7 +90,7 @@ bool	createNewChannel(ServerReactor &_serverReactor, Message &ProcessMessage, in
 }
 
 // :AMSKLDN!~t@5c8c-aff4-7127-3c3-1c20.230.197.ip JOIN :#ChannelNadia
-bool	joinPrivateChannel(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket, ChannelData& Channel, string inputKey){
+bool	joinPrivateChannel(int clientSocket, ChannelData& Channel, string inputKey){
     if (inputKey.c_str() != NULL){
         if (Channel.getKey().compare(inputKey) == 0){
             Channel.addClient(clientSocket);
@@ -106,7 +106,7 @@ bool	joinPrivateChannel(ServerReactor &_serverReactor, Message &ProcessMessage, 
 }
 
 // :AMSKLDN!~t@5c8c-aff4-7127-3c3-1c20.230.197.ip JOIN :#ChannelNadia
-bool	joinPublicChannel(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket, ChannelData& Channel, string inputKey){
+bool	joinPublicChannel(int clientSocket, ChannelData& Channel, string inputKey){
     if (inputKey.empty()){
         Channel.addClient(clientSocket);
         return (true);
@@ -132,14 +132,14 @@ void ExecuteCommands::join(ServerReactor &_server, Message &ProcessMessage, int 
 
 		// Handle request to leave all channels
 		if (stat == 0) {
-				leaveChannels(_server, ProcessMessage, clientSocket);
+				leaveChannels(_server, clientSocket);
 				return;
 		}
 
 		for (unsigned int i = 0; i < ChannelNames.size(); i++) {
 				bool Joined = false;  // Moved the declaration here to avoid re-declaration
 				if (!_server.getChannelManager().channelExistence(ChannelNames[i])) {
-						Joined = createNewChannel(_server, ProcessMessage, clientSocket, ChannelNames[i]);
+						Joined = createNewChannel(_server, clientSocket, ChannelNames[i]);
 						continue;  // Ensure we move to the next channel
 				}
 
@@ -163,8 +163,8 @@ void ExecuteCommands::join(ServerReactor &_server, Message &ProcessMessage, int 
 
 				// Join either a private or public channel based on its security setting
 				Joined = (Channel.getSecurity()) ? 
-						joinPrivateChannel(_server, ProcessMessage, clientSocket, Channel, ChannelKeys[i]) : 
-						joinPublicChannel(_server, ProcessMessage, clientSocket, Channel, ChannelKeys[i]);
+						joinPrivateChannel(clientSocket, Channel, ChannelKeys[i]) : 
+						joinPublicChannel(clientSocket, Channel, ChannelKeys[i]);
 
 				// If the client joined the channel, send the topic and inform members
 				if (Joined) {
@@ -183,7 +183,7 @@ void ExecuteCommands::join(ServerReactor &_server, Message &ProcessMessage, int 
 		}
 
 		// Print user information
-		_server.printUserInformation(clientSocket);
+		_server.printUserInformation();
 }
 
 // void ExecuteCommands::join(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket)

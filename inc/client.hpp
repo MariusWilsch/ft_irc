@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 15:30:13 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/15 06:43:44 by verdant          ###   ########.fr       */
+/*   Updated: 2023/10/15 10:58:22 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ class ClientData {
 		/*			CLASS DEFAULT FUNCTIONS			*/
 	public:
 		ClientData( void );
-		ClientData( int clientSocket, unsigned int clientsNumber);
+		ClientData( int clientSocket);
 		~ClientData();
 
 		/*			MEMBER FUNCTIONS			*/

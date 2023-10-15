@@ -102,7 +102,7 @@ createInfoMsg(ClientData& clientData, const string& command, const vector <strin
 		return (message);
 }
 
-void ServerReactor::sendNumericReply(int socket, string numericReply, const string &param, const string &trailing) {
+void ServerReactor::sendNumericReply(int socket, const string &param, const string &trailing) {
 		string message;
 
 		// Check if socket is valid
@@ -144,7 +144,7 @@ vector <string> ServerReactor::processItems(const string& channelName, const str
 	return (vec);
 }
 
-void ServerReactor::printUserInformation(int clientSocket)
+void ServerReactor::printUserInformation(void)
 {
     std::map<string, ChannelData>::iterator it;
     std::cout << "Number of channels: " << _channelManager.getChannels().size() << std::endl;

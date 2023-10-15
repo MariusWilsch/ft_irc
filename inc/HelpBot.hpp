@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HelpBot.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/07 12:38:51 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/07 16:46:01 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/15 10:54:29 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 
 class HelpBot{
     public:
-    static void Help(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket);
+    static void Help(Message &ProcessMessage, int clientSocket);
     static string BotManual();
     static string PassManual();
     static string NickManual();

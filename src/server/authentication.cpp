@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   authentication.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 00:53:10 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/14 14:38:19 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/15 11:04:02 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void ExecuteCommands::nick(ServerReactor &_serverReactor, Message &ProcessMessag
         }
         client.setRegisteration(true, 2);
         if (client.getRegistration()[0] && client.getRegistration()[1]){
-            _serverReactor.sendNumericReply(clientSocket, "001", client.getNickname(), "Welcome to the IRC Network, " + client.getNickname());
+            _serverReactor.sendNumericReply_FixLater(clientSocket, RPL_WELCOME(nickName));
         }
     }
 }
@@ -81,7 +81,7 @@ void     ExecuteCommands::user(ServerReactor &_serverReactor, Message &ProcessMe
             string nickname = _serverReactor.getClientManager().getClientData(clientSocket).getNickname();
             _serverReactor.getClientManager().getClientData(clientSocket).setRegisteration(true, 1);
             if (client.getRegistration()[0] && client.getRegistration()[2]){
-                _serverReactor.sendNumericReply(clientSocket, "001", nickname, "Welcome to the IRC Network, " + nickname);
+               _serverReactor.sendNumericReply_FixLater(clientSocket, RPL_WELCOME(nickname));
             } 
         }
         else{
