@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
+/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 15:30:13 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/14 14:29:32 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/15 06:43:44 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,5 +111,5 @@ class ClientManager {
 		// if the nick name founded in the given socket id which represent a member of a channel it means that, the user is a memeber.
 		int				MatchNickName(set <int> ChannelMembers, string nickname);
 		int				getClientSocketByNick(string& nickname);
-		string			createUserList(set<int> channelMembers);
+		string		createUserList(set<int> channelMembers);
 };

@@ -50,6 +50,15 @@ int ServerReactor::sendMsg(int socket, const string& clientInfo, const string &c
 		return (0);
 }
 
+int ServerReactor::sendMsg_FixLater(int socket, const string& reply) {
+		// Check if socket is valid
+		if (socket == -1)
+			return -1;
+	
+    send(socket, reply.c_str(), reply.length(), 0);
+		return (0);
+}
+
 /**
  * @brief 
  * 
@@ -75,10 +84,10 @@ createInfoMsg(ClientData& clientData, const string& command, const vector <strin
 		message += " " + params[0];
 
 		// Append parameters
-		if (command == "MODE") {
-			for (size_t i = 0; i < params.size(); ++i)
-					message += " " + params[i];
-		}
+		if (command == "MODE" || command == "INVITE" ) {
+			for (size_t i = 1; i < params.size(); ++i)
+					message += " :" + params[i];
+		} else 
 
 		// Append trailing message if it exists
 		// if (!trailing.empty()) {
@@ -101,7 +110,7 @@ void ServerReactor::sendNumericReply(int socket, string numericReply, const stri
 			return ;
 
 		// Append command
-		message += ":" + _serverName + " " + numericReply;
+		// message += ":" + _serverName + " " + numericReply;
 
 		// Append parameters
 		if (!param.empty()) {

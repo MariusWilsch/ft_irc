@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
+/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 10:02:23 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/14 14:18:25 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/15 06:53:50 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,9 +186,7 @@ int	ClientManager::getClientSocketByNick(string& nickname) {
 	
 	map<int, ClientData>::iterator it;
 
-	for (it = _ClientsBySocket.begin(); it != _ClientsBySocket.end(); it++) {
-		// cout << "|" << getClientData(it->first).getNickname() << "|" << endl;
-
+	for (it = _ClientsBySocket.begin(); it != _ClientsBySocket.end(); ++it) {
 		if (getClientData(it->first).getNickname().compare(nickname) == 0) {
 			cout << "Nickname was found inside of map container" << endl;
 			return (it->first);

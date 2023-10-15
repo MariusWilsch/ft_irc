@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
+/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 15:07:18 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/14 14:36:02 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/15 06:53:17 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ using std::endl;
 #define ERR_ALREADYREGISTRED() "462: You may not reregister\n"
 #define ERR_BADCHANNELKEY(channel) "475: " + channel + " : Cannot join channel (+k)\n"
 #define ERR_NOTONCHANNEL(channel) "442: " + channel + " : You're not on that channel\n"
-#define ERR_USERONCHANNEL(user, channel) "443: " + user + " " + channel + " : is already on channel\n"
+#define ERR_USERONCHANNEL(user, channel) "443: " + user + " " + channel + " : is already on channel\r\n"
 #define ERR_USERNOTINCHANNEL(user, channel) "441: " + user + " " + channel + " : They aren't on that channel\n"
 #define ERR_CHANOPRIVSNEEDED(channel) "482: " + channel + " : You're not channel operator\n"
 #define ERR_NOSUCHCHANNEL(channel) "403: " + channel + " : No such channel\n"

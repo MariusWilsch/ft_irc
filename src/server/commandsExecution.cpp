@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   commandsExecution.cpp                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
+/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 19:02:14 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/14 17:59:04 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/15 06:37:31 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,12 +43,12 @@ void ExecuteCommands::execute(ServerReactor &_serverReactor, Message &ProcessMes
 					throw std::exception();
 			}
 			
-			if (command != "PASS" && command != "USER" && command != "NICK" && !clientData.isRegistered()) {
-					if (nickname.empty())
-						nickname = "*";
-					_serverReactor.sendNumericReply_FixLater(clientSocket, ERR_NOTREGISTERED(nickname, command));
-					throw std::exception();
-			}
+			// if (command != "PASS" && command != "USER" && command != "NICK" && !clientData.isRegistered()) {
+			// 		if (nickname.empty())
+			// 			nickname = "*";
+			// 		_serverReactor.sendNumericReply_FixLater(clientSocket, ERR_NOTREGISTERED(nickname, command));
+			// 		throw std::exception();
+			// }
 			
 			std::string commands[10] = {"PASS", "NICK", "USER", "JOIN", "PRIVMSG", "KICK", "INVITE", "TOPIC", "MODE"  , "PART", }; // TODO: Add function to Command Properties
 			void(*FunctionPointers[10])(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket) = {pass, nick, user, join, privmsg, kick, invite, topic, mode, part};
