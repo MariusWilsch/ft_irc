@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 13:58:39 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/15 13:23:39 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/15 13:25:49 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ void     ExecuteCommands::invite(ServerReactor &_server, Message &Message, int c
 		
 		int targetFD = _server.getClientManager().getClientSocketByNick(params[0]);
 		if (targetFD == -1)
-		{ // But if the target Socket is not found we should throw ERR_NOSUCHNICK
+		{ //FIXME: But if the target Socket is not found we should throw ERR_NOSUCHNICK
 				_server.sendNumericReply_FixLater(clientSocket, ERR_USERONCHANNEL(params[0], channelName));
         return ;
 		}
