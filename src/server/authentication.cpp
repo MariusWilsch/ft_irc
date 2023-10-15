@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   authentication.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
+/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 00:53:10 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/15 13:32:10 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/15 15:18:06 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,19 +76,16 @@ void     ExecuteCommands::user(ServerReactor &_serverReactor, Message &ProcessMe
         _serverReactor.sendNumericReply_FixLater(clientSocket, ERR_NEEDMOREPARAMS(ProcessMessage.getCommand()));
         throw std::exception();
     }
-    _serverReactor.getClientManager().getClientData(clientSocket).setUsername(ProcessMessage.getParams()[0]);
-    _serverReactor.getClientManager().getClientData(clientSocket).setmode(atoi(ProcessMessage.getParams()[1].c_str()));
-    _serverReactor.getClientManager().getClientData(clientSocket).setUnused(ProcessMessage.getParams()[2]);
-    _serverReactor.getClientManager().getClientData(clientSocket).setRealname(ProcessMessage.getParams()[3]);
-    string nickname = _serverReactor.getClientManager().getClientData(clientSocket).getNickname();
+    client.setUsername(ProcessMessage.getParams()[0]);
+    client.setmode(atoi(ProcessMessage.getParams()[1].c_str()));
+    client.setUnused(ProcessMessage.getParams()[2]);
+    client.setRealname(ProcessMessage.getParams()[3]);
     _serverReactor.getClientManager().getClientData(clientSocket).setRegisteration(true, 1);
-    if (client.isRegistered()){
-         _serverReactor.sendNumericReply_FixLater(clientSocket, RPL_WELCOME(nickname));
-    }
+    if (client.isRegistered())
+         _serverReactor.sendNumericReply_FixLater(clientSocket, RPL_WELCOME(client.getNickname()));
 }
 
-void ExecuteCommands::pass(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket)
-{
+void ExecuteCommands::pass(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket) {
     ClientData  &client = _serverReactor.getClientDataFast(clientSocket);
     if (ProcessMessage.getParams().size() < 1){
         _serverReactor.sendNumericReply_FixLater(clientSocket, ERR_NEEDMOREPARAMS(ProcessMessage.getCommand()));
