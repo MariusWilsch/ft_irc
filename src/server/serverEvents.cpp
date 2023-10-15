@@ -38,7 +38,8 @@ void	ServerReactor::recieveIncomingMessage( int clientSocket )
 		if (message.find("\n") != string::npos)
 			break;
 	}
-	
+	if (message == "\n")
+		return ;
 	Message processMessage(message, _properties);
 
 	//****************************************************************************************/

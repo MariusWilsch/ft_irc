@@ -45,8 +45,6 @@ Message::Message( string rawMessage, map <string, CommandProperties> properties 
 				return ;
 		}
 		
-
-
 		while (std::getline(iss, token, ' ')) {
 				if (token == ":")
 						_params.push_back(token);

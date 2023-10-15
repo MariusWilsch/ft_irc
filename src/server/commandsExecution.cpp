@@ -28,8 +28,14 @@ bool    ExecuteCommands::whiteCheck(string str)
 	return true;
 }
 
-void    ExecuteCommands::informMembers(set <int> clientSockets, string message) {
-		for (set<int>::iterator it = clientSockets.begin() ; it !=  clientSockets.end() ; ++it)
+/**
+ * @brief 
+ * 
+ * @param channelMembers All sockets of the members of the channel
+ * @param message Use createInfoMessage to create the message
+ */
+void    ExecuteCommands::informMembers(set <int> channelMembers, string message) {
+		for (set<int>::iterator it = channelMembers.begin() ; it !=  channelMembers.end() ; ++it)
 				send(*it, message.c_str(), message.length(), 0);
 }
 
@@ -107,7 +113,7 @@ void ExecuteCommands::execute(ServerReactor &_serverReactor, Message &ProcessMes
 				if (ProcessMessage.getCommand().compare(commands[i]) == 0)
 					FunctionPointers[i](_serverReactor, ProcessMessage, clientSocket);
 			}
-			} catch (std::exception &ex){}
+			} catch (std::exception &ex) {}
 		// 	 catch (const ServerException &e) {
     //     _server.sendNumericReply_FixLater(clientSocket, e.what());
     // }

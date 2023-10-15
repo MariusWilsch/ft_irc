@@ -99,6 +99,14 @@ class ServerReactor {
 
 		vector<string> processItems(const std::string &channelName = "", const std::string &item2 = "", const std::string &item3 = "");
 
+		/**
+		 * @brief Create a Info Msg object
+		 * 
+		 * @param clientData ClientData object
+		 * @param command 
+		 * @param params 
+		 * @return string 
+		 */
 		string	createInfoMsg(ClientData& clientData, const string &command, const vector <string> &params);
 	
 

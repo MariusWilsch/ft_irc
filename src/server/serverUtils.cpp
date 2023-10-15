@@ -84,10 +84,13 @@ createInfoMsg(ClientData& clientData, const string& command, const vector <strin
 		message += " " + params[0];
 
 		// Append parameters
-		if (command == "MODE" || command == "INVITE" ) {
+		if (command == "INVITE") {
 			for (size_t i = 1; i < params.size(); ++i)
 					message += " :" + params[i];
-		} else 
+		} else {
+				for (size_t i = 1; i < params.size(); ++i)
+						message += " " + params[i];
+		}
 
 		// Append trailing message if it exists
 		// if (!trailing.empty()) {
