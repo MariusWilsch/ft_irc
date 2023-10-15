@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 10:02:20 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/15 01:43:42 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/15 12:28:49 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,8 @@ ChannelData::ChannelData( void ){
 ChannelData::ChannelData(const string& channelName, const int socketFD ) {
     this->_name = channelName;
     this->_creatorBySocket = socketFD;
-    this->_operators.push_back(socketFD);
-    this->_clientSockets.push_back(socketFD);
+    this->_operators.insert(socketFD);
+    this->_clientSockets.insert(socketFD);
     
     this->_inviteList = set<string>();
     this->_topic = "";
@@ -49,7 +49,7 @@ ChannelData::~ChannelData( void ){}
 
 /********************** GETTERS	***********************/
 
-string  hannelData::getName( void ) const{
+string  ChannelData::getName( void ) const{
     return (this->_name);
 }
 

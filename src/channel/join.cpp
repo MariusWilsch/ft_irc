@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/24 12:13:30 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/15 01:37:10 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/15 12:32:02 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 */
 
 int joinParser(std::vector<string> &ChannelNames, std::vector<string> &ChannelKeys, Message &ProcessMessage){
-    if (params.size() == 0 || params[0].empty())
+    if (ProcessMessage.getParams().size() == 0 || ProcessMessage.getParams()[0].empty())
         return (-1);
     string param = ProcessMessage.getParams()[0];
     if (ProcessMessage.getParams().size() == 1 && param.compare("0") == 0){
@@ -84,7 +84,7 @@ bool	joinPrivateChannel(ServerReactor &_serverReactor, Message &ProcessMessage, 
         Channel.addClient(clientSocket);
         return(true);
     }
-    _server.sendNumericReply_FixLater(clientSocket, ERR_BADCHANNELKEY(Channel.getName()));
+    _serverReactor.sendNumericReply_FixLater(clientSocket, ERR_BADCHANNELKEY(Channel.getName()));
     return (false);
 }
 
@@ -94,7 +94,7 @@ bool	joinPublicChannel(ServerReactor &_serverReactor, Message &ProcessMessage, i
         return (true);
     }
     // Send this when the user wants to join to a public channel with  key.
-    _server.sendNumericReply_FixLater(clientSocket, ERR_BADCHANNELKEY(Channel.getName()));
+    _serverReactor.sendNumericReply_FixLater(clientSocket, ERR_BADCHANNELKEY(Channel.getName()));
     return (false);
 }
 
@@ -151,7 +151,7 @@ void ExecuteCommands::join(ServerReactor &_server, Message &ProcessMessage, int 
         }
     }
     // Print user information
-_   server.printUserInformation(clientSocket);
+   _server.printUserInformation(clientSocket);
 }
 
 // void ExecuteCommands::join(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket)

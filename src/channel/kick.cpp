@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/01 16:47:40 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/15 01:53:30 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/15 12:40:03 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 bool kickParser(std::vector<string> &ChannelNames, std::vector<string> &Users, Message &ProcessMessage){
     string param = ProcessMessage.getParams()[0];
 
-    if (params.size() == 0 || params[0].empty())
+    if (param.size() == 0 || param.empty())
         return (false);
     for (unsigned int i = 0; i < ProcessMessage.getParams().size(); i++){
         param = ProcessMessage.getParams()[i];
@@ -51,39 +51,38 @@ void     ExecuteCommands::kick(ServerReactor &_serverReactor, Message &ProcessMe
     std::vector<string> Users;
     
     int stat = kickParser(ChannelNames, Users, ProcessMessage);
-
     if (!stat){
-        _server.sendNumericReply_FixLater(clientSocket, ERR_NEEDMOREPARAMS(ProcessMessage.getCommand()));
+        _serverReactor.sendNumericReply_FixLater(clientSocket, ERR_NEEDMOREPARAMS(ProcessMessage.getCommand()));
         throw std::exception();
     }
-    ChannelData &Channel = _server.getChannelManager().getChannelByName(ChannelNames[i]);
     for (unsigned int i = 0; i < ChannelNames.size(); i++){
         if (!_serverReactor.doesChannelExist(ChannelNames[i])){
-            _server.sendNumericReply_FixLater(clientSocket, ERR_NOSUCHCHANNEL(ChannelNames[i]));
+            _serverReactor.sendNumericReply_FixLater(clientSocket, ERR_NOSUCHCHANNEL(ChannelNames[i]));
             continue;
         }
+        ChannelData &Channel = _serverReactor.getChannelManager().getChannelByName(ChannelNames[i]);
         if (!Channel.isCLient(clientSocket)){
-            _server.sendNumericReply_FixLater(clientSocket, ERR_NOTONCHANNEL(ChannelNames[i]));
+            _serverReactor.sendNumericReply_FixLater(clientSocket, ERR_NOTONCHANNEL(ChannelNames[i]));
             continue;
         }
         if (!Channel.isOperator(clientSocket)){
-            _server.sendNumericReply_FixLater(clientSocket, ERR_CHANOPRIVSNEEDED(ChannelNames[i]));
+            _serverReactor.sendNumericReply_FixLater(clientSocket, ERR_CHANOPRIVSNEEDED(ChannelNames[i]));
             continue;
         }
-        if (Users[i] == NULL){
-            _server.sendNumericReply_FixLater(clientSocket, ERR_NEEDMOREPARAMS(ProcessMessage.getCommand()));
+        if (Users[i].c_str() == NULL){
+            _serverReactor.sendNumericReply_FixLater(clientSocket, ERR_NEEDMOREPARAMS(ProcessMessage.getCommand()));
             continue;
         }
         set<int> ChannelMembers = _serverReactor.getChannelManager().getChannelByName(ChannelNames[i]).getClientSockets();
         int kickedID = _serverReactor.getClientManager().MatchNickName(ChannelMembers, Users[i]);
         if (kickedID == -1){
-            _server.sendNumericReply_FixLater(clientSocket, ERR_USERNOTINCHANNEL(Users[i], ChannelNames[i]));
+            _serverReactor.sendNumericReply_FixLater(clientSocket, ERR_USERNOTINCHANNEL(Users[i], ChannelNames[i]));
             continue;
         }
         Channel.removeClient(kickedID);
         // This is in case if there multiple clients inside the channel.
         if (Channel.isOperator(kickedID))
-            channel.removeOperator(kickedID);
+            Channel.removeOperator(kickedID);
         // NUMERIC REPLY TO INFORM ALL THE CHANNEL MEMBER. "COMMENT"
     
     }

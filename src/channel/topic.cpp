@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/30 13:41:28 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/15 00:42:37 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/15 12:50:10 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,16 +23,16 @@ void     ExecuteCommands::topic(ServerReactor &_ServerReactor, Message &ProcessM
 
     string channelName = ProcessMessage.getParams()[0];
     if (ProcessMessage.getParams().size() < 1){
-        _serverReactor.sendNumericReply_FixLater(clientSocket, ERR_NEEDMOREPARAMS(ProccessMessage.getCommand()));
+        _ServerReactor.sendNumericReply_FixLater(clientSocket, ERR_NEEDMOREPARAMS(ProcessMessage.getCommand()));
         throw std::exception();
     }
     if (!_ServerReactor.doesChannelExist(channelName)){
-        _serverReactor.sendNumericReply_FixLater(clientSocket, ERR_NOSUCHCHANNEL(channelName));
+        _ServerReactor.sendNumericReply_FixLater(clientSocket, ERR_NOSUCHCHANNEL(channelName));
         throw std::exception();
     }
 
     if (!_ServerReactor.getChannelManager().getChannelByName(channelName).isCLient(clientSocket)){
-        _serverReactor.sendNumericReply_FixLater(clientSocket, ERR_NOTONCHANNEL(channelName));
+        _ServerReactor.sendNumericReply_FixLater(clientSocket, ERR_NOTONCHANNEL(channelName));
         throw std::exception();
     }
 
@@ -54,5 +54,4 @@ void     ExecuteCommands::topic(ServerReactor &_ServerReactor, Message &ProcessM
     // message.append(topic);
     // message.append("\n");
     // ExecuteCommands::informMembers(_ServerReactor.getChannelManager().getChannelByName(channelName).getClientSockets(), message);
-}
 }
