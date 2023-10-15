@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/24 12:13:30 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/15 14:26:44 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/15 14:29:24 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int joinParser(std::vector<string> &ChannelNames, std::vector<string> &ChannelKe
 		return (1);
 }
 
-
+// TODO: Refactor Suggestion
 // 1. We directly access the ChannelManager and the map of channels.
 // 2. For each channel, we try to remove the client from both the client list and the operators list. The removeClient and removeOperator functions should handle the case where the client is not present, so there's no need to check existence beforehand.
 // 3/ After the removal operations, if the channel is empty, it's deleted. If not, we move to the next channel.

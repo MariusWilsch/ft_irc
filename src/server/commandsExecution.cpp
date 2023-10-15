@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 19:02:14 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/15 14:03:22 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/15 14:29:01 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,49 @@ void    ExecuteCommands::informMembers(set <int> clientSockets, string message) 
 		for (set<int>::iterator it = clientSockets.begin() ; it !=  clientSockets.end() ; ++it)
 				send(*it, message.c_str(), message.length(), 0);
 }
+
+// TODO: Refactor Suggestion - Create a map of CommandProperties and use it to execute the commands
+
+// void ServerReactor::createPropertiesMap() {
+//     _properties["PASS"] = CommandProperties(1, true, ExecuteCommands::pass);
+//     _properties["NICK"] = CommandProperties(1, true, ExecuteCommands::nick);
+//     _properties["USER"] = CommandProperties(3, false, ExecuteCommands::user);
+//     _properties["JOIN"] = CommandProperties(1, true, ExecuteCommands::join);
+//     _properties["PRIVMSG"] = CommandProperties(1, false, ExecuteCommands::privmsg);
+//     // _properties["OPER"] = CommandProperties(2, true, ExecuteCommands::invite); // Not mapped to a function as it wasn't provided
+//     _properties["KICK"] = CommandProperties(1, false, ExecuteCommands::kick);
+//     _properties["INVITE"] = CommandProperties(2, true,  ExecuteCommands::invite); 
+//     _properties["MODE"] = CommandProperties(2, true, ExecuteCommands::mode); 
+//     _properties["PART"] = CommandProperties(2, true, ExecuteCommands::part);
+
+//     _properties["HELP"] = CommandProperties(1, true); // Not mapped to a function as it wasn't provided in the snippet
+// }
+// struct CommandProperties {
+//     int                mandatoryParams;
+//     bool            ignoreTrailing;
+//     void (executeCommand)(ServerReactor &, Message &, int);
+
+//     CommandProperties();
+//     CommandProperties(int m, bool i,  void (func)(ServerReactor &, Message &, int) = nullptr);
+// };
+// void ExecuteCommands::execute(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket)
+// {
+//         string command = ProcessMessage.getCommand();
+//         try 
+//         {
+//                 if (ProcessMessage.getFatal()){
+//                         string Err = ERR_UNKNOWNCOMMAND();
+//                         send(clientSocket, Err.c_str(), Err.size(), 0);
+//                         throw std::exception();
+//                 }
+
+//             map<std::string, CommandProperties>::iterator it = _serverReactor._properties.find(command);
+//              if (it != _serverReactor._properties.end() && it->second.executeCommand) {
+//                     it->second.executeCommand(_serverReactor, ProcessMessage, clientSocket);
+//             }
+//         }
+//         catch (std::exception &ex){}
+// }
 
 void ExecuteCommands::execute(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket)
 {
