@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 15:07:18 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/15 14:16:17 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/15 19:07:42 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ using std::endl;
 #define ERR_BADCHANNELKEY(channel) "475: " + channel + " : Cannot join channel (+k)\n"
 #define ERR_NOTONCHANNEL(channel) "442: " + channel + " : You're not on that channel\n"
 #define ERR_USERONCHANNEL(user, channel) "443: " + user + " " + channel + " : is already on channel\r\n"
-#define ERR_USERNOTINCHANNEL(user, channel) "441: " + user + " " + channel + " : They aren't on that channel\n"
 #define ERR_CHANOPRIVSNEEDED(channel) "482: " + channel + " : You're not channel operator\n"
 #define ERR_NOSUCHCHANNEL(channel) "403: " + channel + " : No such channel\n"
 #define ERR_CHANNELISFULL(channel) "471: " + channel + " :Cannot join channel (+l)\n"
@@ -66,6 +65,9 @@ using std::endl;
 #define ERR_NORECIPIENT(target) "411 " + target + " :No recipient given (PRIVMSG)\r\n"
 #define ERR_NOTEXTTOSEND(target) "412 " + target + " :No text to send\r\n"
 #define ERR_NOSUCHNICKCHANNEL(nickSender, nickTarget) "401 " + nickSender + " " + nickTarget + " :No such nick/channel\r\n"
+
+
+#define ERR_USERNOTINCHANNEL(nickSender, nickTarget, channel) "441 " +  nickSender + " " + nickTarget + " " + channel + " : They aren't on that channel\r\n"
 
 
 

@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/01 16:47:40 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/15 12:40:03 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/15 19:19:35 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ bool kickParser(std::vector<string> &ChannelNames, std::vector<string> &Users, M
  // Kick #channel1 #channel2 #InvalidCh user1 user2 user3
  // !if kick command failed with a specific channel for any reason: Do the program continue it's execution or not????? 
 void     ExecuteCommands::kick(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket){
+    const string& nickSender = _serverReactor.getClientDataFast(clientSocket).getNickname();
     std::vector<string> ChannelNames;
     std::vector<string> Users;
     
@@ -76,11 +77,10 @@ void     ExecuteCommands::kick(ServerReactor &_serverReactor, Message &ProcessMe
         set<int> ChannelMembers = _serverReactor.getChannelManager().getChannelByName(ChannelNames[i]).getClientSockets();
         int kickedID = _serverReactor.getClientManager().MatchNickName(ChannelMembers, Users[i]);
         if (kickedID == -1){
-            _serverReactor.sendNumericReply_FixLater(clientSocket, ERR_USERNOTINCHANNEL(Users[i], ChannelNames[i]));
+			_serverReactor.sendNumericReply_FixLater(clientSocket, ERR_NOSUCHNICKCHANNEL(nickSender, Users[i]));
             continue;
         }
         Channel.removeClient(kickedID);
-        // This is in case if there multiple clients inside the channel.
         if (Channel.isOperator(kickedID))
             Channel.removeOperator(kickedID);
         // NUMERIC REPLY TO INFORM ALL THE CHANNEL MEMBER. "COMMENT"

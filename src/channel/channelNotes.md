@@ -22,3 +22,8 @@
 
 
 Join #a, #b, #c  :Key1 Key2 Ley3
+
+
+
+:punch.wa.us.dal.net 401 Arc111 Arc :No such nick/channel
+:punch.wa.us.dal.net 441 Arc111 Arc #ch15 :They aren't on that channel
