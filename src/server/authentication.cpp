@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 00:53:10 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/15 13:28:45 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/15 13:32:10 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ void     ExecuteCommands::user(ServerReactor &_serverReactor, Message &ProcessMe
     string nickname = _serverReactor.getClientManager().getClientData(clientSocket).getNickname();
     _serverReactor.getClientManager().getClientData(clientSocket).setRegisteration(true, 1);
     if (client.isRegistered()){
-        _serverReactor.sendNumericReply(clientSocket, "001", nickname, "Welcome to the IRC Network, " + nickname);
+         _serverReactor.sendNumericReply_FixLater(clientSocket, RPL_WELCOME(nickname));
     }
 }
 
