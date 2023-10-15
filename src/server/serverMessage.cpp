@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 13:27:34 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/15 11:44:52 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/15 12:59:23 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,8 @@ Message::Message( string rawMessage, map <string, CommandProperties> properties 
 
 
 		while (std::getline(iss, token, ' ')) {
+				if (token == ":")
+						_params.push_back(token);
 				if (token.empty())
 						continue;
 				if (token.size() != 1 && token.find(':') != string::npos) {

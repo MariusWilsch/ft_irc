@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ExecuteCommands.hpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 19:05:52 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/15 07:19:02 by verdant          ###   ########.fr       */
+/*   Updated: 2023/10/15 12:46:24 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ class ExecuteCommands
 };
 
 #endif
-
 
 /*                      This is the old command chaine                  */
 //    if (ProcessMessage.getCommand().compare("NICK") == 0){

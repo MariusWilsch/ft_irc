@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 15:07:18 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/15 11:09:16 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/15 12:58:05 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ using std::endl;
 
 #define ERR_NORECIPIENT(target) "411 " + target + " :No recipient given (PRIVMSG)\r\n"
 #define ERR_NOTEXTTOSEND(target) "412 " + target + " :No text to send\r\n"
-#define ERR_NOSUCHNICKCHANNEL(target) "401 " + target + " :No such nick/channel\r\n"
+#define ERR_NOSUCHNICKCHANNEL(nickSender, nickTarget) "401 " + nickSender + " " + nickTarget + " :No such nick/channel\r\n"
 
 
 
