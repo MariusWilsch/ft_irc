@@ -22,14 +22,18 @@
 */
 
 int joinParser(std::vector<string> &ChannelNames, std::vector<string> &ChannelKeys, Message &ProcessMessage){
-		if (ProcessMessage.getParams().size() == 0 || ProcessMessage.getParams()[0].empty())
+		if (ProcessMessage.getParams().size() == 0 || ProcessMessage.getParams()[0].empty()) {
+				cout << "here" << endl;
 				return (-1);
+		}
 		string param = ProcessMessage.getParams()[0];
 		if (ProcessMessage.getParams().size() == 1 && param.compare("0") == 0){
 				return (0);
 		}
-		if (ProcessMessage.getParams().size() < 1 || ExecuteCommands::whiteCheck(ProcessMessage.getParams()[0]))
+		if (ProcessMessage.getParams().size() < 1 || ExecuteCommands::whiteCheck(ProcessMessage.getParams()[0])) {
+				cout << "here1" << endl;
 				return (-1);
+		}
 		for (size_t i = 0; i < ProcessMessage.getParams().size(); i++) {
 				param = ProcessMessage.getParams()[i];
 				if (param[0] == '#')
@@ -37,8 +41,10 @@ int joinParser(std::vector<string> &ChannelNames, std::vector<string> &ChannelKe
 				else if (!ExecuteCommands::whiteCheck(param))
 								ChannelKeys.push_back(param);
 		}
-		if (ChannelKeys.size() > ChannelNames.size())
+		if (ChannelKeys.size() > ChannelNames.size()) {
+				cout << "here2" << endl;
 				return (-1);
+		}
 		for (unsigned int i = ChannelKeys.size(); i < ChannelNames.size(); i++){
 				ChannelKeys.push_back("");
 		}
@@ -126,6 +132,8 @@ void ExecuteCommands::join(ServerReactor &_server, Message &ProcessMessage, int 
 		std::vector<string> ChannelKeys;
 
 		int stat = joinParser(ChannelNames, ChannelKeys, ProcessMessage);
+
+		cout << "stat: " << stat << endl;
 		// Handle missing parameters or malformed command
 		if (stat == -1) {
 						_server.sendNumericReply_FixLater(clientSocket, ERR_NEEDMOREPARAMS(ProcessMessage.getCommand()));

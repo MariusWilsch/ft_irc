@@ -172,6 +172,7 @@ void    ChannelOperatorPrivilege(ServerReactor &_serverReactor, Message &Procces
 void     ExecuteCommands::mode(ServerReactor &_server, Message &ProccessMessage, int clientSocket){
 		
 		if (ProccessMessage.getParams().size() < 2) {
+			cout << "here 4" << endl;
 			_server.sendNumericReply_FixLater(clientSocket, ERR_NEEDMOREPARAMS(ProccessMessage.getCommand()));
 			throw std::exception();
 		}
