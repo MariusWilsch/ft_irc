@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 20:17:01 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/15 12:48:29 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/15 16:25:01 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ void    ChannelSecureMode(ServerReactor &_serverReactor, Message &ProccessMessag
 				_serverReactor.sendNumericReply_FixLater(clientSocket, ERR_CHANOPRIVSNEEDED(channel.getName()));
 				throw std::exception();
 		}
-
 		string  key;
 		if (ProccessMessage.getParams().size() == 3)
 				key = ProccessMessage.getParams()[2];
@@ -170,20 +169,18 @@ void    ChannelOperatorPrivilege(ServerReactor &_serverReactor, Message &Procces
 }
 
 void     ExecuteCommands::mode(ServerReactor &_server, Message &ProccessMessage, int clientSocket){
-		
+
+        if (ProccessMessage.getParams().size() == 1)
+            throw std::exception();
 		if (ProccessMessage.getParams().size() < 2) {
-			cout << "here 4" << endl;
 			_server.sendNumericReply_FixLater(clientSocket, ERR_NEEDMOREPARAMS(ProccessMessage.getCommand()));
 			throw std::exception();
 		}
-		
-		
 		if (!_server.doesChannelExist(ProccessMessage.getParams()[0])){
 				_server.sendNumericReply_FixLater(clientSocket, ERR_NOSUCHCHANNEL(ProccessMessage.getParams()[0]));
 				throw std::exception();
 		}
 		string mode = ProccessMessage.getParams()[1];
-
 		// Handle the mode of limeChat when join command is sended by the user.
 		if (mode.compare("+sn") == 0)
 				return ;
