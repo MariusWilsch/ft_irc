@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 00:53:10 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/14 14:38:19 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/15 02:48:16 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,7 @@ void ExecuteCommands::nick(ServerReactor &_serverReactor, Message &ProcessMessag
     string err;
 
     if (ProcessMessage.getParams().empty() || !NickNameValidation(ProcessMessage.getParams()[0])){
-        string Err = ERR_NONICKNAMEGIVEN();
-        send(clientSocket, Err.c_str(), Err.size(), 0);
+        _serverReactor.sendNumericReply_FixLater(clientSocket, ERR_NONICKNAMEGIVEN());
         throw std::exception();
     }
     map<int, ClientData>::iterator it;
@@ -48,10 +47,8 @@ void ExecuteCommands::nick(ServerReactor &_serverReactor, Message &ProcessMessag
     {
         map <int, ClientData> &clientSet = _serverReactor.getClientManager().getClientBySocket();
         for (it = clientSet.begin(); it != clientSet.end(); it++){
-            if ((it->second.getNickname().compare(nickName) == 0) && (it->second.getClientSocket() != clientSocket))
-            {
-                string Err = ERR_NICKNAMEINUSE(nickName);
-                send(clientSocket, Err.c_str(), Err.size(), 0);
+            if ((it->second.getNickname().compare(nickName) == 0) && (it->second.getClientSocket() != clientSocket)){
+                _serverReactor.sendNumericReply_FixLater(clientSocket, ERR_NICKNAMEINUSE(nickName));
                 nickName.append("_");
                 it = clientSet.begin();
             }
@@ -62,7 +59,7 @@ void ExecuteCommands::nick(ServerReactor &_serverReactor, Message &ProcessMessag
                 _serverReactor.sendMsg(clientSocket, client.getClientInfo(), "NICK", nickName);
         }
         client.setRegisteration(true, 2);
-        if (client.getRegistration()[0] && client.getRegistration()[1]){
+        if (client.isRegistered()){
             _serverReactor.sendNumericReply(clientSocket, "001", client.getNickname(), "Welcome to the IRC Network, " + client.getNickname());
         }
     }
@@ -71,51 +68,42 @@ void ExecuteCommands::nick(ServerReactor &_serverReactor, Message &ProcessMessag
 void     ExecuteCommands::user(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket) {
     ClientData  &client = _serverReactor.getClientManager().getClientData(clientSocket);
     
-    if (!client.isRegistered()){
-        if (ProcessMessage.getParams().size() >= 4)
-        {
-            _serverReactor.getClientManager().getClientData(clientSocket).setUsername(ProcessMessage.getParams()[0]);
-            _serverReactor.getClientManager().getClientData(clientSocket).setmode(atoi(ProcessMessage.getParams()[1].c_str()));
-            _serverReactor.getClientManager().getClientData(clientSocket).setUnused(ProcessMessage.getParams()[2]);
-            _serverReactor.getClientManager().getClientData(clientSocket).setRealname(ProcessMessage.getParams()[3]);
-            string nickname = _serverReactor.getClientManager().getClientData(clientSocket).getNickname();
-            _serverReactor.getClientManager().getClientData(clientSocket).setRegisteration(true, 1);
-            if (client.getRegistration()[0] && client.getRegistration()[2]){
-                _serverReactor.sendNumericReply(clientSocket, "001", nickname, "Welcome to the IRC Network, " + nickname);
-            } 
-        }
-        else{
-            string Err = ERR_NEEDMOREPARAMS(ProcessMessage.getCommand());
-            send(clientSocket, Err.c_str(), Err.size(), 0);
-            throw std::exception();
-        }
-    }
-    else {
+    if (client.isRegistered()){
         _serverReactor.sendNumericReply_FixLater(clientSocket, ERR_ALREADYREGISTRED());
         throw std::exception();
     }
+    if (ProcessMessage.getParams().size() < 4){
+        _serverReactor.sendNumericReply_FixLater(clientSocket, ERR_NEEDMOREPARAMS(ProcessMessage.getCommand()));
+        throw std::exception();
+    }
+    _serverReactor.getClientManager().getClientData(clientSocket).setUsername(ProcessMessage.getParams()[0]);
+    _serverReactor.getClientManager().getClientData(clientSocket).setmode(atoi(ProcessMessage.getParams()[1].c_str()));
+    _serverReactor.getClientManager().getClientData(clientSocket).setUnused(ProcessMessage.getParams()[2]);
+    _serverReactor.getClientManager().getClientData(clientSocket).setRealname(ProcessMessage.getParams()[3]);
+    string nickname = _serverReactor.getClientManager().getClientData(clientSocket).getNickname();
+    _serverReactor.getClientManager().getClientData(clientSocket).setRegisteration(true, 1);
+    if (client.isRegistered()){
+        _serverReactor.sendNumericReply(clientSocket, "001", nickname, "Welcome to the IRC Network, " + nickname);
+    }
 }
 
-// Manda
 void ExecuteCommands::pass(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket)
 {
     ClientData  &client = _serverReactor.getClientDataFast(clientSocket);
-    if (ProcessMessage.getParams().size() >= 1){
-        if (!client.getRegistration()[1] && !client.getRegistration()[2]){
-            client.setRegisteration(true, 0);
-            if (_serverReactor.getServerPassword().compare(ProcessMessage.getParams()[0]) != 0){
-                _serverReactor.sendNumericReply_FixLater(clientSocket, ERR_PASSWDMISMATCH());
-                close(clientSocket);
-                throw std::exception();
-            }
-        }
-        else{
-            _serverReactor.sendNumericReply_FixLater(clientSocket, ERR_ALREADYREGISTRED());
-            throw std::exception();
-        }
-    }
-    else{
+    if (ProcessMessage.getParams().size() < 1){
         _serverReactor.sendNumericReply_FixLater(clientSocket, ERR_NEEDMOREPARAMS(ProcessMessage.getCommand()));
+        throw std::exception();
+    }
+    if (client.getRegistration()[1] && client.getRegistration()[2]){
+        _serverReactor.sendNumericReply_FixLater(clientSocket, ERR_ALREADYREGISTRED());
+        throw std::exception();
+    }
+    client.setRegisteration(true, 0);
+    // Handle this case with an appropriate action.
+    if (_serverReactor.getServerPassword().compare(ProcessMessage.getParams()[0]) != 0)
+    {
+        _serverReactor.sendNumericReply_FixLater(clientSocket, ERR_PASSWDMISMATCH());
+        close(clientSocket);
         throw std::exception();
     }
 }

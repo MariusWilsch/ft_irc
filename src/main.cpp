@@ -3,26 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 09:59:41 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/13 15:58:43 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/15 02:52:36 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "server.hpp"
 
 /*
-	* parsing issues:
-		1 - Empty element in the end of the parameters vector
-		2 - When the client leaves the server, needs to remove it from all the channels also !
-		3 - !PROBLEME:  When the server recieves lot of messages from clients, the program complete it's execution and stops without any crach~
-		4 - Focus in NOTICE the clients when some important event happens!
-
-		5 - Now to perform any operation inside the server the client needs to be registred inside the server.
+	ALL IS GOOOOOD MAN!!
+	1 - NEED TO TEST EVERYTHING IN THE MANDATORY PART FOR NOW!
+	2 - TEST THE FILE TRANSFER AND THE BOT (SEND THE MANUAL TO THE USER).
+	3 - READY TO EVALUATION.!!!
 */
-
-// FIXME: 462 You may not reregister
 
 int	main( int argc, char **argv )
 {

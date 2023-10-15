@@ -3,18 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   mode.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 20:17:01 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/14 15:29:50 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/15 02:38:50 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ExecuteCommands.hpp"
 
 // ~~~~~~~~~~~~~ ONLY THE OPERATORS ARE ALLOWED TO PERFORM SUCH OPERATION ~~~~~~~~~~/ 
-// ! Send back the message to the channel member when the Mode is been changed by an operator.
-// ignore this MODE it's send by limeChat
 
 bool    isDecimal(string str){
     for (unsigned int i = 0; i < str.size(); i++){
@@ -24,248 +22,195 @@ bool    isDecimal(string str){
     return (true);
 }
 
-void    inviteOnly(ServerReactor &_serverReactor, Message &ProccessMessage, int clientSocket)
-{
-    if (ProccessMessage.getParams().size() == 2){
-        if (_serverReactor.getChannelManager().itsChannel(ProccessMessage.getParams()[0])){
-            string channelName = ProccessMessage.getParams()[0];
-            channelName.erase(0, 1);
-            if (_serverReactor.getChannelManager().getChannelByName(channelName).isCLient(clientSocket)){
-                if (_serverReactor.getChannelManager().getChannelByName(channelName).isOperator(clientSocket))
-                {
-                    if (ProccessMessage.getParams()[1].compare("+i") == 0)
-                        _serverReactor.getChannelManager().getChannelByName(channelName).setInviteFlag(true);
-                    else if (ProccessMessage.getParams()[1].compare("-i") == 0)
-                        _serverReactor.getChannelManager().getChannelByName(channelName).setInviteFlag(false);
-                    string message = _serverReactor.getClientManager().getClientData(clientSocket).getUsername();
-                    message.append(" has changed mode: ");
-                    message.append(ProccessMessage.getParams()[1]);
-                    message.append("\n");
-                    ExecuteCommands::informMembers(_serverReactor.getChannelManager().getChannelByName(channelName).getClientSockets(), message);
-                }
-                else{
-                    string Err = ERR_CHANOPRIVSNEEDED(channelName);
-                    send(clientSocket, Err.c_str(), Err.size(), 0);
-                    throw std::exception();
-                }
-            }
-            else{
-                string Err = ERR_NOTONCHANNEL(channelName);
-                send(clientSocket, Err.c_str(), Err.size(), 0);
-                throw std::exception();
-            }
-        }
-        else {
-            string Err = ERR_NOSUCHCHANNEL(ProccessMessage.getParams()[0]);
-            send(clientSocket, Err.c_str(), Err.size(), 0);
-            throw std::exception();
-        }
-    }
-    else{
-        string Err = ERR_NEEDMOREPARAMS(ProccessMessage.getCommand());
-        send(clientSocket, Err.c_str(), Err.size(), 0);
+void    inviteOnly(ServerReactor &_serverReactor, Message &ProccessMessage, int clientSocket){
+    ChannelData &channel = _server.getChannelManager().getChannelByName(ProccessMessage.getParams()[0]);
+
+    if (ProccessMessage.getParams().size() != 2){
+        _serverReactor.sendNumericReply_FixLater(clientSocket, ERR_NEEDMOREPARAMS(ProccessMessage.getCommand()));
         throw std::exception();
     }
+    if (!channel.isCLient(clientSocket)){
+        _serverReactor.sendNumericReply_FixLater(clientSocket, ERR_NOTONCHANNEL(channelName));
+        throw std::exception();
+    }
+    if (!channel.isOperator(clientSocket)){
+        _serverReactor.sendNumericReply_FixLater(clientSocket, ERR_CHANOPRIVSNEEDED(channelName));
+        throw std::exception();
+    }
+    if (ProccessMessage.getParams()[1].compare("+i") == 0)
+        channel.setInviteFlag(true);
+    else if (ProccessMessage.getParams()[1].compare("-i") == 0)
+        channel.setInviteFlag(false);
+
+    //! Inform other members about this action.
+    // string message = _serverReactor.getClientManager().getClientData(clientSocket).getUsername();
+    // message.append(" has changed mode: ");
+    // message.append(ProccessMessage.getParams()[1]);
+    // message.append("\n");
+    // ExecuteCommands::informMembers(_serverReactor.getChannelManager().getChannelByName(channelName).getClientSockets(), message);
 }
 
 void    ChannelSecureMode(ServerReactor &_serverReactor, Message &ProccessMessage, int clientSocket){
-    if (ProccessMessage.getParams().size() == 3 || ProccessMessage.getParams().size() == 2){
-        if (_serverReactor.getChannelManager().itsChannel(ProccessMessage.getParams()[0])){
-            string channelName = ProccessMessage.getParams()[0];
-            string  key;
-            channelName.erase(0, 1);
-            if (_serverReactor.getChannelManager().getChannelByName(channelName).isCLient(clientSocket)){    
-                if (_serverReactor.getChannelManager().getChannelByName(channelName).isOperator(clientSocket)){
-                    if (ProccessMessage.getParams().size() == 3){
-                        key = ProccessMessage.getParams()[2];
-                        key.erase(remove(key.begin(), key.end(), '\n'), key.end());
-                    }
-                    if (ProccessMessage.getParams()[1].compare("+k") == 0 && !key.empty()){
-                        _serverReactor.getChannelManager().getChannelByName(channelName).setSecurity(true);
-                        _serverReactor.getChannelManager().getChannelByName(channelName).setKey(key);
-                    }
-                    else if (ProccessMessage.getParams()[1].compare("-k") == 0 && ProccessMessage.getParams().size() == 2){
-                        _serverReactor.getChannelManager().getChannelByName(channelName).setSecurity(false);
-                        _serverReactor.getChannelManager().getChannelByName(channelName).setKey("");
-                    }
-                    string message = _serverReactor.getClientManager().getClientData(clientSocket).getUsername();
-                    message.append(" has changed mode: ");
-                    message.append(ProccessMessage.getParams()[1]);
-                    message.append("\n");
-                    ExecuteCommands::informMembers(_serverReactor.getChannelManager().getChannelByName(channelName).getClientSockets(), message);
-                }
-                else{
-                    string Err = ERR_CHANOPRIVSNEEDED(channelName);
-                    send(clientSocket, Err.c_str(), Err.size(), 0);
-                    throw std::exception();
-                }
-            }
-            else{
-                string Err = ERR_NOTONCHANNEL(channelName);
-                send(clientSocket, Err.c_str(), Err.size(), 0);
-                throw std::exception();
-            }
-        }
-        else {
-            string Err = ERR_NOSUCHCHANNEL(ProccessMessage.getParams()[0]);
-            send(clientSocket, Err.c_str(), Err.size(), 0);
-            throw std::exception();
-        }
-    }
-    else{
-        string Err = ERR_NEEDMOREPARAMS(ProccessMessage.getCommand());
-        send(clientSocket, Err.c_str(), Err.size(), 0);
+    ChannelData &channel = _server.getChannelManager().getChannelByName(ProccessMessage.getParams()[0]);
+
+    if (ProccessMessage.getParams().size() < 1 || ProccessMessage.getParams().size() > 3){
+        _serverReactor.sendNumericReply_FixLater(clientSocket, ERR_NEEDMOREPARAMS(ProccessMessage.getCommand()));
         throw std::exception();
     }
+    if (!channel.isCLient(clientSocket)){
+        _serverReactor.sendNumericReply_FixLater(clientSocket, ERR_NOTONCHANNEL(channelName));
+        throw std::exception();
+    }
+    if (!channel.isOperator(clientSocket)){
+        _serverReactor.sendNumericReply_FixLater(clientSocket, ERR_CHANOPRIVSNEEDED(channelName));
+        throw std::exception();
+    }
+
+    string  key;
+    if (ProccessMessage.getParams().size() == 3)
+        key = ProccessMessage.getParams()[2];
+    if (ProccessMessage.getParams()[1].compare("+k") == 0 && !key.empty()){
+        channel.setSecurity(true);
+        channel.setKey(key);
+    }
+    else if (ProccessMessage.getParams()[1].compare("-k") == 0 && key.empty()){
+        channel.setSecurity(false);
+        channel.setKey("");
+    }
+
+    //! Inform other members about this action.
+
+    // string message = _serverReactor.getClientManager().getClientData(clientSocket).getUsername();
+    // message.append(" has changed mode: ");
+    // message.append(ProccessMessage.getParams()[1]);
+    // message.append("\n");
+    // ExecuteCommands::informMembers(_serverReactor.getChannelManager().getChannelByName(channelName).getClientSockets(), message);
+
 }
 
 void    ChannelTopicMode(ServerReactor &_serverReactor, Message &ProccessMessage, int clientSocket){
-    if (ProccessMessage.getParams().size() == 3 || ProccessMessage.getParams().size() == 2){
-        if (_serverReactor.getChannelManager().itsChannel(ProccessMessage.getParams()[0])){
-            string channelName = ProccessMessage.getParams()[0];
-            string topic;
-            channelName.erase(0, 1);
-            if (_serverReactor.getChannelManager().getChannelByName(channelName).isCLient(clientSocket)){
-                if (_serverReactor.getChannelManager().getChannelByName(channelName).isOperator(clientSocket)){
-                    if (ProccessMessage.getParams().size() == 3){
-                        topic = ProccessMessage.getParams()[2];
-                        topic.erase(remove(topic.begin(), topic.end(), '\n'), topic.end());
-                    }
-                    if (ProccessMessage.getParams()[1].compare("+t") == 0 && !topic.empty()){
-                        _serverReactor.getChannelManager().getChannelByName(channelName).setTopicFlag(true);
-                        _serverReactor.getChannelManager().getChannelByName(channelName).setTopic(topic);
-                    }
-                    else if (ProccessMessage.getParams()[1].compare("-t") == 0){
-                        _serverReactor.getChannelManager().getChannelByName(channelName).setTopicFlag(false);
-                        _serverReactor.getChannelManager().getChannelByName(channelName).setTopic("");
-                    }
-                    string message = _serverReactor.getClientManager().getClientData(clientSocket).getUsername();
-                    message.append(" has changed mode: ");
-                    message.append(ProccessMessage.getParams()[1]);
-                    message.append("\n");
-                    ExecuteCommands::informMembers(_serverReactor.getChannelManager().getChannelByName(channelName).getClientSockets(), message);
-                }
-                else{
-                    string Err = ERR_CHANOPRIVSNEEDED(channelName);
-                    send(clientSocket, Err.c_str(), Err.size(), 0);
-                    throw std::exception();
-                }
-            }
-            else{
-                string Err = ERR_NOTONCHANNEL(channelName);
-                send(clientSocket, Err.c_str(), Err.size(), 0);
-                throw std::exception();
-            }
-        }
-        else{
-            string Err = ERR_NOSUCHCHANNEL(ProccessMessage.getParams()[0]);
-            send(clientSocket, Err.c_str(), Err.size(), 0);
-            throw std::exception();
-        }
-    }
-    else{
-        string Err = ERR_NEEDMOREPARAMS(ProccessMessage.getCommand());
-        send(clientSocket, Err.c_str(), Err.size(), 0);
+    ChannelData &channel = _server.getChannelManager().getChannelByName(ProccessMessage.getParams()[0]);
+
+    if (ProccessMessage.getParams().size() < 1 || ProccessMessage.getParams().size() > 3){
+        _serverReactor.sendNumericReply_FixLater(clientSocket, ERR_NEEDMOREPARAMS(ProccessMessage.getCommand()));
         throw std::exception();
     }
-}
-
-void ChanneLimitMode(ServerReactor &_serverReactor, Message &ProccessMessage, int clientSocket)
-{
-    if (ProccessMessage.getParams().size() == 3 || ProccessMessage.getParams().size() == 2){
-        if (_serverReactor.getChannelManager().itsChannel(ProccessMessage.getParams()[0])){
-            int     limit;
-            string  channelName = ProccessMessage.getParams()[0];
-            channelName.erase(0, 1);
-            if (_serverReactor.getChannelManager().getChannelByName(channelName).isCLient(clientSocket)){
-                if (_serverReactor.getChannelManager().getChannelByName(channelName).isOperator(clientSocket)){ 
-                    if (ProccessMessage.getParams().size() == 3){
-                        if (isDecimal(ProccessMessage.getParams()[2]))
-                            limit = std::atoi(ProccessMessage.getParams()[2].c_str());
-                        else{
-                            string Err = ERR_NEEDMOREPARAMS(ProccessMessage.getCommand());
-                            send(clientSocket, Err.c_str(), Err.size(), 0);
-                            throw std::exception();
-                        }
-                    }
-                    if (ProccessMessage.getParams()[1].compare("+l") == 0 && limit){
-                        _serverReactor.getChannelManager().getChannelByName(channelName).setLimitFlag(true);
-                        _serverReactor.getChannelManager().getChannelByName(channelName).setLimit(limit);
-                    }
-                    else if (ProccessMessage.getParams()[1].compare("-l") == 0){
-                        _serverReactor.getChannelManager().getChannelByName(channelName).setLimitFlag(false);
-                        _serverReactor.getChannelManager().getChannelByName(channelName).setLimit(-1);
-                    }
-                    string message = _serverReactor.getClientManager().getClientData(clientSocket).getUsername();
-                    message.append(" has changed mode: ");
-                    message.append(ProccessMessage.getParams()[1]);
-                    message.append("\n");
-                    ExecuteCommands::informMembers(_serverReactor.getChannelManager().getChannelByName(channelName).getClientSockets(), message);
-                }
-                else{
-                    string Err = ERR_CHANOPRIVSNEEDED(channelName);
-                    send(clientSocket, Err.c_str(), Err.size(), 0);
-                    throw std::exception();
-                }
-            }
-            else{
-                string Err = ERR_NOTONCHANNEL(channelName);
-                send(clientSocket, Err.c_str(), Err.size(), 0);
-                throw std::exception();
-            }
-   
-        }
-        else{
-            string Err = ERR_NOSUCHCHANNEL(ProccessMessage.getParams()[0]);
-            send(clientSocket, Err.c_str(), Err.size(), 0);
-            throw std::exception();
-        }
-    }
-    else{
-        string Err = ERR_NEEDMOREPARAMS(ProccessMessage.getCommand());
-        send(clientSocket, Err.c_str(), Err.size(), 0);
+    if (!channel.isCLient(clientSocket)){
+        _serverReactor.sendNumericReply_FixLater(clientSocket, ERR_NOTONCHANNEL(channelName));
         throw std::exception();
     }
-    
+    if (!channel.isOperator(clientSocket)){
+        _serverReactor.sendNumericReply_FixLater(clientSocket, ERR_CHANOPRIVSNEEDED(channelName));
+        throw std::exception();
+    }
+    string channelName = ProccessMessage.getParams()[0];
+    string topic;
+    if (ProccessMessage.getParams().size() == 3)
+        topic = ProccessMessage.getParams()[2];
+    if (ProccessMessage.getParams()[1].compare("+t") == 0 && !topic.empty()){
+        channel.setTopicFlag(true);
+        channel.setTopic(topic);
+    }
+    else if (ProccessMessage.getParams()[1].compare("-t") == 0 && topic.empty()){
+        channel.setTopicFlag(false);
+        channel.setTopic("");
+    }
+
+    //! Inform other members about this action.
+    // string message = _serverReactor.getClientManager().getClientData(clientSocket).getUsername();
+    // message.append(" has changed mode: ");
+    // message.append(ProccessMessage.getParams()[1]);
+    // message.append("\n");
+    // ExecuteCommands::informMembers(_serverReactor.getChannelManager().getChannelByName(channelName).getClientSockets(), message);
 }
 
+void ChanneLimitMode(ServerReactor &_serverReactor, Message &ProccessMessage, int clientSocket){
+    ChannelData &channel = _server.getChannelManager().getChannelByName(ProccessMessage.getParams()[0]);
+
+    if (ProccessMessage.getParams().size() < 1 || ProccessMessage.getParams().size() > 3){
+        _serverReactor.sendNumericReply_FixLater(clientSocket, ERR_NEEDMOREPARAMS(ProccessMessage.getCommand()));
+        throw std::exception();
+    }
+    int limit = -1;
+    string channelName = ProccessMessage.getParams()[0];
+    if (!channel.isCLient(clientSocket)){
+        _serverReactor.sendNumericReply_FixLater(clientSocket, ERR_NOTONCHANNEL(channelName));
+        throw std::exception();
+    }
+    if (!channel.isOperator(clientSocket)){
+        _serverReactor.sendNumericReply_FixLater(clientSocket, ERR_CHANOPRIVSNEEDED(channelName));
+        throw std::exception();
+    }
+    if (ProccessMessage.getParams().size() == 3)
+    {
+        // What if the client try this:  mode #ChannelName +l a !
+        if (!isDecimal(ProccessMessage.getParams()[2])){
+            _serverReactor.sendNumericReply_FixLater(clientSocket, ERR_NEEDMOREPARAMS(ProccessMessage.getCommand()));
+            throw std::exception();
+        }
+        limit = std::atoi(ProccessMessage.getParams()[2].c_str());
+    }
+    if (ProccessMessage.getParams()[1].compare("+l") == 0 && limit){
+        channel.setLimitFlag(true);
+        channel.setLimit(limit);
+    }
+    else if (ProccessMessage.getParams()[1].compare("-l") == 0 && (limit == -1)){
+        channel.setLimitFlag(false);
+        channel.setLimit(-1);
+    }
+    else{
+        _serverReactor.sendNumericReply_FixLater(clientSocket, ERR_NEEDMOREPARAMS(ProccessMessage.getCommand()));
+        throw std::exception();
+    }
+
+    //! Inform other members about this action.
+    // string message = _serverReactor.getClientManager().getClientData(clientSocket).getUsername();
+    // message.append(" has changed mode: ");
+    // message.append(ProccessMessage.getParams()[1]);
+    // message.append("\n");
+    // ExecuteCommands::informMembers(_serverReactor.getChannelManager().getChannelByName(channelName).getClientSockets(), message);
+}
+
+// Test the size of parameter with nc punch: server.
 void    ChannelOperatorPrivilege(ServerReactor &_serverReactor, Message &ProccessMessage, int clientSocket){
-    cout << "The size of parameters from op mode: " << ProccessMessage.getParams().size() << endl;
-    if (ProccessMessage.getParams().size() == 3){
-        string channelName = ProccessMessage.getParams()[0];
-        channelName.erase(0, 1);
-        if (_serverReactor.getChannelManager().getChannelByName(channelName).isCLient(clientSocket)){
-            if (_serverReactor.getChannelManager().getChannelByName(channelName).isOperator(clientSocket)){
-                string nickName = ProccessMessage.getParams()[2];
-                int ClSocket = _serverReactor.getClientManager().MatchNickName(_serverReactor.getChannelManager().getChannelByName(channelName).getClientSockets(), nickName);
-                if (ProccessMessage.getParams()[1].compare("+o") == 0)
-                    _serverReactor.getChannelManager().getChannelByName(channelName).addOperator(ClSocket);
-                else if (ProccessMessage.getParams()[1].compare("-o") == 0)
-                    _serverReactor.getChannelManager().getChannelByName(channelName).removeOperator(ClSocket);
-             }
-            else{
-                string Err = ERR_CHANOPRIVSNEEDED(channelName);
-                send(clientSocket, Err.c_str(), Err.size(), 0);
-                throw std::exception();
-                
-            }
-        }
-        else{
-            string Err = ERR_NOTONCHANNEL(channelName);
-            send(clientSocket, Err.c_str(), Err.size(), 0);
-            throw std::exception();
-        }
-    }
-    else{
-        string Err = ERR_NEEDMOREPARAMS(ProccessMessage.getCommand());
-        send(clientSocket, Err.c_str(), Err.size(), 0);
+    ChannelData &channel = _server.getChannelManager().getChannelByName(ProccessMessage.getParams()[0]);
+
+    if (ProccessMessage.getParams().size() != 3){
+        _serverReactor.sendNumericReply_FixLater(clientSocket, ERR_NEEDMOREPARAMS(ProccessMessage.getCommand()));
         throw std::exception();
     }
+    if (!channel.isCLient(clientSocket)){
+        _serverReactor.sendNumericReply_FixLater(clientSocket, ERR_NOTONCHANNEL(channelName));
+        throw std::exception();
+    }
+    if (!channel.isOperator(clientSocket)){
+        _serverReactor.sendNumericReply_FixLater(clientSocket, ERR_CHANOPRIVSNEEDED(channelName));
+        throw std::exception();
+    }
+    string nickName = ProccessMessage.getParams()[2];
+    int ClSocket = _serverReactor.getClientManager().MatchNickName(channel.getClientSockets(), nickName);
+    if (ClSocket == -1){
+        _serverReactor.sendNumericReply_FixLater(clientSocket, ERR_NOTONCHANNEL(channelName));
+        throw std::exception();
+    }
+    if (ProccessMessage.getParams()[1].compare("+o") == 0)
+        channel.addOperator(ClSocket);
+    else if (ProccessMessage.getParams()[1].compare("-o") == 0)
+        channel.removeOperator(ClSocket);
+    
+    // !Check if there is a need to inform other members about this action or not?
 }
 
 void     ExecuteCommands::mode(ServerReactor &_serverReactor, Message &ProccessMessage, int clientSocket){
     if (ProccessMessage.getParams().size() >= 2){
+        if (!_serverReactor.doesChannelExist(ProcessMessage.getParams()[0])){
+            _server.sendNumericReply_FixLater(clientSocket, ERR_NOSUCHCHANNEL(ProccessMessage.getParams()[0]));
+            throw std::exception();
+        }
         string mode = ProccessMessage.getParams()[1];
+        // Handle the mode of limeChat when join command is sended by the user.
+        // if (mode.compare("+s") == 0)
+        //     return ;
         if (mode.compare("+i") == 0 || mode.compare("-i") == 0){
             inviteOnly(_serverReactor, ProccessMessage, clientSocket);
         }
@@ -282,14 +227,12 @@ void     ExecuteCommands::mode(ServerReactor &_serverReactor, Message &ProccessM
             ChannelOperatorPrivilege(_serverReactor, ProccessMessage, clientSocket);
         }
         else{
-            string Err = ERR_UNKNOWNMODE(mode);
-            send(clientSocket, Err.c_str(), Err.size(), 0);
+            _serverReactor.sendNumericReply_FixLater(clientSocket, ERR_UNKNOWNMODE(mode));
             throw std::exception();
         }
     }
     else{
-        string Err = ERR_NEEDMOREPARAMS(ProccessMessage.getCommand());
-        send(clientSocket, Err.c_str(), Err.size(), 0);
+        _serverReactor.sendNumericReply_FixLater(clientSocket, ERR_NEEDMOREPARAMS(ProccessMessage.getCommand()));
         throw std::exception();
     }
 }
