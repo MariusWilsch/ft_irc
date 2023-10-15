@@ -3,41 +3,44 @@
 /*                                                        :::      ::::::::   */
 /*   privmsg.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
+/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/24 22:51:30 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/13 11:52:55 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/15 07:43:05 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ExecuteCommands.hpp"
 
-void	ExecuteCommands::privmsg(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket) {
-	
-	string target = ProcessMessage.getParams()[0];
-	// string trailing = ProcessMessage.getTrailing();
-
-	cout << "ClientSocket: " << clientSocket << endl;
+void	ExecuteCommands::privmsg(ServerReactor &_server, Message &ProcessMessage, int clientSocket) {
 	
 
-	if (target.empty())
-		return _serverReactor.sendNumericReply(clientSocket, "411", target, "No recipient given (PRIVMSG)");
-	// if (trailing.empty())
-	// 	return _serverReactor.sendNumericReply(clientSocket, "412", target, "No text to send");
+	if (ProcessMessage.getParams().size() < 2)
+		return _server.sendNumericReply_FixLater(clientSocket, ERR_NEEDMOREPARAMS(ProcessMessage.getCommand()));;
+		
+	vector<string> params = ProcessMessage.getParams();
+	
+	if (params[0].empty())
+		return _server.sendNumericReply(clientSocket, "411", params[0], "No recipient given (PRIVMSG)");
+		
+	if (params[1].empty())
+		return _server.sendNumericReply(clientSocket, "412", params[0], "No text to send"); // TODO: USE MACRO FOR ERRORS
 
-	cout << "Channel Exist: " << _serverReactor.getChannelManager().itsChannel(target) << endl;
-	cout << "Channel Exist: " << _serverReactor.doesChannelExist(target) << endl; // Try this one
-	if (_serverReactor.getChannelManager().itsChannel(target)) { // If Channel
-			set<int> channelMembers = _serverReactor.getChannelManager().getChannelByName(target).getClientSockets();
-			for (set<int>::iterator it = channelMembers.begin(); it != channelMembers.end(); it++) {
-				if (*it == clientSocket)
-					continue ;
-				_serverReactor.sendMsg(*it, _serverReactor.getClientManager().getClientData(*it).getClientInfo() ,"PRIVMSG", target, "");
-			}
-	} else {
-		cout << "In Not Channel" << endl;
-		int targetSocket = _serverReactor.getClientManager().getClientSocketByNick(target);
-		if (_serverReactor.sendMsg(targetSocket,  _serverReactor.getClientManager().getClientData(clientSocket).getClientInfo(), "PRIVMSG", target, "") == -1)
-		 	_serverReactor.sendNumericReply(clientSocket, "401", target, "No such nick/channel"); // No such nick/channel
+	int targetFD = _server.getClientManager().getClientSocketByNick(params[0]);
+	bool isUser = (targetFD != -1);
+
+	// Error if neither channel nor user exists
+	if (!_server.doesChannelExist(params[0]) && !isUser)
+			return _server.sendNumericReply(clientSocket, "401", params[0], "No such nick/channel");;
+
+	if (isUser) // If User
+		return _server.sendMsg(targetFD, _server.getClientDataFast(clientSocket).getClientInfo(), "PRIVMSG", params[0], param[1]);
+	
+	set<int> channelMembers = _server.getChannelManager().getChannelByName(params[0]).getClientSockets();
+	for (set<int>::iterator it = channelMembers.begin(); it != channelMembers.end(); it++) {
+		if (*it == clientSocket)
+				continue ;
+		_server.sendMsg(*it, _server.getClientManager().getClientData(*it).getClientInfo() ,"PRIVMSG", params[0], params[1]);
 	}
 }
+

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ExecuteCommands.hpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
+/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 19:05:52 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/14 15:28:24 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/15 07:19:02 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,10 @@ class ServerReactor;
 class ExecuteCommands
 {
 		private:
-			// ServerReactor&		_serverReactor;
+			ServerReactor&		_serverReactor; // FIXME: Call the parameterised constructor instead default constructor
     public:
     ExecuteCommands();
-		// ExecuteCommands(ServerReactor& reactor) : _serverReactor(reactor) {};
+		ExecuteCommands(ServerReactor& reactor) : _serverReactor(reactor) {};
     ~ExecuteCommands();
 
     //*********************************** AUTHENTICATION COMMANDS ***********************************//

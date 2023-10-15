@@ -30,6 +30,20 @@ struct CommandProperties {
 };
 
 
+class ServerException : public std::exception {
+private:
+    std::string errorMsg;
+
+public:
+    ServerException(const std::string &msg) : errorMsg(msg) {}
+    
+    const char* what() const throw() {
+        return errorMsg.c_str();
+    }
+};
+
+
+
 /**
  * @brief Class to handle server-level operations
  * 
@@ -83,8 +97,8 @@ class ServerReactor {
 		string	createInfoMsg(ClientData& clientData, const string &command, const vector <string> &params);
 	
 
-		int			sendMsg(int socket, const string& clientInfo ,const string &command, string param, const string &trailing = "");
-		int sendMsg_FixLater(int socket, const string &message);
+		void			sendMsg(int socket, const string& clientInfo ,const string &command, string param, const string &trailing = "");
+		int 		sendMsg_FixLater(int socket, const string &message);
 		void sendNumericReply(int socket, string numericReply, const string &param, const string &trailing = "");
 		void		sendNumericReply_FixLater(int socket, const string& reply);
 

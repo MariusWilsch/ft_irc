@@ -6,16 +6,18 @@
 /*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 19:02:14 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/15 06:37:31 by verdant          ###   ########.fr       */
+/*   Updated: 2023/10/15 07:16:10 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ExecuteCommands.hpp"
 #include "HelpBot.hpp"
 
-ExecuteCommands::~ExecuteCommands(){};
+ExecuteCommands::~ExecuteCommands() {};
 
-ExecuteCommands::ExecuteCommands(){};
+ExecuteCommands::ExecuteCommands() {};
+
+ExecuteCommands::ExecuteCommands(ServerReactor& reactor) : _serverReactor(reactor) {};
 
 bool    ExecuteCommands::whiteCheck(string str)
 {
@@ -33,6 +35,7 @@ void    ExecuteCommands::informMembers(set <int> clientSockets, string message) 
 
 void ExecuteCommands::execute(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket)
 {
+		
 		try {
 			ClientData& clientData = _serverReactor.getClientDataFast(clientSocket);
 			string command = ProcessMessage.getCommand();
@@ -60,8 +63,6 @@ void ExecuteCommands::execute(ServerReactor &_serverReactor, Message &ProcessMes
 						FunctionPointers[i](_serverReactor, ProcessMessage, clientSocket);
 				}
 			}
-
-
 
 			} catch (std::exception &ex){}
 }

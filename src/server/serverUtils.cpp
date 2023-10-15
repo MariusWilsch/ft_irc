@@ -17,12 +17,12 @@ void	ServerReactor::writeServerError( std::string function, std::string message,
 	exit(1);
 }
 
-int ServerReactor::sendMsg(int socket, const string& clientInfo, const string &command, string param, const string &trailing) {
+void ServerReactor::sendMsg(int socket, const string& clientInfo, const string &command, string param, const string &trailing) {
     string message;
 
 		// Check if socket is valid
 		if (socket == -1)
-			return -1;
+			return ;
 
 		// Append client info
 		message += ":" + clientInfo + " ";
@@ -47,7 +47,7 @@ int ServerReactor::sendMsg(int socket, const string& clientInfo, const string &c
     message += "\r\n";  // IRC messages end with \r\n
 
     send(socket, message.c_str(), message.length(), 0);
-		return (0);
+		
 }
 
 int ServerReactor::sendMsg_FixLater(int socket, const string& reply) {
