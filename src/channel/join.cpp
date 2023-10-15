@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/24 12:13:30 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/15 11:19:50 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/15 11:31:46 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,6 +137,7 @@ void ExecuteCommands::join(ServerReactor &_server, Message &ProcessMessage, int 
 		}
 
 		for (unsigned int i = 0; i < ChannelNames.size(); i++) {
+			
 				bool Joined = false;  // Moved the declaration here to avoid re-declaration
 				if (!_server.getChannelManager().channelExistence(ChannelNames[i])) {
 						Joined = createNewChannel(_server, clientSocket, ChannelNames[i]);

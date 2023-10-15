@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 16:04:46 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/13 12:06:07 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/15 11:30:50 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,37 +45,24 @@ struct	CommandProperties;
  */
 class Message {
 	private:
-		bool							_isFatal;
-		string							_rawMessage;
-		string							_prefix;
-		string							_command;
-		// string							_trailing;
-		std::vector<string>				_params;
-		map <string, CommandProperties> _properties;
+		bool														_isFatal;
+		string													_rawMessage;
+		string													_prefix;
+		string													_command;
+		vector<string>									_params;
+		map <string, CommandProperties>	_properties; // TODO: Refactor this
 	public:
 		/*			CLASS DEFAULT FUNCTIONS			*/
 		
-		// Message( void );
 		Message( string rawMessage,  map <string, CommandProperties> properties );
 		~Message( void );
 		
-		/*			EXTRACT			*/
-	
-		void							extractCommand( void  );
-		void							extractTrailing( void );
-		void							extractParams( void );
-
-		/*			???			*/
-
 		void	printData( void );
 
 		/*			GETTERS			*/
 		string							getCommand( void );
-		std::vector<string> 			getParams( void );
-		bool							getFatal( void );
-		// string							getTrailing( void );
-
+		vector<string>			getParams( void );
+		bool								getFatal( void );
+	
 		/*			SETTERS			*/
-
-		// void							setResponseCode( string code );
 };
