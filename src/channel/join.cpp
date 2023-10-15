@@ -6,7 +6,7 @@
 /*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/24 12:13:30 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/15 11:31:46 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/15 13:27:59 by mwilsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,38 +15,32 @@
 
 
 /*
-
-/ Cannot join or do anything when the client is not registred inside the serverv.
-:punch.wa.us.dal.net 451 * join :You must finish connecting with another nickname first.
-
-/ ! Join for the first time to a channel
-
-:WldL3arbi!~Aissam@5c8c-aff4-7127-3c3-1c20.230.197.ip JOIN :#HDI
-:punch.wa.us.dal.net 353 WldL3arbi = #HDI :@WldL3arbi
-:punch.wa.us.dal.net 366 WldL3arbi #HDI :End of /NAMES list.
+    :WldL3arbi!~Aissam@5c8c-aff4-7127-3c3-1c20.230.197.ip JOIN :#HDI
+    :punch.wa.us.dal.net 353 WldL3arbi = #HDI :@WldL3arbi
+    :punch.wa.us.dal.net 366 WldL3arbi #HDI :End of /NAMES list.
 
 */
 
 int joinParser(std::vector<string> &ChannelNames, std::vector<string> &ChannelKeys, Message &ProcessMessage){
-    if (ProcessMessage.getParams().size() == 0)
-            return (-1);
+    if (ProcessMessage.getParams().size() == 0 || ProcessMessage.getParams()[0].empty())
+        return (-1);
     string param = ProcessMessage.getParams()[0];
     if (ProcessMessage.getParams().size() == 1 && param.compare("0") == 0){
-            return (0);
+        return (0);
     }
     if (ProcessMessage.getParams().size() < 1 || ExecuteCommands::whiteCheck(ProcessMessage.getParams()[0]))
-            return (-1);
+        return (-1);
     for (size_t i = 0; i < ProcessMessage.getParams().size(); i++) {
-            param = ProcessMessage.getParams()[i];
-            if (param[0] == '#')
-                    ChannelNames.push_back(param);
-            else if (!ExecuteCommands::whiteCheck(param))
-                    ChannelKeys.push_back(param);
+        param = ProcessMessage.getParams()[i];
+        if (param[0] == '#')
+                ChannelNames.push_back(param);
+        else if (!ExecuteCommands::whiteCheck(param))
+                ChannelKeys.push_back(param);
     }
     if (ChannelKeys.size() > ChannelNames.size())
-            return (-1);
+        return (-1);
     for (unsigned int i = ChannelKeys.size(); i < ChannelNames.size(); i++){
-            ChannelKeys.push_back("");
+        ChannelKeys.push_back("");
     }
     return (1);
 }
@@ -60,24 +54,20 @@ void    leaveChannels(ServerReactor &_serverReactor, int clientSocket){
         set<int>::iterator RemoveIt;
         RemoveIt = it->second.getClientSockets().find(clientSocket);
         if (RemoveIt != it->second.getClientSockets().end())
-                it->second.removeClient(*RemoveIt);
+            it->second.removeClient(*RemoveIt);
         RemoveIt = it->second.getOperators().find(clientSocket);
         if (RemoveIt != it->second.getOperators().end())
-                it->second.removeOperator(*RemoveIt);
+            it->second.removeOperator(*RemoveIt);
         if (it->second.getOperators().size() == 0 && it->second.getClientSockets().size() == 0)
-                _serverReactor.getChannelManager().getChannels().erase(it++);
+            _serverReactor.getChannelManager().getChannels().erase(it++);
         else
             ++it;
     }
 }
 
+// !Check if the new constructor is working good !
 bool	createNewChannel(ServerReactor &_serverReactor, int clientSocket, string ChannelName){
-    ChannelData    NewChannel;
-    // ChannelData    NewChannel(ChannelName, clientSocket);
-    NewChannel.setName(ChannelName);
-    NewChannel.addClient(clientSocket);
-    NewChannel.addOperator(clientSocket);
-    NewChannel.setCreatorBySocket(clientSocket);
+    ChannelData    NewChannel(ChannelName, clientSocket);
 
     _serverReactor.getChannelManager().addChannel(ChannelName, NewChannel);
     string nickname = _serverReactor.getClientManager().getClientData(clientSocket).getNickname();
@@ -102,6 +92,7 @@ bool	joinPrivateChannel(int clientSocket, ChannelData& Channel, string inputKey)
             throw std::exception();
         }
     }
+    _serverReactor.sendNumericReply_FixLater(clientSocket, ERR_BADCHANNELKEY(Channel.getName()));
     return (false);
 }
 
@@ -111,11 +102,8 @@ bool	joinPublicChannel(int clientSocket, ChannelData& Channel, string inputKey){
         Channel.addClient(clientSocket);
         return (true);
     }
-    else{
-        string  Err = ERR_BADCHANNELKEY(Channel.getName());
-        send(clientSocket, Err.c_str(), Err.size(), 0);
-        throw std::exception();
-    }
+    // Send this when the user wants to join to a public channel with  key.
+    _serverReactor.sendNumericReply_FixLater(clientSocket, ERR_BADCHANNELKEY(Channel.getName()));
     return (false);
 }
 

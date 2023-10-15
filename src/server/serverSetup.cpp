@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   serverSetup.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 10:00:19 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/13 17:46:49 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/15 13:21:18 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,10 +58,9 @@ void	ServerReactor::createPropertiesMap( void ) {
 	_properties["USER"] = CommandProperties(3, false);
 	_properties["JOIN"] = CommandProperties(1, true); // Unlimited
 	_properties["PRIVMSG"] = CommandProperties(1, false);
-	_properties["OPER"] = CommandProperties(2, true);
 	_properties["KICK"] = CommandProperties(1, false); // Unlimited
 	_properties["INVITE"] = CommandProperties(2, true); 
-	// _properties["TOPIC"] = CommandProperties(1, false);
+	_properties["TOPIC"] = CommandProperties(1, false);
 	_properties["MODE"] = CommandProperties(2, true);
 	_properties["PART"] = CommandProperties(2, true); // Unlimited
 	_properties["QUIT"] = CommandProperties(1, false);
