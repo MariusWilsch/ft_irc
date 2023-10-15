@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 13:58:39 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/15 12:27:01 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/15 13:08:57 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void     ExecuteCommands::invite(ServerReactor &_serverReactor, Message &Procces
         _serverReactor.sendNumericReply_FixLater(clientSocket, ERR_NEEDMOREPARAMS(ProccessMessage.getCommand()));
         throw std::exception();
     }
-    if (!_serverReactor.getChannelManager().itsChannel(channelName)){
+    if (!_serverReactor.doesChannelExist(channelName)){
         _serverReactor.sendNumericReply_FixLater(clientSocket, ERR_NOSUCHCHANNEL(channelName));
         throw std::exception();
     }
@@ -39,5 +39,5 @@ void     ExecuteCommands::invite(ServerReactor &_serverReactor, Message &Procces
     }
     _serverReactor.getChannelManager().getChannelByName(channelName).addGuest(ProccessMessage.getParams()[0]);
     // Inform The members of the channel about this event.
-            
+
 }
