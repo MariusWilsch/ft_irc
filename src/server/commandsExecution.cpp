@@ -6,18 +6,18 @@
 /*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 19:02:14 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/15 07:16:10 by verdant          ###   ########.fr       */
+/*   Updated: 2023/10/15 07:44:14 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ExecuteCommands.hpp"
 #include "HelpBot.hpp"
 
-ExecuteCommands::~ExecuteCommands() {};
+// ExecuteCommands::~ExecuteCommands() {};
 
-ExecuteCommands::ExecuteCommands() {};
+// ExecuteCommands::ExecuteCommands() {};
 
-ExecuteCommands::ExecuteCommands(ServerReactor& reactor) : _serverReactor(reactor) {};
+// ExecuteCommands::ExecuteCommands(ServerReactor& reactor) : _serverReactor(reactor) {};
 
 bool    ExecuteCommands::whiteCheck(string str)
 {

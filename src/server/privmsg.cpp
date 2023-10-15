@@ -6,7 +6,7 @@
 /*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/24 22:51:30 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/15 07:43:05 by verdant          ###   ########.fr       */
+/*   Updated: 2023/10/15 07:48:49 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 void	ExecuteCommands::privmsg(ServerReactor &_server, Message &ProcessMessage, int clientSocket) {
 	
+	cout << "size" << ProcessMessage.getParams().size() << endl;
 
 	if (ProcessMessage.getParams().size() < 2)
 		return _server.sendNumericReply_FixLater(clientSocket, ERR_NEEDMOREPARAMS(ProcessMessage.getCommand()));;
@@ -21,7 +22,7 @@ void	ExecuteCommands::privmsg(ServerReactor &_server, Message &ProcessMessage, i
 	vector<string> params = ProcessMessage.getParams();
 	
 	if (params[0].empty())
-		return _server.sendNumericReply(clientSocket, "411", params[0], "No recipient given (PRIVMSG)");
+		return _server.sendNumericReply(clientSocket, "411", params[0], "No recipient given (PRIVMSG)"); // TODO: USE MACRO FOR ERRORS
 		
 	if (params[1].empty())
 		return _server.sendNumericReply(clientSocket, "412", params[0], "No text to send"); // TODO: USE MACRO FOR ERRORS
@@ -31,16 +32,18 @@ void	ExecuteCommands::privmsg(ServerReactor &_server, Message &ProcessMessage, i
 
 	// Error if neither channel nor user exists
 	if (!_server.doesChannelExist(params[0]) && !isUser)
-			return _server.sendNumericReply(clientSocket, "401", params[0], "No such nick/channel");;
+			return _server.sendNumericReply(clientSocket, "401", params[0], "No such nick/channel"); // TODO: USE MACRO FOR ERRORS
 
-	if (isUser) // If User
-		return _server.sendMsg(targetFD, _server.getClientDataFast(clientSocket).getClientInfo(), "PRIVMSG", params[0], param[1]);
+
+	// Code blow is working 
+	if (isUser) // If User 
+		return _server.sendMsg(targetFD, _server.getClientDataFast(clientSocket).getClientInfo(), "PRIVMSG", params[0], params[1]);
 	
 	set<int> channelMembers = _server.getChannelManager().getChannelByName(params[0]).getClientSockets();
 	for (set<int>::iterator it = channelMembers.begin(); it != channelMembers.end(); it++) {
 		if (*it == clientSocket)
 				continue ;
-		_server.sendMsg(*it, _server.getClientManager().getClientData(*it).getClientInfo() ,"PRIVMSG", params[0], params[1]);
+		_server.sendMsg(*it, _server.getClientManager().getClientData(*it).getClientInfo() ,"PRIVMSG", params[0], params[1]); 
 	}
 }
 

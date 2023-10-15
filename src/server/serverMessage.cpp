@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   serverMessage.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
+/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 13:27:34 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/14 17:26:36 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/15 07:47:18 by verdant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ Message::Message( string rawMessage, map <string, CommandProperties> properties 
 						continue;
 				}
 				if (token != ":")
-				_params.push_back(token);
+					_params.push_back(token);
 		}
 	
 		// Print extracted data

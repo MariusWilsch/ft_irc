@@ -30,17 +30,17 @@ struct CommandProperties {
 };
 
 
-class ServerException : public std::exception {
-private:
-    std::string errorMsg;
+// class ServerException : public std::exception {
+// private:
+//     std::string errorMsg;
 
-public:
-    ServerException(const std::string &msg) : errorMsg(msg) {}
+// public:
+//     ServerException(const std::string &msg) : errorMsg(msg) {}
     
-    const char* what() const throw() {
-        return errorMsg.c_str();
-    }
-};
+//     const char* what() const throw() {
+//         return errorMsg.c_str();
+//     }
+// };
 
 
 
