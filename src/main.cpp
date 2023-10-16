@@ -19,6 +19,13 @@
 	3 - READY TO EVALUATION.!!!
 */
 
+
+// ! Fix privmsg issue:
+/*
+	privmsg #c : Hello! Helloo! i'm sending a message here! 
+	412 Archer :No text to send
+*/
+
 int	main( int argc, char **argv )
 {
 	if (argc != 3)

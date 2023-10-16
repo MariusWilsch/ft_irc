@@ -214,6 +214,22 @@ bool    ChannelManager::itsChannel( string name ){
     return (false);
 }
 
+void    ChannelManager::removeGarbageChannels(){
+    map<string, ChannelData>::iterator  it;
+    map<string, ChannelData> &m = getChannels();
+    for (it = m.begin(); it != m.end();)
+    {
+        if (it->second.getOperators().size() == 0 && it->second.getClientSockets().size() == 0){
+            getChannels().erase(it++);
+            if (getChannels().size() == 0)
+                break;
+        }
+        else
+            ++it;
+    }
+}
+
+// Add a case when the client joins a channel and leaves the channel directly.
 void    ChannelManager::removeFromChannels(int _clientSocket){
     map<string, ChannelData>::iterator it;
     for (it = this->_channels.begin(); it != this->_channels.end(); it++){
@@ -224,6 +240,7 @@ void    ChannelManager::removeFromChannels(int _clientSocket){
             }
         }
     }
+    removeGarbageChannels();
 }
 
 void        ChannelManager::removeChannel(string channelName){

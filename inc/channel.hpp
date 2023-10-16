@@ -119,6 +119,7 @@ class ChannelManager {
 		bool			itsChannel( string name );
 		void			removeChannel(string channelName);
 		void			removeFromChannels(int _clientSocket);
+		void    		removeGarbageChannels();
 		
 		// void			joinSequence()
 		string		createUserList(string channelName, ServerReactor &serverReactor, int senderSocket);

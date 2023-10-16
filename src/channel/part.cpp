@@ -12,12 +12,6 @@
 
 #include "ExecuteCommands.hpp"
 
-/*
-		This funciton it's about part from single or multiple channels in one time, 
-		+ The first task here is about split the parameters and check if there is multiple channel names and
-		initialize the set reference passed to the multipleChannels funciton.
-*/
-
 bool    partParser(std::vector<string> &ChannelNames, std::vector<string> &partMessage, Message &ProcessMessage){
 	vector<string> params = ProcessMessage.getParams();
 	
@@ -36,7 +30,12 @@ bool    partParser(std::vector<string> &ChannelNames, std::vector<string> &partM
 	return (true);
 }
 
-void     ExecuteCommands::part(ServerReactor &_server, Message &ProcessMessage, int clientSocket) {
+// :Archer123!~Aissam@5c8c-aff4-7127-3c3-1c20.230.197.ip PART #chTest111 : I don't like those kind of random channels
+// ! if the user leaves a channel and the part message parameter is present then need to inform the other members like in the above example.
+	// ? How to inform them?
+	// * there is vector for partMessage is exist inside the part function, this vector  will contain one element or more, if it's size is biger than 0 then take the first element
+	// * and send with the part message to inform other members.
+	void     ExecuteCommands::part(ServerReactor &_server, Message &ProcessMessage, int clientSocket) {
 		
 	std::vector<string> ChannelNames;
 	std::vector<string> partMessage;
@@ -62,6 +61,17 @@ void     ExecuteCommands::part(ServerReactor &_server, Message &ProcessMessage, 
 			channel.removeOperator(clientSocket);
 		if (channel.getClientSockets().size() == 0) // remove the channel from channel manager.
 			_server.getChannelManager().removeChannel(ChannelNames[i]);
-		informMembers(channel.getClientSockets(), _server.createInfoMsg(_server.getClientDataFast(clientSocket), "PART", ProcessMessage.getParams()));
+
+		// ! the problem is that, not all the command have to send their parameters in the informative message to other users.
+		// ? How to send an informative message to all the members with an appropriate parameters and message.
+		// * 1 - generate the list of parameter before sending it to createInfoMsg function
+		// * 2 - the funtion takes three parameters the first two parameters are good, the thirt parameter need to containe the appropriate parameters.
+		
+		std::vector<string> params;
+		params.push_back(ProcessMessage.getParams()[0]);
+		if (partMessage.size())
+			params.push_back(partMessage[0].insert(0, ":"));
+		informMembers(channel.getClientSockets(), _server.createInfoMsg(_server.getClientDataFast(clientSocket), "PART", params));
+		// informMembers(channel.getClientSockets(), _server.createInfoMsg(_server.getClientDataFast(clientSocket), "PART", ProcessMessage.getParams()));
 	}
 }

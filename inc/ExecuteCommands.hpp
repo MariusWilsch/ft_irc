@@ -17,6 +17,7 @@
 #include "message.hpp"
 #include "server.hpp"
 #include "client.hpp"
+#include <vector>
 
 class Message;
 class ServerReactor;
