@@ -229,7 +229,6 @@ void    ChannelManager::removeGarbageChannels(){
     }
 }
 
-// Add a case when the client joins a channel and leaves the channel directly.
 void    ChannelManager::removeFromChannels(int _clientSocket){
     map<string, ChannelData>::iterator it;
     for (it = this->_channels.begin(); it != this->_channels.end(); it++){

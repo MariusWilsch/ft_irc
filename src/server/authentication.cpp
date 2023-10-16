@@ -12,6 +12,12 @@
 
 #include "ExecuteCommands.hpp"
 
+// Inform when the registration is completed,
+    // + the pass command needs to be the first command. or the registration can't be done.
+    // The index[0]: PASS
+    // The index[1]: USER
+    // The index[2]: NICK
+
 bool    NickNameValidation(string param)
 {
     int a = 0;
@@ -25,11 +31,6 @@ bool    NickNameValidation(string param)
     return (true);
 }
 
-// Inform when the registration is completed,
-    // + the pass command needs to be the first command. or the registration can't be done.
-    // The index[0]: PASS
-    // The index[1]: USER
-    // The index[2]: NICK
 
 void ExecuteCommands::nick(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket)
 {
@@ -96,9 +97,7 @@ void ExecuteCommands::pass(ServerReactor &_serverReactor, Message &ProcessMessag
         throw std::exception();
     }
     client.setRegisteration(true, 0);
-    // Handle this case with an appropriate action.
-    if (_serverReactor.getServerPassword().compare(ProcessMessage.getParams()[0]) != 0)
-    {
+    if (_serverReactor.getServerPassword().compare(ProcessMessage.getParams()[0]) != 0){
         _serverReactor.sendNumericReply_FixLater(clientSocket, ERR_PASSWDMISMATCH());
         close(clientSocket);
         throw std::exception();
