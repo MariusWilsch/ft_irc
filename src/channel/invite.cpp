@@ -44,11 +44,10 @@
 
 void     ExecuteCommands::invite(ServerReactor &_server, Message &Message, int clientSocket){
 
-    if (Message.getParams().size() < 2){
+    if (Message.getParams().size() < 2) {
         _server.sendNumericReply_FixLater(clientSocket, ERR_NEEDMOREPARAMS(Message.getCommand()));
         return ;
     }
-		
 		vector<string>	params = Message.getParams();
     string					channelName = params[1];
 		ChannelData&		channel = _server.getChannelManager().getChannelByName(channelName);
@@ -57,31 +56,24 @@ void     ExecuteCommands::invite(ServerReactor &_server, Message &Message, int c
         _server.sendNumericReply_FixLater(clientSocket, ERR_NOSUCHCHANNEL(channelName));
         return ;
     }
-		
-    if (!channel.isCLient(clientSocket)){
+    if (!channel.isCLient(clientSocket)) {
         _server.sendNumericReply_FixLater(clientSocket, ERR_NOTONCHANNEL(channelName));
         return ;
     }
-		
-    if (!channel.isOperator(clientSocket)){
+    if (!channel.isOperator(clientSocket)) {
         _server.sendNumericReply_FixLater(clientSocket, ERR_CHANOPRIVSNEEDED(channelName));
         return ;
     }
-
-		if (_server.getClientManager().MatchNickName(channel.getClientSockets(), params[0]) != -1)
-		{ 
+		if (_server.getClientManager().MatchNickName(channel.getClientSockets(), params[0]) != -1) { 
 				_server.sendNumericReply_FixLater(clientSocket, ERR_USERONCHANNEL(params[0], channelName));
         return ;
 		}
-		
 		int targetFD = _server.getClientManager().getClientSocketByNick(params[0]);
 		if (targetFD == -1) {
 				_server.sendNumericReply_FixLater(clientSocket, ERR_NOSUCHNICKCHANNEL(params[0], channelName));
 				return ;
 		}
-		
 		channel.addGuest(params[0]);
-		cout << "inviting user" << endl;
 		_server.sendMsg_FixLater(targetFD, _server.createInfoMsg(_server.getClientDataFast(clientSocket), Message.getCommand(), params));
 		_server.sendNumericReply_FixLater(clientSocket, RPL_INVITING(_server.getClientDataFast(clientSocket).getNickname(), channelName, params[0]));
 }

@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 10:00:19 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/15 13:21:18 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/16 22:54:48 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void	ServerReactor::createPropertiesMap( void ) {
 	_properties["MODE"] = CommandProperties(2, true);
 	_properties["PART"] = CommandProperties(2, true); // Unlimited
 	_properties["QUIT"] = CommandProperties(1, false);
-	_properties["HELP"] = CommandProperties(1, true);
+	_properties["MAN"] = CommandProperties(1, true);
 }
 
 

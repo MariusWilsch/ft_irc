@@ -1,24 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   HelpBot.hpp                                        :+:      :+:    :+:   */
+/*   ManBot.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/07 12:38:51 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/15 10:54:29 by mwilsch          ###   ########.fr       */
+/*   Created: 2023/10/16 22:52:31 by ahammout          #+#    #+#             */
+/*   Updated: 2023/10/16 22:53:07 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef HELPBOT_HPP
-#define HELPBOT_HPP
+#ifndef MANBOT_HPP
+#define MANBOT_HPP
 
 #include <iostream>
+
 #include <ExecuteCommands.hpp>
 
-class HelpBot{
+class ManBot{
     public:
-    static void Help(Message &ProcessMessage, int clientSocket);
+    static void man(ServerReactor &_server, Message &ProcessMessage, int clientSocket);
     static string BotManual();
     static string PassManual();
     static string NickManual();
