@@ -60,10 +60,6 @@ int joinParser(std::vector<string> &ChannelNames, std::vector<string> &ChannelKe
 //     }
 // }
 
-// !When using join 0 with limechat, lime chat will send #0: and this means that the server will create the channel #0.
-// ? Is this correct or not
-// * nc will send it like this: join 0 > this means leaveChannels.
-// * limeChat will send it like this: join #0 > this means create a channel with the name #0.
 void    leaveChannels(ServerReactor &_serverReactor, int clientSocket){
 	map<string, ChannelData>::iterator  it;
 	map<string, ChannelData> &m = _serverReactor.getChannelManager().getChannels();
@@ -113,7 +109,6 @@ bool	joinPublicChannel(ServerReactor &_serverReactor, int clientSocket, ChannelD
 		Channel.addClient(clientSocket);
 		return (true);
 	}
-	// Send this when the user wants to join to a public channel with  key.
 	_serverReactor.sendNumericReply_FixLater(clientSocket, ERR_BADCHANNELKEY(Channel.getName()));
 	return (false);
 }
@@ -123,65 +118,46 @@ void ExecuteCommands::join(ServerReactor &_server, Message &ProcessMessage, int 
 	std::vector<string> ChannelKeys;
 
 	int stat = joinParser(ChannelNames, ChannelKeys, ProcessMessage);
-
-	cout << "stat: " << stat << endl;
-	// Handle missing parameters or malformed command
 	if (stat == -1) {
 		_server.sendNumericReply_FixLater(clientSocket, ERR_NEEDMOREPARAMS(ProcessMessage.getCommand()));
 		return;
 	}
-
-	// Handle request to leave all channels
 	if (stat == 0) {
 		leaveChannels(_server, clientSocket);
 		throw std::exception();
 	}
-
 	for (unsigned int i = 0; i < ChannelNames.size(); i++) {
-		bool Joined = false;  // Moved the declaration here to avoid re-declaration
+		bool Joined = false;
 		if (!_server.getChannelManager().channelExistence(ChannelNames[i])) {
 			Joined = createNewChannel(_server, clientSocket, ChannelNames[i]);
-			continue;  // Ensure we move to the next channel
+			continue;
 		}
-
 		ChannelData&	Channel = _server.getChannelManager().getChannelByName(ChannelNames[i]);
 		string			ChannelName = Channel.getName();
-
-		// If the client is already in the channel, move to the next channel
 		if (Channel.isCLient(clientSocket))
 			continue;
-
-		// Various checks and error handling
 		if (Channel.getLimitFlag() && Channel.getClientSockets().size() >= Channel.getLimit()) {
 			_server.sendNumericReply_FixLater(clientSocket, ERR_CHANNELISFULL(ChannelName));
 			continue;
 		}
-
 		if (Channel.getInviteFlag() && !Channel.isInvited(_server.getClientDataFast(clientSocket).getNickname())) {
 			_server.sendNumericReply_FixLater(clientSocket, ERR_INVITEONLYCHAN(ChannelName));
 			continue;
 		}
-
-		// Join either a private or public channel based on its security setting
 		Joined = (Channel.getSecurity()) ? 
 			joinPrivateChannel(_server, clientSocket, Channel, ChannelKeys[i]) : 
 			joinPublicChannel(_server, clientSocket, Channel, ChannelKeys[i]);
-
-		// If the client joined the channel, send the topic and inform members
 		if (Joined) {
 			if (Channel.getTopicFlag())
 				_server.sendNumericReply_FixLater(clientSocket, RPL_TOPIC(ChannelName, Channel.getTopic()));
 			else
 				_server.sendNumericReply_FixLater(clientSocket, RPL_NOTOPIC(ChannelName));
-			
 			informMembers(Channel.getClientSockets(), _server.createInfoMsg(_server.getClientDataFast(clientSocket), "JOIN", ProcessMessage.getParams()));
 			string nickname = _server.getClientManager().getClientData(clientSocket).getNickname();
 			string channelKey = "=";
-			// _server.sendMsg(clientSocket, _server.getClientManager().getClientData(clientSocket).getClientInfo(), "JOIN", ChannelName);
 			_server.sendNumericReply_FixLater(clientSocket, RPL_NAMREPLY(nickname , channelKey, ChannelName, _server.getChannelManager().createUserList(ChannelName, _server, clientSocket)));
 			_server.sendNumericReply_FixLater(clientSocket, RPL_ENDOFNAMES(nickname, ChannelName));
 		}
 	}
-	// Print user information
 	_server.printUserInformation();
 }
