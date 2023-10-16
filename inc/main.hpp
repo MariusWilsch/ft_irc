@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 15:07:18 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/15 19:07:42 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/16 23:48:04 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,27 +41,26 @@ using std::endl;
 #define RPL_WELCOME(nickname) "001 "  + nickname + " :Welcome to the IRC Network, " + nickname + "\r\n"
 #define RPL_NAMREPLY(nickname, channelType, channel, users) "353 " + nickname + " " + channelType + " " + channel + " :" + users + "\r\n"
 #define RPL_ENDOFNAMES(nickname, channel) "366 " + nickname + " " + channel + " :End of /NAMES list." + "\r\n"
-#define RPL_NOTOPIC(channel) "331: " + channel + " : No topic is set\n"
-#define RPL_TOPIC(channel, topic) "332: " + channel + ": "  + topic + "\n"
+#define RPL_NOTOPIC(channel) "331: " + channel + " : No topic is set\r\n"
+#define RPL_TOPIC(channel, topic) "332: " + channel + ": "  + topic + "\r\n"
 #define RPL_INVITING(nickSender, channel, nickReciever) "341 " + nickSender + " " + nickReciever + " " + channel + "\r\n"
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ERRORS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
 #define ERR_UNKNOWNCOMMAND(nickname, wrongCommand) "421 " + nickname + " " + wrongCommand + " :Unknown command\r\n"
-#define ERR_NONICKNAMEGIVEN() "431: No nickname given\n"
-#define ERR_NICKNAMEINUSE(nick) "433: " + nick + " :Nickname is already in use\n"
-#define ERR_NEEDMOREPARAMS(command) "461: " + command + " : Not enough parameters\n"
-#define ERR_ALREADYREGISTRED() "462: You may not reregister\n"
-#define ERR_BADCHANNELKEY(channel) "475: " + channel + " : Cannot join channel (+k)\n"
-#define ERR_NOTONCHANNEL(channel) "442: " + channel + " : You're not on that channel\n"
+#define ERR_NONICKNAMEGIVEN() "431: No nickname given\r\n"
+#define ERR_NICKNAMEINUSE(nick) "433: " + nick + " :Nickname is already in use\r\n"
+#define ERR_NEEDMOREPARAMS(command) "461: " + command + " : Not enough parameters\r\n"
+#define ERR_ALREADYREGISTRED() "462: You may not reregister\r\n"
+#define ERR_BADCHANNELKEY(channel) "475: " + channel + " : Cannot join channel (+k)\r\n"
+#define ERR_NOTONCHANNEL(channel) "442: " + channel + " : You're not on that channel\r\n"
 #define ERR_USERONCHANNEL(user, channel) "443: " + user + " " + channel + " : is already on channel\r\n"
-#define ERR_CHANOPRIVSNEEDED(channel) "482: " + channel + " : You're not channel operator\n"
-#define ERR_NOSUCHCHANNEL(channel) "403: " + channel + " : No such channel\n"
-#define ERR_CHANNELISFULL(channel) "471: " + channel + " :Cannot join channel (+l)\n"
-#define ERR_UNKNOWNMODE(character) "472: " + character + " : is unknown mode char to me\n"
-#define ERR_INVITEONLYCHAN(channel) "473: " + channel + " :Cannot join channel (+i)\n"
+#define ERR_CHANOPRIVSNEEDED(channel) "482: " + channel + " : You're not channel operator\r\n"
+#define ERR_NOSUCHCHANNEL(channel) "403: " + channel + " : No such channel\r\n"
+#define ERR_CHANNELISFULL(channel) "471: " + channel + " :Cannot join channel (+l)\r\n"
+#define ERR_UNKNOWNMODE(character) "472: " + character + " : is unknown mode char to me\r\n"
+#define ERR_INVITEONLYCHAN(channel) "473: " + channel + " :Cannot join channel (+i)\r\n"
 #define ERR_NOTREGISTERED(nickname, command) "451 " + nickname + " " + command + " :You must finish connecting with another nickname first.\r\n"
 #define ERR_PASSWDMISMATCH() "464 * :Password incorect\r\n"
-
 #define ERR_NORECIPIENT(target) "411 " + target + " :No recipient given (PRIVMSG)\r\n"
 #define ERR_NOTEXTTOSEND(target) "412 " + target + " :No text to send\r\n"
 #define ERR_NOSUCHNICKCHANNEL(nickSender, nickTarget) "401 " + nickSender + " " + nickTarget + " :No such nick/channel\r\n"

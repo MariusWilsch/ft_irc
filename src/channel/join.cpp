@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/24 12:13:30 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/15 16:29:29 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/16 23:37:31 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,12 @@ bool	createNewChannel(ServerReactor &_serverReactor, int clientSocket, string Ch
 }
 
 // :AMSKLDN!~t@5c8c-aff4-7127-3c3-1c20.230.197.ip JOIN :#ChannelNadia
+
+
+// !Recieve this when join first time.
+// :Ajrngejkrg!~t@5c8c-aff4-7127-3c3-1c20.230.197.ip JOIN :#ch77
+// :punch.wa.us.dal.net 353 Ajrngejkrg = #ch77 :Ajrngejkrg @mok 
+// :punch.wa.us.dal.net 366 Ajrngejkrg #ch77 :End of /NAMES list.
 bool	joinPrivateChannel(ServerReactor &_serverReactor, int clientSocket, ChannelData& Channel, string inputKey){
 	if ((inputKey.c_str() != NULL) && (Channel.getKey().compare(inputKey) == 0)){
 		Channel.addClient(clientSocket);
