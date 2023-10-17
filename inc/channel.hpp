@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 16:01:33 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/14 17:03:04 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/17 15:54:40 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,23 +28,16 @@ class ServerReactor;
  * 
  */
 
-/*
-	UPDATE:
-		The members & operators of the channel needs to be stored by nick name and socket ID.
-		
-*/
 class ChannelData {
 	private:
-		string				_name;
-		string				_topic;
-		string				_key;
-		size_t				_limit;
-
-		bool					_securityFlag;
-		bool					_inviteOnlyFlag;
-		bool					_topicFlag;
-		bool					_limitFlag;
-
+		bool			_securityFlag;
+		bool			_inviteOnlyFlag;
+		bool			_topicFlag;
+		bool			_limitFlag;
+		string			_name;
+		string			_topic;
+		string			_key;
+		size_t			_limit;
 		int				_creatorBySocket;
 		set <int> 		_clientSockets;
 		set <int> 		_operators;
@@ -56,33 +49,28 @@ class ChannelData {
 		~ChannelData( void );
 		
 		/*			GETTERS			*/
+		bool			getSecurity( void ) const;
+		bool			getTopicFlag ( void ) const;
+		bool			getInviteFlag ( void )  const;
+		bool			getLimitFlag ( void ) const;
 		string 			getName( void ) const;
 		string 			getTopic( void ) const;
 		string			getKey( void ) const;
 		size_t			getLimit( void ) const;
-
-		bool			getSecurity( void ) const;
-		bool			getTopicFlag ( void ) const;
-		bool			getInviteFlag ( void )  const;
-		
-		bool			getLimitFlag ( void ) const;
-		
 		set <int> 		getClientSockets( void ) const;
 		set <int> 		getOperators( void ) const;
 		set <string>	getInviteList( void ) const;
-		int						getCreatorBySocket( void ) const;
+		int				getCreatorBySocket( void ) const;
 
 		/*			SETTERS			 */
 		void 			setName( string name );
 		void 			setTopic( string topic );
 		void			setKey (string key);
 		void			setLimit(size_t limit);
-		
 		void			setSecurity( bool stat);
 		void			setInviteFlag( bool stat );
 		void			setTopicFlag( bool stat );
 		void			setLimitFlag( bool stat );
-		
 		void			setCreatorBySocket( int socketID );
 		void			addClient( int clientSocket);
 		void			addOperator( int clientSocket);
@@ -102,25 +90,20 @@ class ChannelManager {
 		map<string, ChannelData>	_channels;
 
 	public:
-		/*			CLASS DEFAULT FUNCTIONS			*/
-		
-			ChannelManager( void );
-			~ChannelManager( void );
-			
-		/*			GETTERS			*/
-		ChannelData&							getChannelByName( string name );
-		map<string, ChannelData>&	getChannels( void );
+		ChannelManager( void );
+		~ChannelManager( void );
 
-		/*			SETTERS			*/
-		void	addChannel( string name, ChannelData &channelData );
+		/*			GETTERS			*/
+		map<string, ChannelData>&	getChannels( void );
+		ChannelData&				getChannelByName( string name );
 
 		/*			METHODS			*/
-		bool			channelExistence(string name);
-		bool			itsChannel( string name );
-		void			removeChannel(string channelName);
-		void			removeFromChannels(int _clientSocket);
-		void    		removeGarbageChannels();
-		
-		// void			joinSequence()
+		void		addChannel( string name, ChannelData &channelData );
+		void		removeChannel(string channelName);
+		bool		channelExistence(string name);
+		bool		itsChannel( string name );
+		void		removeFromChannels(int _clientSocket);
+		void    	removeGarbageChannels();
 		string		createUserList(string channelName, ServerReactor &serverReactor, int senderSocket);
+		// void			joinSequence()
 };

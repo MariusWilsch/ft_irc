@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 15:30:13 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/15 13:39:12 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/17 15:49:12 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,42 +29,34 @@
  */
 class ClientData {
 	private:
-	int										_clientSocket;
-	int											_mode;
-		string								_clientIP;
-		string								_realname;
-		string								_nickname;
-		string								_username;
-		string								_unused;
-		string								_password;
-		vector<bool>					_Registration;
-		/*			CLASS DEFAULT FUNCTIONS			*/
+		int				_clientSocket;
+		int				_mode;
+		string			_clientIP;
+		string			_realname;
+		string			_nickname;
+		string			_username;
+		string			_unused;
+		string			_password;
+		vector<bool>	_Registration;
+
 	public:
 		ClientData( void );
 		ClientData( int clientSocket);
 		~ClientData();
 
-		/*			MEMBER FUNCTIONS			*/
-
-		
-
 		/*			GETTERS			*/
-
-		int						getClientSocket( void ) const;
-		int						getMode() const;
-		string				getRealname() const;
-		string				getNickname() const;
-		string				getUsername() const;
-		string 				getUnused() const;
+		int				getClientSocket( void ) const;
+		int				getMode() const;
+		string			getRealname() const;
+		string			getNickname() const;
+		string			getUsername() const;
+		string 			getUnused() const;
+		string			getPassword() const;
+		string			getClientIP() const;
+		string			getClientInfo() const;
 		vector<bool>&	getRegistration();
-		string				getPassword() const;
-		string				getClientIP() const;
-		string				getClientInfo() const;
-		
-
 
 		/*			SETTERS			 */
-
 		void			setmode(int mode);
 		void			setRealname(string realname);
 		void			setNickname(string nickname);
@@ -74,7 +66,8 @@ class ClientData {
 		void			setPassword(string pass);
 		void			setClientIP(string clientIP);
 
-		bool	isRegistered();
+		/*			MEMBER FUNCTIONS			*/
+		bool			isRegistered();
 
 };
 
@@ -83,32 +76,23 @@ class ClientData {
  * 
  * @param _usedNicknames A set of used nicknames
  * @param _activeClientsBySocket A map of active clients by socket
- * 
  */
 class ClientManager {
 	private:
 		map <int, ClientData>				_ClientsBySocket;
-	public:
-		/*			CLASS DEFAULT FUNCTIONS			*/
-		
+	
+	public:		
 		ClientManager( void );
 		~ClientManager();
 
-		/*			MEMBER FUNCTIONS			*/
+		/*				GETTERS					*/
+		map<int, ClientData>&	getClientBySocket();
+		ClientData&				getClientData( int clientSocket );
 		
-		void								addClient( int clientSocket, string clientIP);
-		void								removeClient( int clientSocket );
-
-		/*			GETTERS			*/
-
-		ClientData&							getClientData( int clientSocket );
-		map<int, ClientData>&		getClientBySocket();
-		
-		/*			METHODS			*/
-		// Repreduce a method that takes two parameters: 1 - a set of client socket 2 - a nick name,
-		// search for each the client socket from the set inside the map of _ClientsBySocket  and then check if the nick name is matched
-		// if the nick name founded in the given socket id which represent a member of a channel it means that, the user is a memeber.
-		int				MatchNickName(set <int> ChannelMembers, string nickname);
-		int				getClientSocketByNick(string& nickname);
+		/*			MEMBER FUNCTIONS			*/	
+		void		addClient( int clientSocket, string clientIP);
+		void		removeClient( int clientSocket );
+		int			MatchNickName(set <int> ChannelMembers, string nickname);
+		int			getClientSocketByNick(string& nickname);
 		string		createUserList(set<int> channelMembers);
 };
