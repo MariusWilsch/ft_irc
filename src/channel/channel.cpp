@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 10:02:20 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/15 12:28:49 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/17 15:32:14 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,11 @@ ChannelData::ChannelData( void ){
     _operators = set<int>();
 }
 
-// Creating a new channel with constructor means that the channel has a creator and one operator and client.
 ChannelData::ChannelData(const string& channelName, const int socketFD ) {
     this->_name = channelName;
     this->_creatorBySocket = socketFD;
     this->_operators.insert(socketFD);
     this->_clientSockets.insert(socketFD);
-    
     this->_inviteList = set<string>();
     this->_topic = "";
     this->_key = "";
@@ -151,7 +149,6 @@ void    ChannelData::removeOperator(int SocketID){
     this->_operators.erase(SocketID);
 }
 
-
 /************************* ClientData methods ***************************/
 
 bool    ChannelData::isOperator(int clientSocket){
@@ -242,7 +239,7 @@ void    ChannelManager::removeFromChannels(int _clientSocket){
     removeGarbageChannels();
 }
 
-void        ChannelManager::removeChannel(string channelName){
+void    ChannelManager::removeChannel(string channelName){
     this->_channels.erase(channelName);
 }
 
