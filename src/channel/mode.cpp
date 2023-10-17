@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 20:17:01 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/17 19:21:36 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/17 19:25:04 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,31 +144,30 @@ void    ChannelSecureMode(ServerReactor &_serverReactor, Message &ProccessMessag
 			channel.setKey(key);
 	}
 	else if (ProccessMessage.getParams()[1].compare("-k") == 0){
-			cout << "removing the key for channel " << endl;
 			channel.setSecurity(false);
 			channel.setKey("");
 	}
 }
 
 void    inviteOnly(ServerReactor &_serverReactor, Message &ProccessMessage, int clientSocket){
-		ChannelData &channel = _serverReactor.getChannelManager().getChannelByName(ProccessMessage.getParams()[0]);
+	ChannelData &channel = _serverReactor.getChannelManager().getChannelByName(ProccessMessage.getParams()[0]);
 
-		if (ProccessMessage.getParams().size() < 2){
-				_serverReactor.sendNumericReply_FixLater(clientSocket, ERR_NEEDMOREPARAMS(ProccessMessage.getCommand()));
-				throw std::exception();
-		}
-		if (!channel.isCLient(clientSocket)){
-				_serverReactor.sendNumericReply_FixLater(clientSocket, ERR_NOTONCHANNEL(channel.getName()));
-				throw std::exception();
-		}
-		if (!channel.isOperator(clientSocket)){
-				_serverReactor.sendNumericReply_FixLater(clientSocket, ERR_CHANOPRIVSNEEDED(channel.getName()));
-				throw std::exception();
-		}
-		if (ProccessMessage.getParams()[1].compare("+i") == 0)
-				channel.setInviteFlag(true);
-		else if (ProccessMessage.getParams()[1].compare("-i") == 0)
-				channel.setInviteFlag(false);
+	if (ProccessMessage.getParams().size() < 2){
+			_serverReactor.sendNumericReply_FixLater(clientSocket, ERR_NEEDMOREPARAMS(ProccessMessage.getCommand()));
+			throw std::exception();
+	}
+	if (!channel.isCLient(clientSocket)){
+			_serverReactor.sendNumericReply_FixLater(clientSocket, ERR_NOTONCHANNEL(channel.getName()));
+			throw std::exception();
+	}
+	if (!channel.isOperator(clientSocket)){
+			_serverReactor.sendNumericReply_FixLater(clientSocket, ERR_CHANOPRIVSNEEDED(channel.getName()));
+			throw std::exception();
+	}
+	if (ProccessMessage.getParams()[1].compare("+i") == 0)
+			channel.setInviteFlag(true);
+	else if (ProccessMessage.getParams()[1].compare("-i") == 0)
+			channel.setInviteFlag(false);
 }
 
 void     ExecuteCommands::mode(ServerReactor &_server, Message &ProccessMessage, int clientSocket){
