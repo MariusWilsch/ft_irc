@@ -26,6 +26,10 @@
 	412 Archer :No text to send
 */
 
+// Issue list
+	// 1. Pass | ERR_NEEDMOREPARAMS
+	
+
 int	main( int argc, char **argv )
 {
 	if (argc != 3)

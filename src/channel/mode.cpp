@@ -170,7 +170,7 @@ void    inviteOnly(ServerReactor &_serverReactor, Message &ProccessMessage, int 
 			channel.setInviteFlag(false);
 }
 
-void     ExecuteCommands::mode(ServerReactor &_server, Message &ProccessMessage, int clientSocket){
+void	ExecuteCommands::mode(ServerReactor &_server, Message &ProccessMessage, int clientSocket){
 	if (ProccessMessage.getParams().size() == 1)
 		throw std::exception();
 	if (ProccessMessage.getParams().size() < 2) {
@@ -182,21 +182,22 @@ void     ExecuteCommands::mode(ServerReactor &_server, Message &ProccessMessage,
 		throw std::exception();
 	}
 	string mode = ProccessMessage.getParams()[1];
+
 	if (mode.compare("+sn") == 0)
 		return ;
-	if (mode.compare("+i") == 0 || mode.compare("-i") == 0){
+	if (mode.compare("+i") == 0 || mode.compare("-i") == 0) {
 		inviteOnly(_server, ProccessMessage, clientSocket);
 	}
-	else if (mode.compare("+k") == 0 || mode.compare("-k") == 0){
+	else if (mode.compare("+k") == 0 || mode.compare("-k") == 0) {
 		ChannelSecureMode (_server, ProccessMessage, clientSocket);
 	}
-	else if (mode.compare("+t") == 0 || mode.compare("-t") == 0){
+	else if (mode.compare("+t") == 0 || mode.compare("-t") == 0) {
 		ChannelTopicMode(_server, ProccessMessage, clientSocket);
 	}
-	else if (mode.compare("+l") == 0 || mode.compare("-l") == 0){
+	else if (mode.compare("+l") == 0 || mode.compare("-l") == 0) {
 		ChanneLimitMode(_server, ProccessMessage, clientSocket);
 	}
-	else if (mode.compare("+o") == 0 || mode.compare("-o") == 0){
+	else if (mode.compare("+o") == 0 || mode.compare("-o") == 0) {
 		ChannelOperatorPrivilege(_server, ProccessMessage, clientSocket);
 	}
 	else {

@@ -47,7 +47,7 @@ using std::endl;
 #define ERR_CHANNELISFULL(channel) "471: " + channel + " :Cannot join channel (+l)\r\n"
 
 #define ERR_UNKNOWNCOMMAND(nickname, wrongCommand) "421 " + nickname + " " + wrongCommand + " :Unknown command\r\n"
-#define ERR_NONICKNAMEGIVEN() "431: No nickname given\r\n"
+#define ERR_NONICKNAMEGIVEN() "431: * No nickname given\r\n"
 #define ERR_NICKNAMEINUSE(nick) "433: " + nick + " :Nickname is already in use\r\n"
 #define ERR_NEEDMOREPARAMS(command) "461: " + command + " : Not enough parameters\r\n"
 #define ERR_ALREADYREGISTRED() "462: You may not reregister\r\n"
