@@ -27,7 +27,19 @@
 */
 
 // Issue list
-	// 1. Pass | ERR_NEEDMOREPARAMS
+	// authentification
+		// 1. Pass | Good!
+		// 2. Nick | Good!
+		// 3. User | Good!
+	// Channel
+		// 1. Join | Good!
+		// 2. Part | Good!
+		// 3. Names | Good!
+		// 4. List | Good!
+		// 5. Topic | Good!
+		// 6. Invite | Good!
+		// 7. Kick | Good!
+
 	
 
 int	main( int argc, char **argv )

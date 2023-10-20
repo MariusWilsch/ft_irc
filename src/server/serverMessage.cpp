@@ -46,12 +46,12 @@ Message::Message( string rawMessage, map <string, CommandProperties> properties 
 		}
 		
 		while (std::getline(iss, token, ' ')) {
-				if (token == ":")
-						_params.push_back(token);
 				if (token.empty())
 						continue;
-				if (token.size() != 1 && token.find(':') != string::npos) {
+				if (token.find(':') != string::npos) {
 						_params.push_back(_rawMessage.substr(_rawMessage.find(':') + 1));
+						if (_params.back().empty())
+								_params.back() = ":";
 						break;
 				}
 				if (token.find(',') != string::npos) {
@@ -114,3 +114,10 @@ void Message::printData( void )
 	// std::cout << "Trailing: " << _trailing << std::endl;
 }
 
+void	Message::setTrailing(const string& trailing ) {
+	this->_trailing = trailing;
+}
+
+string Message::getTrailing( void ){
+	return (this->_trailing);
+}

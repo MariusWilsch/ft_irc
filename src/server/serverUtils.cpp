@@ -68,7 +68,7 @@ int ServerReactor::sendMsg_FixLater(int socket, const string& reply) {
  * @return string 
  */
 string ServerReactor::
-createInfoMsg(ClientData& clientData, const string& command, const vector <string>& params) {
+createInfoMsg(ClientData& clientData, const string& command, const vector <string>& params, const string& trailing) {
 		string message;
 
 		// Append client info
@@ -84,7 +84,7 @@ createInfoMsg(ClientData& clientData, const string& command, const vector <strin
 		message += " " + params[0];
 
 		// Append parameters
-		if (command == "INVITE") {
+		if (command == "INVITE" || command == "PART") {
 			for (size_t i = 1; i < params.size(); ++i)
 					message += " :" + params[i];
 		} else {
@@ -93,9 +93,9 @@ createInfoMsg(ClientData& clientData, const string& command, const vector <strin
 		}
 
 		// Append trailing message if it exists
-		// if (!trailing.empty()) {
-		// 		message += " :" + trailing;
-		// }
+		if (!trailing.empty()) {
+				message += " :" + trailing;
+		}
 
 		message += "\r\n";  // IRC messages end with \r\n
 

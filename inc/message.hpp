@@ -50,6 +50,7 @@ class Message {
 		string													_prefix;
 		string													_command;
 		vector<string>									_params;
+		string													_trailing;
 		map <string, CommandProperties>	_properties; // TODO: Refactor this
 	public:
 		/*			CLASS DEFAULT FUNCTIONS			*/
@@ -63,6 +64,9 @@ class Message {
 		string							getCommand( void );
 		vector<string>			getParams( void );
 		bool								getFatal( void );
+		string							getTrailing( void );
 	
 		/*			SETTERS			*/
+
+		void	setTrailing( const string& trailing );
 };

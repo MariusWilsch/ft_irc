@@ -43,6 +43,16 @@ void ExecuteCommands::nick(ServerReactor &_serverReactor, Message &ProcessMessag
     }
     map<int, ClientData>::iterator it;
     string nickName = ProcessMessage.getParams()[0];
+		if (isdigit(nickName[0])) {
+			_serverReactor.sendNumericReply_FixLater(clientSocket, ERR_ERRONEUSNICKNAME(nickName));
+			throw std::exception();
+		}
+		for (string::iterator it = nickName.begin(); it != nickName.end(); it++) {
+			if (!isalnum(*it) && *it == '_') {
+				_serverReactor.sendNumericReply_FixLater(clientSocket, ERR_ERRONEUSNICKNAME(nickName));
+				throw std::exception();
+			}
+		}
     string oldNick =  client.getNickname();
     if (nickName.compare(client.getNickname()) != 0)
     {
@@ -64,6 +74,7 @@ void ExecuteCommands::nick(ServerReactor &_serverReactor, Message &ProcessMessag
             _serverReactor.sendNumericReply_FixLater(clientSocket, RPL_WELCOME(nickName));
         }
     }
+		_serverReactor.printUserInformation();
 }
 
 void     ExecuteCommands::user(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket) {
@@ -88,7 +99,7 @@ void     ExecuteCommands::user(ServerReactor &_serverReactor, Message &ProcessMe
 
 void ExecuteCommands::pass(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket) {
     ClientData  &client = _serverReactor.getClientDataFast(clientSocket);
-    if (ProcessMessage.getParams().size() < 1){
+    if (ProcessMessage.getParams().size() < 1 || ProcessMessage.getParams()[0].empty()){
         _serverReactor.sendNumericReply_FixLater(clientSocket, ERR_NEEDMOREPARAMS(ProcessMessage.getCommand()));
         throw std::exception();
     }

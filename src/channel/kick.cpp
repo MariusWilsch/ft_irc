@@ -26,10 +26,11 @@ bool kickParser(std::vector<string> &ChannelNames, std::vector<string> &Users, M
             Users.push_back(param);
         }
     }
-    if (Users.size() > ChannelNames.size())
-        return (false);
-    for (unsigned int i = Users.size(); i < ChannelNames.size(); i++){
-        Users.push_back("");
+    if (Users.size() > ChannelNames.size() + 1)
+				return (false);
+		if (Users.size() == ChannelNames.size() + 1) {
+				ProcessMessage.setTrailing(Users[Users.size() - 1]);
+			cout << "Users Size: " << Users.size() << "Names: " << ChannelNames.size() << endl;
     }
     return (true);
 }
@@ -50,6 +51,7 @@ void     ExecuteCommands::kick(ServerReactor &_serverReactor, Message &ProcessMe
     const string& nickSender = _serverReactor.getClientDataFast(clientSocket).getNickname();
     std::vector<string> ChannelNames;
     std::vector<string> Users;
+
     
     int stat = kickParser(ChannelNames, Users, ProcessMessage);
     if (!stat){
@@ -80,11 +82,16 @@ void     ExecuteCommands::kick(ServerReactor &_serverReactor, Message &ProcessMe
 			_serverReactor.sendNumericReply_FixLater(clientSocket, ERR_NOSUCHNICKCHANNEL(nickSender, Users[i]));
             continue;
         }
+				vector<string> params;
+				params.push_back(ChannelNames[i]);
+				params.push_back(Users[i]);
+
+				informMembers(Channel.getClientSockets(), _serverReactor.createInfoMsg(_serverReactor.getClientDataFast(clientSocket), "KICK", params, ProcessMessage.getTrailing()));
         Channel.removeClient(kickedID);
         if (Channel.isOperator(kickedID))
             Channel.removeOperator(kickedID);
         // NUMERIC REPLY TO INFORM ALL THE CHANNEL MEMBER. "COMMENT"
-    
+
     }
 }
 

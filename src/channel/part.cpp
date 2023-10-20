@@ -52,17 +52,15 @@ void     ExecuteCommands::part(ServerReactor &_server, Message &ProcessMessage, 
 			_server.sendNumericReply_FixLater(clientSocket, ERR_NOTONCHANNEL(ChannelNames[i]));
 			continue ;
 		}
+		std::vector<string> params;
+		params.push_back(ProcessMessage.getParams()[0]);
+		informMembers(channel.getClientSockets(), _server.createInfoMsg(_server.getClientDataFast(clientSocket), "PART", params));
 		channel.removeClient(clientSocket);
 		if (channel.isOperator(clientSocket))
 			channel.removeOperator(clientSocket);
 		if (channel.getClientSockets().size() == 0)
 			_server.getChannelManager().removeChannel(ChannelNames[i]);
 		
-		std::vector<string> params;
-		params.push_back(ProcessMessage.getParams()[0]);
-		if (partMessage.size())
-			params.push_back(partMessage[0].insert(0, ":"));
-		informMembers(channel.getClientSockets(), _server.createInfoMsg(_server.getClientDataFast(clientSocket), "PART", params));
-		// informMembers(channel.getClientSockets(), _server.createInfoMsg(_server.getClientDataFast(clientSocket), "PART", ProcessMessage.getParams()));
+
 	}
 }

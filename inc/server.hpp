@@ -107,7 +107,7 @@ class ServerReactor {
 		 * @param params 
 		 * @return string 
 		 */
-		string	createInfoMsg(ClientData& clientData, const string &command, const vector <string> &params);
+		string	createInfoMsg(ClientData& clientData, const string &command, const vector <string> &params, const string &trailing = "");
 	
 
 		void			sendMsg(int socket, const string& clientInfo ,const string &command, string param, const string &trailing = "");
