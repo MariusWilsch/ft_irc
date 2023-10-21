@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/24 12:13:30 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/21 15:10:26 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/21 15:41:24 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ bool	joinPrivateChannel(ServerReactor &_serverReactor, int clientSocket, Channel
 		Channel.addClient(clientSocket);
 		return(true);
 	}
-	_serverReactor.sendNumericReply_FixLater(clientSocket, ERR_BADCHANNELKEY(Channel.getName()));
+	_serverReactor.sendNumericReply_FixLater(clientSocket, ERR_BADCHANNELKEY(_serverReactor.getClientDataFast(clientSocket).getNickname(), Channel.getName()));
 	return (false);
 }
 
@@ -131,11 +131,11 @@ void ExecuteCommands::join(ServerReactor &_server, Message &ProcessMessage, int 
 		if (Channel.isCLient(clientSocket))
 			continue;
 		if (Channel.getLimitFlag() && Channel.getClientSockets().size() >= Channel.getLimit()) {
-			_server.sendNumericReply_FixLater(clientSocket, ERR_CHANNELISFULL(ChannelName));
+			_server.sendNumericReply_FixLater(clientSocket, ERR_CHANNELISFULL(_server.getClientDataFast(clientSocket).getNickname(), ChannelName));
 			continue;
 		}
 		if (Channel.getInviteFlag() && !Channel.isInvited(_server.getClientDataFast(clientSocket).getNickname())) {
-			_server.sendNumericReply_FixLater(clientSocket, ERR_INVITEONLYCHAN(ChannelName));
+			_server.sendNumericReply_FixLater(clientSocket, ERR_INVITEONLYCHAN(_server.getClientDataFast(clientSocket).getNickname() ,ChannelName));
 			continue;
 		}
 		Joined = (Channel.getSecurity()) ? 

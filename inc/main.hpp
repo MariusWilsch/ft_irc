@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 15:07:18 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/17 18:37:18 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/21 15:36:23 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,9 @@ using std::endl;
 #define RPL_INVITING(nickSender, channel, nickReciever) "341 " + nickSender + " " + nickReciever + " " + channel + "\r\n"
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ERRORS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
-#define ERR_INVITEONLYCHAN(channel) "473: " + channel + " :Cannot join channel (+i)\r\n"
-#define ERR_BADCHANNELKEY(channel) "475: " + channel + " : Cannot join channel (+k)\r\n"
-#define ERR_CHANNELISFULL(channel) "471: " + channel + " :Cannot join channel (+l)\r\n"
+#define ERR_INVITEONLYCHAN(nickname, channel) "473 " + nickname + " " + channel + " :Cannot join channel (+i)\r\n"
+#define ERR_BADCHANNELKEY(nickname, channel) "475 " + nickname + " " + channel + " : Cannot join channel (+k)\r\n"
+#define ERR_CHANNELISFULL(nickname, channel) "471 " + nickname + " " + channel + " :Cannot join channel (+l)\r\n"
 
 #define ERR_UNKNOWNCOMMAND(nickname, wrongCommand) "421 " + nickname + " " + wrongCommand + " :Unknown command\r\n"
 #define ERR_NONICKNAMEGIVEN() "431: * No nickname given\r\n"
