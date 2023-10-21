@@ -47,46 +47,47 @@ bool kickParser(std::vector<string> &ChannelNames, std::vector<string> &Users, M
 
  // Kick #channel1 #channel2 #InvalidCh user1 user2 user3
  // !if kick command failed with a specific channel for any reason: Do the program continue it's execution or not????? 
-void     ExecuteCommands::kick(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket){
-    const string& nickSender = _serverReactor.getClientDataFast(clientSocket).getNickname();
+void     ExecuteCommands::kick(ServerReactor &_server, Message &msg, int clientSocket){
+    const string& nickSender = _server.getClientDataFast(clientSocket).getNickname();
     std::vector<string> ChannelNames;
     std::vector<string> Users;
 
     
-    int stat = kickParser(ChannelNames, Users, ProcessMessage);
+    int stat = kickParser(ChannelNames, Users, msg);
     if (!stat){
-        _serverReactor.sendNumericReply_FixLater(clientSocket, ERR_NEEDMOREPARAMS(ProcessMessage.getCommand()));
+        _server.sendNumericReply_FixLater(clientSocket, ERR_NEEDMOREPARAMS(msg.getCommand()));
         throw std::exception();
     }
+		const string &nick = _server.getClientDataFast(clientSocket).getNickname();
     for (unsigned int i = 0; i < ChannelNames.size(); i++){
-        if (!_serverReactor.doesChannelExist(ChannelNames[i])){
-            _serverReactor.sendNumericReply_FixLater(clientSocket, ERR_NOSUCHCHANNEL(ChannelNames[i]));
+        if (!_server.doesChannelExist(ChannelNames[i])){
+            _server.sendNumericReply_FixLater(clientSocket, ERR_NOSUCHCHANNEL(nick, ChannelNames[i]));
             continue;
         }
-        ChannelData &Channel = _serverReactor.getChannelManager().getChannelByName(ChannelNames[i]);
+        ChannelData &Channel = _server.getChannelManager().getChannelByName(ChannelNames[i]);
         if (!Channel.isCLient(clientSocket)){
-            _serverReactor.sendNumericReply_FixLater(clientSocket, ERR_NOTONCHANNEL(ChannelNames[i]));
+            _server.sendNumericReply_FixLater(clientSocket, ERR_NOTONCHANNEL(nick, ChannelNames[i]));
             continue;
         }
         if (!Channel.isOperator(clientSocket)){
-            _serverReactor.sendNumericReply_FixLater(clientSocket, ERR_CHANOPRIVSNEEDED(ChannelNames[i]));
+            _server.sendNumericReply_FixLater(clientSocket, ERR_CHANOPRIVSNEEDED(ChannelNames[i]));
             continue;
         }
         if (Users[i].c_str() == NULL){
-            _serverReactor.sendNumericReply_FixLater(clientSocket, ERR_NEEDMOREPARAMS(ProcessMessage.getCommand()));
+            _server.sendNumericReply_FixLater(clientSocket, ERR_NEEDMOREPARAMS(msg.getCommand()));
             continue;
         }
-        set<int> ChannelMembers = _serverReactor.getChannelManager().getChannelByName(ChannelNames[i]).getClientSockets();
-        int kickedID = _serverReactor.getClientManager().MatchNickName(ChannelMembers, Users[i]);
+        set<int> ChannelMembers = _server.getChannelManager().getChannelByName(ChannelNames[i]).getClientSockets();
+        int kickedID = _server.getClientManager().MatchNickName(ChannelMembers, Users[i]);
         if (kickedID == -1){
-			_serverReactor.sendNumericReply_FixLater(clientSocket, ERR_NOSUCHNICKCHANNEL(nickSender, Users[i]));
+			_server.sendNumericReply_FixLater(clientSocket, ERR_NOSUCHNICKCHANNEL(nickSender, Users[i]));
             continue;
         }
 				vector<string> params;
 				params.push_back(ChannelNames[i]);
 				params.push_back(Users[i]);
 
-				informMembers(Channel.getClientSockets(), _serverReactor.createMsg(_serverReactor.getClientDataFast(clientSocket), "KICK", params, ProcessMessage.getTrailing()));
+				informMembers(Channel.getClientSockets(), _server.createMsg(_server.getClientDataFast(clientSocket), "KICK", params, msg.getTrailing()));
         Channel.removeClient(kickedID);
         if (Channel.isOperator(kickedID))
             Channel.removeOperator(kickedID);

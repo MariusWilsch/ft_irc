@@ -42,14 +42,16 @@ void     ExecuteCommands::part(ServerReactor &_server, Message &ProcessMessage, 
 		send(clientSocket, Err.c_str(), Err.size(), 0);
 		throw std::exception();
 	}
-	for (unsigned int i = 0; i < ChannelNames.size(); i++) {
+	const string &nick = _server.getClientDataFast(clientSocket).getNickname();
+	for (unsigned int i = 0; i < ChannelNames.size(); i++)
+	{
 		if (!_server.doesChannelExist(ChannelNames[i])){
-			_server.sendNumericReply_FixLater(clientSocket, ERR_NOSUCHCHANNEL(ChannelNames[i]));
+			_server.sendNumericReply_FixLater(clientSocket, ERR_NOSUCHCHANNEL(nick, ChannelNames[i]));
 			continue ;
 		}
 		ChannelData &channel = _server.getChannelManager().getChannelByName(ChannelNames[i]);
 		if (!channel.isCLient(clientSocket)){
-			_server.sendNumericReply_FixLater(clientSocket, ERR_NOTONCHANNEL(ChannelNames[i]));
+			_server.sendNumericReply_FixLater(clientSocket, ERR_NOTONCHANNEL(nick, ChannelNames[i]));
 			continue ;
 		}
 		std::vector<string> params;

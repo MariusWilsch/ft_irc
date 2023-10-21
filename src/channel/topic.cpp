@@ -28,13 +28,15 @@ void     ExecuteCommands::topic(ServerReactor &_server, Message &ProcessMessage,
         throw std::exception();
     }
     string channelName = ProcessMessage.getParams()[0];
-    if (!_server.doesChannelExist(channelName)){
-        _server.sendNumericReply_FixLater(clientSocket, ERR_NOSUCHCHANNEL(channelName));
+		const string &nick = _server.getClientDataFast(clientSocket).getNickname();
+		if (!_server.doesChannelExist(channelName))
+		{
+				_server.sendNumericReply_FixLater(clientSocket, ERR_NOSUCHCHANNEL(nick, channelName));
         throw std::exception();
-    }
-    ChannelData&	Channel = _server.getChannelManager().getChannelByName(channelName);
+		}
+		ChannelData&	Channel = _server.getChannelManager().getChannelByName(channelName);
     if (!Channel.isCLient(clientSocket)){
-        _server.sendNumericReply_FixLater(clientSocket, ERR_NOTONCHANNEL(channelName));
+        _server.sendNumericReply_FixLater(clientSocket, ERR_NOTONCHANNEL(nick, channelName));
         throw std::exception();
     }
     // Any member can ask for the topic of the channel, in this case w'll send RPL_TOPIC or RPL_NOTOPIC

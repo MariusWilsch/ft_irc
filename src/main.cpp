@@ -53,10 +53,10 @@
 			// 1.0 Succesfull cases:
 				// 1.0.1 Works with bullshit value after channel name | GOOD! 
 				// 1.0.2 Works with multiple channels | GOOD!
-				// 1.0.3 Part trailing message is not implemented
-			// 1.1 ERR_NEEDMOREPARAMS | Doesn't throw numeric reply | In Parser we have only :
-			// 1.2 ERR_NOSUCHCHANNEL | The channel is not present in the message
-			// 1.3 ERR_NOTONCHANNEL |  The channel is not present in the message
+				// 1.0.3 Part trailing message is not implemented // TODO 
+			// 1.1 ERR_NEEDMOREPARAMS | Doesn't throw numeric reply | In Parser we have only : (Fixed)
+			// 1.2 ERR_NOSUCHCHANNEL | The channel is not present in the message (FIXED)
+			// 1.3 ERR_NOTONCHANNEL |  The channel is not present in the message (FIXED)
 		// 3. Topic | ...
 			// 1.0 with this example input "topic #ch1 add some words here" it only adds "add" and forgets about the rest
 		// 4. Invite | ..

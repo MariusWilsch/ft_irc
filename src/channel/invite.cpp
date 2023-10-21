@@ -51,13 +51,14 @@ void     ExecuteCommands::invite(ServerReactor &_server, Message &Message, int c
 		vector<string>	params = Message.getParams();
     string					channelName = params[1];
 		ChannelData&		channel = _server.getChannelManager().getChannelByName(channelName);
-		
-    if (!_server.doesChannelExist(params[1])) {
-        _server.sendNumericReply_FixLater(clientSocket, ERR_NOSUCHCHANNEL(channelName));
+		const string &nick = _server.getClientDataFast(clientSocket).getNickname();
+		if (!_server.doesChannelExist(params[1]))
+		{
+				_server.sendNumericReply_FixLater(clientSocket, ERR_NOSUCHCHANNEL(nick, channelName));
         return ;
-    }
-    if (!channel.isCLient(clientSocket)) {
-        _server.sendNumericReply_FixLater(clientSocket, ERR_NOTONCHANNEL(channelName));
+		}
+		if (!channel.isCLient(clientSocket)) {
+        _server.sendNumericReply_FixLater(clientSocket, ERR_NOTONCHANNEL(nick, channelName));
         return ;
     }
     if (!channel.isOperator(clientSocket)) {
