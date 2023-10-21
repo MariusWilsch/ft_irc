@@ -37,7 +37,7 @@ using std::endl;
 #define RPL_WELCOME(nickname) "001 "  + nickname + " :Welcome to the IRC Network, " + nickname + "\r\n"
 #define RPL_NAMREPLY(nickname, channelType, channel, users) "353 " + nickname + " " + channelType + " " + channel + " :" + users + "\r\n"
 #define RPL_ENDOFNAMES(nickname, channel) "366 " + nickname + " " + channel + " :End of /NAMES list." + "\r\n"
-#define RPL_NOTOPIC(channel) "331: " + channel + " : No topic is set\r\n"
+#define RPL_NOTOPIC(nick, channel) "331 " + nick + " " + channel + " : No topic is set\r\n"
 #define RPL_TOPIC(nick, channel, topic) "332 " + nick + " " + channel + " :" + topic + "\r\n"
 #define RPL_INVITING(nickSender, channel, nickReciever) "341 " + nickSender + " " + nickReciever + " " + channel + "\r\n"
 
@@ -52,6 +52,7 @@ using std::endl;
 #define ERR_NICKNAMEINUSE(nick) "433: " + nick + " :Nickname is already in use\r\n"
 #define ERR_NEEDMOREPARAMS(command) "461: " + command + " : Not enough parameters\r\n"
 #define ERR_ALREADYREGISTRED() "462: You may not reregister\r\n"
+#define ERR_USERNOTINCHANNEL(nickSender, nickTarget, channel) "441 " +  nickSender + " " + nickTarget + " " + channel + " : They aren't on that channel\r\n"
 #define ERR_NOTONCHANNEL(nick, channel) "442 " + nick + " " + channel + " : You're not on that channel\r\n"
 #define ERR_USERONCHANNEL(user, channel) "443: " + user + " " + channel + " : is already on channel\r\n"
 #define ERR_CHANOPRIVSNEEDED(channel) "482: " + channel + " : You're not channel operator\r\n"
@@ -64,6 +65,5 @@ using std::endl;
 #define ERR_NOSUCHNICKCHANNEL(nickSender, nickTarget) "401 " + nickSender + " " + nickTarget + " :No such nick/channel\r\n"
 
 
-#define ERR_USERNOTINCHANNEL(nickSender, nickTarget, channel) "441 " +  nickSender + " " + nickTarget + " " + channel + " : They aren't on that channel\r\n"
 
 // PRIVMSG Numeric replies to add here.

@@ -146,7 +146,7 @@ void ExecuteCommands::join(ServerReactor &_server, Message &ProcessMessage, int 
 			if (Channel.getTopicFlag())
 				_server.sendNumericReply_FixLater(clientSocket, RPL_TOPIC(nickname, ChannelName, Channel.getTopic()));
 			else
-				_server.sendNumericReply_FixLater(clientSocket, RPL_NOTOPIC(ChannelName));
+				_server.sendNumericReply_FixLater(clientSocket, RPL_NOTOPIC(nickname, ChannelName));
 			informMembers(Channel.getClientSockets(), _server.createMsg(_server.getClientDataFast(clientSocket), "JOIN", ProcessMessage.getParams()));
 			string channelKey = "=";
 			_server.sendNumericReply_FixLater(clientSocket, RPL_NAMREPLY(nickname , channelKey, ChannelName, _server.getChannelManager().createUserList(ChannelName, _server, clientSocket)));

@@ -49,10 +49,11 @@ Message::Message( string rawMessage, map <string, CommandProperties> properties 
 				if (token.empty())
 						continue;
 				if (token.find(':') != string::npos) {
-						_params.push_back(_rawMessage.substr(_rawMessage.find(':') + 1));
-						if (_params.back().empty())
-								_params.back() = ":";
-						break;
+						string trailing = _rawMessage.substr(_rawMessage.find(':') + 1);
+						if (!trailing.empty()) {
+    					_params.push_back(trailing);
+    					break;
+						}
 				}
 				if (token.find(',') != string::npos) {
 						std::istringstream iss2(token);
@@ -66,9 +67,9 @@ Message::Message( string rawMessage, map <string, CommandProperties> properties 
 				if (token != ":")
 					_params.push_back(token);
 		}
-	
+
 		// Print extracted data
-		printData();
+		// printData();
 }
 
 /*			GETTERS			*/
@@ -78,8 +79,6 @@ string Message::getCommand( void ) {
 }
 
 std::vector <string> Message::getParams( void ) {
-	if (_params.empty())
-		return (std::vector <string> (1, ""));
 	return _params;
 }
 

@@ -22,12 +22,14 @@
 // The regular user can't change the channel topic, but they can view the topic of the channel by using [ Topic #channelName ]
 //:mok!~d@5c8c-aff4-7127-3c3-1c20.230.197.ip TOPIC #ch77 :Hello,World
 void     ExecuteCommands::topic(ServerReactor &_server, Message &ProcessMessage, int clientSocket){
+	const vector<string>& params = ProcessMessage.getParams();
 
-    if (ProcessMessage.getParams().size() < 1){
-        _server.sendNumericReply_FixLater(clientSocket, ERR_NEEDMOREPARAMS(ProcessMessage.getCommand()));
-        throw std::exception();
-    }
-    string channelName = ProcessMessage.getParams()[0];
+	if (params.empty())
+	{
+		_server.sendNumericReply_FixLater(clientSocket, ERR_NEEDMOREPARAMS(ProcessMessage.getCommand()));
+		throw std::exception();
+  }
+    string channelName = params[0];
 		const string &nick = _server.getClientDataFast(clientSocket).getNickname();
 		if (!_server.doesChannelExist(channelName))
 		{
@@ -40,11 +42,11 @@ void     ExecuteCommands::topic(ServerReactor &_server, Message &ProcessMessage,
         throw std::exception();
     }
     // Any member can ask for the topic of the channel, in this case w'll send RPL_TOPIC or RPL_NOTOPIC
-    if (ProcessMessage.getParams().size() == 1) {
+    if (params.size() == 1) {
         if (Channel.getTopicFlag())
-            _server.sendNumericReply_FixLater(clientSocket, RPL_TOPIC(_server.getClientDataFast(clientSocket).getNickname(), channelName, Channel.getTopic()));
+            _server.sendNumericReply_FixLater(clientSocket, RPL_TOPIC(nick, channelName, Channel.getTopic()));
         else
-            _server.sendNumericReply_FixLater(clientSocket, RPL_NOTOPIC(channelName));
+            _server.sendNumericReply_FixLater(clientSocket, RPL_NOTOPIC(nick, channelName));
         return ;
     }
     // Only the operators of the channel can change the topic.
@@ -52,14 +54,14 @@ void     ExecuteCommands::topic(ServerReactor &_server, Message &ProcessMessage,
         _server.sendNumericReply_FixLater(clientSocket, ERR_CHANOPRIVSNEEDED(channelName));
         return ;
     }
-    if (ProcessMessage.getParams().size() == 2 && whiteCheck(ProcessMessage.getParams()[1])){
+    if (params.size() == 2 && whiteCheck(params[1])){
         Channel.setTopic("");
         Channel.setTopicFlag(false);
     }
-		Channel.setTopic(ProcessMessage.getParams()[1]);
+		Channel.setTopic(params[1]);
 		Channel.setTopicFlag(true);
-    std::vector <string> params;
-    params.push_back(ProcessMessage.getParams()[0]);
-    params.push_back(ProcessMessage.getParams()[1]);
-    informMembers(Channel.getClientSockets(), _server.createMsg(_server.getClientDataFast(clientSocket), "TOPIC", params));
+    std::vector <string> param;
+    param.push_back(params[0]);
+    param.push_back(params[1]);
+    informMembers(Channel.getClientSockets(), _server.createMsg(_server.getClientDataFast(clientSocket), "TOPIC", param));
 }

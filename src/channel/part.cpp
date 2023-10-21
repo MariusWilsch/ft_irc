@@ -14,14 +14,10 @@
 
 bool    partParser(std::vector<string> &ChannelNames, std::vector<string> &partMessage, Message &ProcessMessage){
 	vector<string> params = ProcessMessage.getParams();
-	
-	if (params.size() == 1 && params[0] == ":")
-			return (false);
-	if (params[0].empty())
-			return (false);
-	
+	if (params.empty())
+		return (false);
 	for (unsigned int i = 0; i < params.size(); i++) {
-		string param = ProcessMessage.getParams()[i];
+		string param = params[i];
 		if (param[0] == '#')
 				ChannelNames.push_back(param);
 		else if (!ExecuteCommands::whiteCheck(param))
@@ -38,8 +34,7 @@ void     ExecuteCommands::part(ServerReactor &_server, Message &ProcessMessage, 
 
 	int stat = partParser(ChannelNames, partMessage, ProcessMessage);
 	if (stat == false){
-		string Err = ERR_NEEDMOREPARAMS(ProcessMessage.getCommand());
-		send(clientSocket, Err.c_str(), Err.size(), 0);
+		_server.sendNumericReply_FixLater(clientSocket, ERR_NEEDMOREPARAMS(ProcessMessage.getCommand()));
 		throw std::exception();
 	}
 	const string &nick = _server.getClientDataFast(clientSocket).getNickname();

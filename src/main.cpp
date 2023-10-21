@@ -71,7 +71,7 @@
 				// 1.6 RPL_AWAY | Not required!
 		// 5. Kick | ...
 			// Succesfull cases:
-				// 1.0 Works with bullshit value after channel name | Not Good! 
+				// 1.0 Works with bullshit value after channel name | Good! 
 				// 1.1 Works with multiple channels | GOOD!
 				// 1.2 Kick trailing message | GOOD!
 				// 1.3 Send to all the channel members the kick message | GOOD!
