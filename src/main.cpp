@@ -26,6 +26,15 @@
 	412 Archer :No text to send
 */
 
+// ! The user list creation is not working correctly if a user left the channel and tries to join multiple channels again
+	// TODO if user1 joins "join #ch1,#ch2" and then parts from #ch1 and then tries to join again #ch1,#ch2 then it doesn't work
+// * Fix the trailing message issue in part issue with multiple channels/users
+// * Check all the mode command successful cases and numeric replies from RFC2812
+// * Check all the PRIVMSG command successful cases and numeric replies from RFC2812
+// * Go over all subjects commands successfull cases and numeric replies/server replies from RFC2812 again
+// * Eval
+
+
 // FIXME:
 // Issue list
 	// authentification
