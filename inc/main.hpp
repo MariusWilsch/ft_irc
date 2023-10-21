@@ -42,8 +42,8 @@ using std::endl;
 #define RPL_INVITING(nickSender, channel, nickReciever) "341 " + nickSender + " " + nickReciever + " " + channel + "\r\n"
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ERRORS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
-#define ERR_INVITEONLYCHAN(channel) "473: " + channel + " :Cannot join channel (+i)\r\n"
-#define ERR_BADCHANNELKEY(channel) "475: " + channel + " : Cannot join channel (+k)\r\n"
+#define ERR_INVITEONLYCHAN(nick, channel) "473 " + nick + " " + channel + " :Cannot join channel (+i)\r\n"
+#define ERR_BADCHANNELKEY(nick, channel) "475 " + nick + " " + channel + " : Cannot join channel (+k)\r\n"
 #define ERR_CHANNELISFULL(channel) "471: " + channel + " :Cannot join channel (+l)\r\n"
 
 #define ERR_UNKNOWNCOMMAND(nickname, wrongCommand) "421 " + nickname + " " + wrongCommand + " :Unknown command\r\n"

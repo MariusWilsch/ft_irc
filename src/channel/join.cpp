@@ -93,12 +93,12 @@ bool	createNewChannel(ServerReactor &_serverReactor, int clientSocket, string Ch
 	return (true);
 }
 
-bool	joinPrivateChannel(ServerReactor &_serverReactor, int clientSocket, ChannelData& Channel, string inputKey){
+bool	joinPrivateChannel(ServerReactor &_server, int clientSocket, ChannelData& Channel, string inputKey){
 	if ((inputKey.c_str() != NULL) && (Channel.getKey().compare(inputKey) == 0)){
 		Channel.addClient(clientSocket);
 		return(true);
 	}
-	_serverReactor.sendNumericReply_FixLater(clientSocket, ERR_BADCHANNELKEY(Channel.getName()));
+	_server.sendNumericReply_FixLater(clientSocket, ERR_BADCHANNELKEY(_server.getClientDataFast(clientSocket).getNickname(), Channel.getName()));
 	return (false);
 }
 
@@ -135,7 +135,7 @@ void ExecuteCommands::join(ServerReactor &_server, Message &ProcessMessage, int 
 			continue;
 		}
 		if (Channel.getInviteFlag() && !Channel.isInvited(_server.getClientDataFast(clientSocket).getNickname())) {
-			_server.sendNumericReply_FixLater(clientSocket, ERR_INVITEONLYCHAN(ChannelName));
+			_server.sendNumericReply_FixLater(clientSocket, ERR_INVITEONLYCHAN(_server.getClientDataFast(clientSocket).getNickname(), ChannelName));
 			continue;
 		}
 		Joined = (Channel.getSecurity()) ? 
