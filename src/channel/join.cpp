@@ -141,13 +141,13 @@ void ExecuteCommands::join(ServerReactor &_server, Message &ProcessMessage, int 
 		Joined = (Channel.getSecurity()) ? 
 			joinPrivateChannel(_server, clientSocket, Channel, ChannelKeys[i]) : 
 			joinPublicChannel(clientSocket, Channel);
+		string nickname = _server.getClientManager().getClientData(clientSocket).getNickname();
 		if (Joined) {
 			if (Channel.getTopicFlag())
-				_server.sendNumericReply_FixLater(clientSocket, RPL_TOPIC(ChannelName, Channel.getTopic()));
+				_server.sendNumericReply_FixLater(clientSocket, RPL_TOPIC(nickname, ChannelName, Channel.getTopic()));
 			else
 				_server.sendNumericReply_FixLater(clientSocket, RPL_NOTOPIC(ChannelName));
 			informMembers(Channel.getClientSockets(), _server.createMsg(_server.getClientDataFast(clientSocket), "JOIN", ProcessMessage.getParams()));
-			string nickname = _server.getClientManager().getClientData(clientSocket).getNickname();
 			string channelKey = "=";
 			_server.sendNumericReply_FixLater(clientSocket, RPL_NAMREPLY(nickname , channelKey, ChannelName, _server.getChannelManager().createUserList(ChannelName, _server, clientSocket)));
 			_server.sendNumericReply_FixLater(clientSocket, RPL_ENDOFNAMES(nickname, ChannelName));

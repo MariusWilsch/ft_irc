@@ -40,14 +40,14 @@
 			// 1.1 ERR_NEEDMOREPARAMS | Good!
 			// 1.2 ERR_BANNEDFROMCHAN | Not required!
 			// 1.3 In ERR_INVITEONLYCHAN | The channel is not present in the message (Fixed)
-			// 1.4 ERR_BADCHANNELKEY | The channel is not present in the message
-			// 1.5 ERR_CHANNELISFULL | The channel is not present in the message
+			// 1.4 ERR_BADCHANNELKEY | The channel is not present in the message (Fixed)
+			// 1.5 ERR_CHANNELISFULL | The channel is not present in the message (Fixed)
 			// 1.6 ERR_BADCHANMASK | Not required!
 			// 1.7 ERR_NOSUCHCHANNEL | The channel is not present in the message (Wired bc we just create it, lol)
 			// 1.8 ERR_TOOMANYCHANNELS | Not required!
 			// 1.9 ERR_TOOMANYTARGETS | Not required!
 			// 1.10 ERR_UNAVAILRESOURCE | Not required!
-			// 1.11 RPL_TOPIC | Doesn't send the full topic or the wrong param
+			// 1.11 RPL_TOPIC | Doesn't send the full topic or the wrong param (Fixed)
 			// 1.12 RPL_NAMES | Good!
 		// 2. Part | ...
 			// 1.0 Succesfull cases:

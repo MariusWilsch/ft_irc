@@ -15,7 +15,7 @@
 bool    partParser(std::vector<string> &ChannelNames, std::vector<string> &partMessage, Message &ProcessMessage){
 	vector<string> params = ProcessMessage.getParams();
 	
-	if (params.size() == 0)
+	if (params.size() == 1 && params[0] == ":")
 			return (false);
 	if (params[0].empty())
 			return (false);

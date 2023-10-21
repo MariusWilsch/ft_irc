@@ -38,7 +38,7 @@ using std::endl;
 #define RPL_NAMREPLY(nickname, channelType, channel, users) "353 " + nickname + " " + channelType + " " + channel + " :" + users + "\r\n"
 #define RPL_ENDOFNAMES(nickname, channel) "366 " + nickname + " " + channel + " :End of /NAMES list." + "\r\n"
 #define RPL_NOTOPIC(channel) "331: " + channel + " : No topic is set\r\n"
-#define RPL_TOPIC(channel, topic) "332: " + channel + ": "  + topic + "\r\n"
+#define RPL_TOPIC(nick, channel, topic) "332 " + nick + " " + channel + " :" + topic + "\r\n"
 #define RPL_INVITING(nickSender, channel, nickReciever) "341 " + nickSender + " " + nickReciever + " " + channel + "\r\n"
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ERRORS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
