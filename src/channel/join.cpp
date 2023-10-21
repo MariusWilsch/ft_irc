@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/24 12:13:30 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/16 23:37:31 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/21 15:10:26 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,13 +102,9 @@ bool	joinPrivateChannel(ServerReactor &_serverReactor, int clientSocket, Channel
 	return (false);
 }
 
-bool	joinPublicChannel(ServerReactor &_serverReactor, int clientSocket, ChannelData& Channel, string inputKey){
-	if (inputKey.empty()){
-		Channel.addClient(clientSocket);
-		return (true);
-	}
-	_serverReactor.sendNumericReply_FixLater(clientSocket, ERR_BADCHANNELKEY(Channel.getName()));
-	return (false);
+bool	joinPublicChannel(int clientSocket, ChannelData& Channel){
+	Channel.addClient(clientSocket);
+	return (true);
 }
 
 void ExecuteCommands::join(ServerReactor &_server, Message &ProcessMessage, int clientSocket){
@@ -144,7 +140,7 @@ void ExecuteCommands::join(ServerReactor &_server, Message &ProcessMessage, int 
 		}
 		Joined = (Channel.getSecurity()) ? 
 			joinPrivateChannel(_server, clientSocket, Channel, ChannelKeys[i]) : 
-			joinPublicChannel(_server, clientSocket, Channel, ChannelKeys[i]);
+			joinPublicChannel(clientSocket, Channel);
 		if (Joined) {
 			if (Channel.getTopicFlag())
 				_server.sendNumericReply_FixLater(clientSocket, RPL_TOPIC(ChannelName, Channel.getTopic()));
