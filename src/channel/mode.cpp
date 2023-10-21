@@ -205,5 +205,5 @@ void	ExecuteCommands::mode(ServerReactor &_server, Message &ProccessMessage, int
 		throw std::exception();
 	}
 	ChannelData &channel = _server.getChannelManager().getChannelByName(ProccessMessage.getParams()[0]);
-	informMembers(channel.getClientSockets(), _server.createInfoMsg(_server.getClientDataFast(clientSocket), "MODE", ProccessMessage.getParams()));
+	informMembers(channel.getClientSockets(), _server.createMsg(_server.getClientDataFast(clientSocket), "MODE", ProccessMessage.getParams()));
 }

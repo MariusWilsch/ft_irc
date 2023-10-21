@@ -28,8 +28,7 @@ void	ExecuteCommands::privmsg(ServerReactor &_server, Message &ProcessMessage, i
 	if (!_server.doesChannelExist(params[0]) && !isUser)
 		return _server.sendNumericReply_FixLater(clientSocket, ERR_NOSUCHNICKCHANNEL(nickSender, params[0]));
 		// return _server.sendNumericReply(clientSocket, "401", params[0], "No such nick/channel"); // TODO: USE MACRO FOR ERRORS
-		
-	cout << "params[1] = " << params[1] << endl;
+
 	if (params[1] == ":")
 		return _server.sendNumericReply_FixLater(clientSocket, ERR_NOTEXTTOSEND(nickSender));
 		// return _server.sendNumericReply(clientSocket, "412", params[0], "No text to send"); // TODO: USE MACRO FOR ERRORS

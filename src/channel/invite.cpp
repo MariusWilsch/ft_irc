@@ -74,6 +74,6 @@ void     ExecuteCommands::invite(ServerReactor &_server, Message &Message, int c
 				return ;
 		}
 		channel.addGuest(params[0]);
-		_server.sendMsg_FixLater(targetFD, _server.createInfoMsg(_server.getClientDataFast(clientSocket), Message.getCommand(), params));
+		_server.sendMsg_FixLater(targetFD, _server.createMsg(_server.getClientDataFast(clientSocket), Message.getCommand(), params));
 		_server.sendNumericReply_FixLater(clientSocket, RPL_INVITING(_server.getClientDataFast(clientSocket).getNickname(), channelName, params[0]));
 }

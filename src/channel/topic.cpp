@@ -59,5 +59,5 @@ void     ExecuteCommands::topic(ServerReactor &_ServerReactor, Message &ProcessM
     std::vector <string> params;
     params.push_back(ProcessMessage.getParams()[0]);
     params.push_back(ProcessMessage.getParams()[1]);
-    informMembers(Channel.getClientSockets(), _ServerReactor.createInfoMsg(_ServerReactor.getClientDataFast(clientSocket), "TOPIC", params));
+    informMembers(Channel.getClientSockets(), _ServerReactor.createMsg(_ServerReactor.getClientDataFast(clientSocket), "TOPIC", params));
 }

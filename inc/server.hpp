@@ -97,25 +97,14 @@ class ServerReactor {
 		 
 		/*			SERVER T0 CLIENT COMMUICATION			*/
 
-		vector<string> processItems(const std::string &channelName = "", const std::string &item2 = "", const std::string &item3 = "");
-
-		/**
-		 * @brief Create a Info Msg object
-		 * 
-		 * @param clientData ClientData object
-		 * @param command 
-		 * @param params 
-		 * @return string 
-		 */
-		string	createInfoMsg(ClientData& clientData, const string &command, const vector <string> &params, const string &trailing = "");
+		// string	createMsg(ClientData& clientData, const string &command, const vector <string> &params, int paramCnt, const string &trailing = "");
+		string	createMsg(ClientData& clientData, const string &command, const vector <string> &params, const string &trailing = "");
 	
+		void		sendMsg(int socket, const string& clientInfo ,const string &command, string param, const string &trailing = "");
+		void		sendNumericReply(int socket, const string &param, const string &trailing = "");
 
-		void			sendMsg(int socket, const string& clientInfo ,const string &command, string param, const string &trailing = "");
 		int 		sendMsg_FixLater(int socket, const string &message);
-		void sendNumericReply(int socket, const string &param, const string &trailing = "");
 		void		sendNumericReply_FixLater(int socket, const string& reply);
-
-		/*			COMMAND IMPLEMENTATION			*/
 
 		/* 					GETTERS					*/
 		ClientManager&			getClientManager( void );

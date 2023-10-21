@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
- 
 #include "ExecuteCommands.hpp"
 
 int joinParser(std::vector<string> &ChannelNames, std::vector<string> &ChannelKeys, Message &ProcessMessage){
@@ -75,7 +74,7 @@ void    leaveChannels(ServerReactor &_serverReactor, int clientSocket){
 			it->second.removeOperator(*RemoveIt);
 		std::vector<string> params;
 		params.push_back(channel.getName());
-		ExecuteCommands::informMembers(channel.getClientSockets(), _serverReactor.createInfoMsg(_serverReactor.getClientDataFast(clientSocket), "PART", params));
+		ExecuteCommands::informMembers(channel.getClientSockets(), _serverReactor.createMsg(_serverReactor.getClientDataFast(clientSocket), "PART", params));
 	}
 	_serverReactor.getChannelManager().removeGarbageChannels();
 
@@ -94,13 +93,6 @@ bool	createNewChannel(ServerReactor &_serverReactor, int clientSocket, string Ch
 	return (true);
 }
 
-// :AMSKLDN!~t@5c8c-aff4-7127-3c3-1c20.230.197.ip JOIN :#ChannelNadia
-
-
-// !Recieve this when join first time.
-// :Ajrngejkrg!~t@5c8c-aff4-7127-3c3-1c20.230.197.ip JOIN :#ch77
-// :punch.wa.us.dal.net 353 Ajrngejkrg = #ch77 :Ajrngejkrg @mok 
-// :punch.wa.us.dal.net 366 Ajrngejkrg #ch77 :End of /NAMES list.
 bool	joinPrivateChannel(ServerReactor &_serverReactor, int clientSocket, ChannelData& Channel, string inputKey){
 	if ((inputKey.c_str() != NULL) && (Channel.getKey().compare(inputKey) == 0)){
 		Channel.addClient(clientSocket);
@@ -158,7 +150,7 @@ void ExecuteCommands::join(ServerReactor &_server, Message &ProcessMessage, int 
 				_server.sendNumericReply_FixLater(clientSocket, RPL_TOPIC(ChannelName, Channel.getTopic()));
 			else
 				_server.sendNumericReply_FixLater(clientSocket, RPL_NOTOPIC(ChannelName));
-			informMembers(Channel.getClientSockets(), _server.createInfoMsg(_server.getClientDataFast(clientSocket), "JOIN", ProcessMessage.getParams()));
+			informMembers(Channel.getClientSockets(), _server.createMsg(_server.getClientDataFast(clientSocket), "JOIN", ProcessMessage.getParams()));
 			string nickname = _server.getClientManager().getClientData(clientSocket).getNickname();
 			string channelKey = "=";
 			_server.sendNumericReply_FixLater(clientSocket, RPL_NAMREPLY(nickname , channelKey, ChannelName, _server.getChannelManager().createUserList(ChannelName, _server, clientSocket)));

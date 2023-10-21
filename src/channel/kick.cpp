@@ -86,7 +86,7 @@ void     ExecuteCommands::kick(ServerReactor &_serverReactor, Message &ProcessMe
 				params.push_back(ChannelNames[i]);
 				params.push_back(Users[i]);
 
-				informMembers(Channel.getClientSockets(), _serverReactor.createInfoMsg(_serverReactor.getClientDataFast(clientSocket), "KICK", params, ProcessMessage.getTrailing()));
+				informMembers(Channel.getClientSockets(), _serverReactor.createMsg(_serverReactor.getClientDataFast(clientSocket), "KICK", params, ProcessMessage.getTrailing()));
         Channel.removeClient(kickedID);
         if (Channel.isOperator(kickedID))
             Channel.removeOperator(kickedID);

@@ -53,14 +53,12 @@ void     ExecuteCommands::part(ServerReactor &_server, Message &ProcessMessage, 
 			continue ;
 		}
 		std::vector<string> params;
-		params.push_back(ProcessMessage.getParams()[0]);
-		informMembers(channel.getClientSockets(), _server.createInfoMsg(_server.getClientDataFast(clientSocket), "PART", params));
+		params.push_back(ProcessMessage.getParams()[i]);
+		informMembers(channel.getClientSockets(), _server.createMsg(_server.getClientDataFast(clientSocket), "PART", params));
 		channel.removeClient(clientSocket);
 		if (channel.isOperator(clientSocket))
 			channel.removeOperator(clientSocket);
 		if (channel.getClientSockets().size() == 0)
 			_server.getChannelManager().removeChannel(ChannelNames[i]);
-		
-
 	}
 }
