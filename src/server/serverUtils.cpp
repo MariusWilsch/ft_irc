@@ -119,7 +119,7 @@ createMsg(ClientData& clientData, const string& command, const vector <string>& 
 		message += " " + params[0];
 
 		// Append parameters
-		if (command == "INVITE" || command == "PART") {
+		if (command == "INVITE" || command == "PART" || command == "TOPIC") {
 			for (size_t i = 1; i < params.size(); ++i)
 					message += " :" + params[i];
 		} else {

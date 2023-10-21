@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/04 22:01:31 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/15 01:15:31 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/21 17:29:25 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 bool    partParser(std::vector<string> &ChannelNames, std::vector<string> &partMessage, Message &ProcessMessage){
 	vector<string> params = ProcessMessage.getParams();
 	
-	if (params.size() == 0)
+	if (params.size() == 1 && params[0] == ":")
 			return (false);
 	if (params[0].empty())
 			return (false);
@@ -31,6 +31,11 @@ bool    partParser(std::vector<string> &ChannelNames, std::vector<string> &partM
 }
 
 // :Archer123!~Aissam@5c8c-aff4-7127-3c3-1c20.230.197.ip PART #chTest111 : I don't like those kind of random channels
+
+
+/*
+
+*/
 void     ExecuteCommands::part(ServerReactor &_server, Message &ProcessMessage, int clientSocket) {
 	
 	std::vector<string> ChannelNames;
@@ -54,6 +59,7 @@ void     ExecuteCommands::part(ServerReactor &_server, Message &ProcessMessage, 
 		}
 		std::vector<string> params;
 		params.push_back(ProcessMessage.getParams()[i]);
+		
 		informMembers(channel.getClientSockets(), _server.createMsg(_server.getClientDataFast(clientSocket), "PART", params));
 		channel.removeClient(clientSocket);
 		if (channel.isOperator(clientSocket))

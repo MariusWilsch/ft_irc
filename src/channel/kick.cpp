@@ -90,8 +90,6 @@ void     ExecuteCommands::kick(ServerReactor &_serverReactor, Message &ProcessMe
         Channel.removeClient(kickedID);
         if (Channel.isOperator(kickedID))
             Channel.removeOperator(kickedID);
-        // NUMERIC REPLY TO INFORM ALL THE CHANNEL MEMBER. "COMMENT"
-
     }
 }
 
