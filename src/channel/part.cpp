@@ -43,7 +43,8 @@ void     ExecuteCommands::part(ServerReactor &_server, Message &ProcessMessage, 
 	const string &nick = _server.getClientDataFast(clientSocket).getNickname();
 	for (unsigned int i = 0; i < ChannelNames.size(); i++)
 	{
-		if (!_server.doesChannelExist(ChannelNames[i])){
+		cout << std::boolalpha << _server.doesChannelExist(ChannelNames[i]) << endl;
+		if (!_server.doesChannelExist(ChannelNames[i])) {
 			_server.sendNumericReply_FixLater(clientSocket, ERR_NOSUCHCHANNEL(nick, ChannelNames[i]));
 			continue ;
 		}

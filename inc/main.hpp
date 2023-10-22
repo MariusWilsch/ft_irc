@@ -44,7 +44,7 @@ using std::endl;
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ERRORS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
 #define ERR_INVITEONLYCHAN(nick, channel) "473 " + nick + " " + channel + " :Cannot join channel (+i)\r\n"
 #define ERR_BADCHANNELKEY(nick, channel) "475 " + nick + " " + channel + " : Cannot join channel (+k)\r\n"
-#define ERR_CHANNELISFULL(channel) "471: " + channel + " :Cannot join channel (+l)\r\n"
+#define ERR_CHANNELISFULL(nick, channel) "471 " + nick + " " + channel + " :Cannot join channel (+l)\r\n"
 
 #define ERR_UNKNOWNCOMMAND(nickname, wrongCommand) "421 " + nickname + " " + wrongCommand + " :Unknown command\r\n"
 #define ERR_NONICKNAMEGIVEN() "431: * No nickname given\r\n"
@@ -63,7 +63,6 @@ using std::endl;
 #define ERR_NORECIPIENT(target) "411 " + target + " :No recipient given (PRIVMSG)\r\n"
 #define ERR_NOTEXTTOSEND(target) "412 " + target + " :No text to send\r\n"
 #define ERR_NOSUCHNICKCHANNEL(nickSender, nickTarget) "401 " + nickSender + " " + nickTarget + " :No such nick/channel\r\n"
-
 
 
 // PRIVMSG Numeric replies to add here.

@@ -12,13 +12,13 @@
 
 #include "ExecuteCommands.hpp"
 
-bool kickParser(std::vector<string> &ChannelNames, std::vector<string> &Users, Message &ProcessMessage){
-    string param = ProcessMessage.getParams()[0];
+bool kickParser(std::vector<string> &ChannelNames, std::vector<string> &Users, Message &msg){
 
-    if (ProcessMessage.getParams().size() <= 1 || param.empty())
+    if (msg.getParams().empty())
         return (false);
-    for (unsigned int i = 0; i < ProcessMessage.getParams().size(); i++){
-        param = ProcessMessage.getParams()[i];
+    string param = msg.getParams()[0];
+    for (unsigned int i = 0; i < msg.getParams().size(); i++){
+        param = msg.getParams()[i];
         if (param[0] == '#'){
             ChannelNames.push_back(param);
         }
@@ -29,7 +29,7 @@ bool kickParser(std::vector<string> &ChannelNames, std::vector<string> &Users, M
     if (Users.size() > ChannelNames.size() + 1)
             return (false);
 		if (Users.size() == ChannelNames.size() + 1) {
-            ProcessMessage.setTrailing(Users[Users.size() - 1]);
+            msg.setTrailing(Users[Users.size() - 1]);
     }
     return (true);
 }
