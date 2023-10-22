@@ -71,7 +71,8 @@ Message::Message( string rawMessage, map <string, CommandProperties> properties 
 					_params.push_back(token);
 		}
 		// Print extracted data
-		// printData();
+		cout << "Printing data" << endl;
+		printData();
 }
 
 /*			GETTERS			*/

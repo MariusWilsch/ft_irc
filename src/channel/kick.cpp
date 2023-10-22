@@ -14,7 +14,7 @@
 
 bool kickParser(std::vector<string> &ChannelNames, std::vector<string> &Users, Message &msg){
 
-    if (msg.getParams().empty())
+    if (msg.getParams().size() < 3)
         return (false);
     string param = msg.getParams()[0];
     for (unsigned int i = 0; i < msg.getParams().size(); i++){

@@ -18,26 +18,33 @@ void	ExecuteCommands::privmsg(ServerReactor &_server, Message &ProcessMessage, i
 	vector<string> params = ProcessMessage.getParams();
 	const string& nickSender = _server.getClientDataFast(clientSocket).getNickname();
 	
-	if (params[0].empty())
+	if (params.empty())
 		return _server.sendNumericReply_FixLater(clientSocket, ERR_NORECIPIENT(nickSender));
-		// return _server.sendNumericReply(clientSocket, "411", params[0], "No recipient given (PRIVMSG)"); // TODO: USE MACRO FOR ERRORS
+		
 		
 	int		targetFD = _server.getClientManager().getClientSocketByNick(params[0]);
 	bool	isUser = (targetFD != -1);
 	
 	if (!_server.doesChannelExist(params[0]) && !isUser)
 		return _server.sendNumericReply_FixLater(clientSocket, ERR_NOSUCHNICKCHANNEL(nickSender, params[0]));
-		// return _server.sendNumericReply(clientSocket, "401", params[0], "No such nick/channel"); // TODO: USE MACRO FOR ERRORS
+		
 
-	if (params[1] == ":")
+	if (params.size () < 2)
 		return _server.sendNumericReply_FixLater(clientSocket, ERR_NOTEXTTOSEND(nickSender));
-		// return _server.sendNumericReply(clientSocket, "412", params[0], "No text to send"); // TODO: USE MACRO FOR ERRORS
+		
+	cout << "targetFD = " << targetFD << endl;
+
+
+	//! FIXME : check if the user is in the channel
+
+	// if ( _server.doesChannelExist(params[0]) && _server.getClientManager().MatchNickName(_server.getChannelManager().getChannelByName(params[0]).getClientSockets(), nickSender))
+	// 	return _server.sendNumericReply_FixLater(clientSocket, ERR_CANNOTSENDTOCHAN(nickSender, params[0]));
 	
-	// If User 
 	if (isUser) 
 		return _server.sendMsg(targetFD, _server.getClientDataFast(clientSocket).getClientInfo(), "PRIVMSG", params[0], params[1]);
 	// If Channel
 	set<int> channelMembers = _server.getChannelManager().getChannelByName(params[0]).getClientSockets();
+	cout << "channelMembers.size() = " << channelMembers.size() << endl;
 	for (set<int>::iterator it = channelMembers.begin(); it != channelMembers.end(); it++) {
 		if (*it == clientSocket)
 				continue ;

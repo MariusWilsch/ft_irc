@@ -102,7 +102,7 @@
 
 
 
-// * Testing all Commands again!
+// * Testing all Commands again! Mainly with LimeChat
 
 // TODO 
 	// Numeric Replies
@@ -226,14 +226,23 @@
 				// 1.5 ERR_NOTONCHANNEL | Good!
 			// Correct
 				// 1.0 KICK <channel> <nickname> | Good!
-				// 1.1 KICK <channel> <nickname> bullshitValue | Good!
-				// 1.2 KICK <channel> <nickname> :trailingMessage | Good!
-				// 1.3 KICK <channel> <nickname> bullshitValue :trailingMessage | Good!
-				// 1.4 Broadcast the kick message to all the channel members | Good!
+				// 1.1 KICK <channel> <nickname> kickMessage | Good!
+				// 1.2 KICK <channel1>,<channel2> <nickname><nickname> | Good!
+				// 1.2 KICK <channel1>,<channel2> <nickname><nickname> Message | Good! //? Accoriding to RFC2812 we do not need to implement kickMessage with multiple channels/users, but it works in LimeChat
+				// 1.3 Broadcast the kick message to all the channel members | Good!
+	
 
 
 
 		// PRIVMSG
+			// NUMERIC REPLIES
+				// 1.0 ERR_NORECIPIENT | Good!
+				// 1.1 ERR_NOTEXTTOSEND | Good!
+				// 1.2 ERR_CANNOTSENDTOCHAN | not required!
+				// 1.3 ERR_NOTOPLEVEL | not required!
+				// 1.4 ERR_WILDTOPLEVEL | not required!
+				// 1.5 ERR_TOOMANYTARGETS | not required!
+				// 1.6 ERR_NOSUCHNICKCHANNEL | Good!
 			
 			// Correct
 				// Sends message to channel even if the user left the channel | //! Not Good!
