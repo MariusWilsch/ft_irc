@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/01 16:47:40 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/15 19:19:35 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/22 02:18:30 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 bool kickParser(std::vector<string> &ChannelNames, std::vector<string> &Users, Message &ProcessMessage){
     string param = ProcessMessage.getParams()[0];
 
-    if (param.size() == 0 || param.empty())
+    if (ProcessMessage.getParams().size() <= 1 || param.empty())
         return (false);
     for (unsigned int i = 0; i < ProcessMessage.getParams().size(); i++){
         param = ProcessMessage.getParams()[i];
@@ -27,26 +27,14 @@ bool kickParser(std::vector<string> &ChannelNames, std::vector<string> &Users, M
         }
     }
     if (Users.size() > ChannelNames.size() + 1)
-				return (false);
+            return (false);
 		if (Users.size() == ChannelNames.size() + 1) {
-				ProcessMessage.setTrailing(Users[Users.size() - 1]);
-			cout << "Users Size: " << Users.size() << "Names: " << ChannelNames.size() << endl;
+            ProcessMessage.setTrailing(Users[Users.size() - 1]);
     }
     return (true);
 }
 
-/*
-    Search for the channels inside the channels countainer:
-        + channel doesn't exist: Generate a numeric reply of ERR and continue.
-        + channel exist search for the componenet user
-            + if the user is present then: kick his ass from the channel.
-                + Check the trailing if it's present then inform all the members: by the kick reason
-                + if the trailing is not present then JUST INFORM without specifyng the reason 
-            + if the user doesn't exist then generate a specific numeric reply and continue.
-*/
-
  // Kick #channel1 #channel2 #InvalidCh user1 user2 user3
- // !if kick command failed with a specific channel for any reason: Do the program continue it's execution or not????? 
 void     ExecuteCommands::kick(ServerReactor &_server, Message &msg, int clientSocket){
     const string& nickSender = _server.getClientDataFast(clientSocket).getNickname();
     std::vector<string> ChannelNames;
@@ -83,11 +71,10 @@ void     ExecuteCommands::kick(ServerReactor &_server, Message &msg, int clientS
 			_server.sendNumericReply_FixLater(clientSocket, ERR_NOSUCHNICKCHANNEL(nickSender, Users[i]));
             continue;
         }
-				vector<string> params;
-				params.push_back(ChannelNames[i]);
-				params.push_back(Users[i]);
-
-				informMembers(Channel.getClientSockets(), _server.createMsg(_server.getClientDataFast(clientSocket), "KICK", params, msg.getTrailing()));
+        vector<string> params;
+        params.push_back(ChannelNames[i]);
+        params.push_back(Users[i]);
+        informMembers(Channel.getClientSockets(), _server.createMsg(_server.getClientDataFast(clientSocket), "KICK", params, msg.getTrailing()));
         Channel.removeClient(kickedID);
         if (Channel.isOperator(kickedID))
             Channel.removeOperator(kickedID);

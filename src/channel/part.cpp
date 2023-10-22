@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/04 22:01:31 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/15 01:15:31 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/21 23:40:19 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,13 @@ bool    partParser(std::vector<string> &ChannelNames, std::vector<string> &partM
 	for (unsigned int i = 0; i < params.size(); i++) {
 		string param = params[i];
 		if (param[0] == '#')
-				ChannelNames.push_back(param);
+			ChannelNames.push_back(param);
 		else if (!ExecuteCommands::whiteCheck(param))
-				partMessage.push_back(param);
+			partMessage.push_back(param);
 	}
+	// using the trailing inside ProcessMessage object.
+	if (partMessage.size() > 0)
+		ProcessMessage.setTrailing(partMessage[0]);
 	return (true);
 }
 
@@ -51,6 +54,8 @@ void     ExecuteCommands::part(ServerReactor &_server, Message &ProcessMessage, 
 		}
 		std::vector<string> params;
 		params.push_back(ProcessMessage.getParams()[i]);
+		if (!ProcessMessage.getTrailing().empty())
+			params.push_back(ProcessMessage.getTrailing());
 		informMembers(channel.getClientSockets(), _server.createMsg(_server.getClientDataFast(clientSocket), "PART", params));
 		channel.removeClient(clientSocket);
 		if (channel.isOperator(clientSocket))

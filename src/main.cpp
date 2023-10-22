@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 09:59:41 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/15 02:52:36 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/22 01:36:51 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,10 @@
 */
 
 // ! The user list creation is not working correctly if a user left the channel and tries to join multiple channels again
-	// TODO if user1 joins "join #ch1,#ch2" and then parts from #ch1 and then tries to join again #ch1,#ch2 then it doesn't work
-// * Fix the trailing message issue in part issue with multiple channels/users
+
+
+// TODO if user1 joins "join #ch1,#ch2" and then parts from #ch1 and then tries to join again #ch1,#ch2 then it doesn't work
+// * Fix the trailing message issue in part issue with multiple channels
 // * Check all the mode command successful cases and numeric replies from RFC2812
 // * Check all the PRIVMSG command successful cases and numeric replies from RFC2812
 // * Go over all subjects commands successfull cases and numeric replies/server replies from RFC2812 again

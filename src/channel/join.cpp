@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/24 12:13:30 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/21 15:10:26 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/21 23:19:15 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,12 +142,15 @@ void ExecuteCommands::join(ServerReactor &_server, Message &ProcessMessage, int 
 			joinPrivateChannel(_server, clientSocket, Channel, ChannelKeys[i]) : 
 			joinPublicChannel(clientSocket, Channel);
 		string nickname = _server.getClientManager().getClientData(clientSocket).getNickname();
+
 		if (Joined) {
 			if (Channel.getTopicFlag())
 				_server.sendNumericReply_FixLater(clientSocket, RPL_TOPIC(nickname, ChannelName, Channel.getTopic()));
 			else
 				_server.sendNumericReply_FixLater(clientSocket, RPL_NOTOPIC(nickname, ChannelName));
-			informMembers(Channel.getClientSockets(), _server.createMsg(_server.getClientDataFast(clientSocket), "JOIN", ProcessMessage.getParams()));
+			std::vector<string> params;
+			params.push_back(ChannelName);
+			informMembers(Channel.getClientSockets(), _server.createMsg(_server.getClientDataFast(clientSocket), "JOIN", params));
 			string channelKey = "=";
 			_server.sendNumericReply_FixLater(clientSocket, RPL_NAMREPLY(nickname , channelKey, ChannelName, _server.getChannelManager().createUserList(ChannelName, _server, clientSocket)));
 			_server.sendNumericReply_FixLater(clientSocket, RPL_ENDOFNAMES(nickname, ChannelName));

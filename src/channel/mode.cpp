@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 20:17:01 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/17 19:25:04 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/22 04:31:53 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ void ChanneLimitMode(ServerReactor &_server, Message &msg, int clientSocket){
 		channel.setLimitFlag(true);
 		channel.setLimit(limit);
 	}
-	else if (msg.getParams()[1].compare("-l") == 0 && (limit == -1)){
+	else if (msg.getParams()[1].compare("-l") == 0){
 		channel.setLimitFlag(false);
 		channel.setLimit(-1);
 	}
