@@ -27,9 +27,10 @@
 */
 
 // ! The user list creation is not working correctly if a user left the channel and tries to join multiple channels again
-
-
 // TODO if user1 joins "join #ch1,#ch2" and then parts from #ch1 and then tries to join again #ch1,#ch2 then it doesn't work
+
+	// ! If the channel creator leaves he lives his creator status which needs to represented in the user list creation (FIXED)
+
 // * Fix the trailing message issue in part issue with multiple channels
 // * Check all the mode command successful cases and numeric replies from RFC2812
 // * Check all the PRIVMSG command successful cases and numeric replies from RFC2812
@@ -97,6 +98,49 @@
 
  // Other problems
 	// In Mode when I write some bullshit after the correct parameters it's also sending that to the Client
+
+
+
+
+// * Testing all Commands again!
+
+// TODO 
+	// Numeric Replies
+		// 461 is missing the nickname in the message or * if nickname is not known //! :YourServerName 461 <YourNick> PASS :Not enough parameters
+		// 462 is missing the nickname in the message or * if nickname is not known //! :YourServerName 461 <YourNick> PASS :Not enough parameters
+
+	//* Authentication
+
+	// PASS
+		// NUMERIC REPLIES
+			// 1.0 ERR_NEEDMOREPARAMS | Good! //! (Kind of missing nickname in the message)
+			// 1.1 ERR_ALREADYREGISTRED | Good! //! (Kind of missing nickname in the message)
+		// Correct Input
+			// 1.0 PASS <password> | Good!
+			// 1.1 PASS <password> bullshitValue | Good!
+
+	// NICK
+		// NUMERIC REPLIES
+			// 1.0 ERR_NONICKNAMEGIVEN | Good!
+			// 1.1 ERR_ERRONEUSNICKNAME | Not Good! //TODO (Works with non alphanumerical characters)
+			// 1.2 ERR_NICKNAMEINUSE | Not Good! //TODO It RPL_WELCOME (001) again && I think server confirmation message is wrong
+		// Correct Input
+			// 1.0 NICK <nickname> | Not Good | It's not sending this in limechat: "You are now known as changedNick"
+				//* Our: hallo!~user@127.0.0.1 NICK :hallo // Expected: :hallo!~user@127.0.0.1 NICK hallo
+			// 1.1 NICK <nickname> bullshitValue | Good!
+
+	// USER
+		// NUMERIC REPLIES
+			// 1.0 ERR_NEEDMOREPARAMS | Good! //! (Kind of missing nickname in the message)
+			// 1.1 ERR_ALREADYREGISTRED | Good!
+
+	// * Channel commands
+		
+
+
+
+
+
 
 int	main( int argc, char **argv )
 {

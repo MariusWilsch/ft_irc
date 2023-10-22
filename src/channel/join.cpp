@@ -84,6 +84,7 @@ bool	createNewChannel(ServerReactor &_serverReactor, int clientSocket, string Ch
 	ChannelData    NewChannel(ChannelName, clientSocket);
 
 	_serverReactor.getChannelManager().addChannel(ChannelName, NewChannel);
+	
 	string nickname = _serverReactor.getClientManager().getClientData(clientSocket).getNickname();
 	string channelKey = "=";
 	_serverReactor.sendMsg(clientSocket, _serverReactor.getClientManager().getClientData(clientSocket).getClientInfo(), "JOIN", NewChannel.getName());
