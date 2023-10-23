@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 00:53:10 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/23 11:19:11 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/23 13:06:28 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,13 +37,13 @@ void ExecuteCommands::nick(ServerReactor &_serverReactor, Message &ProcessMessag
     ClientData  &client = _serverReactor.getClientManager().getClientData(clientSocket);
     string err;
 
-    if (ProcessMessage.getParams().empty() || !NickNameValidation(ProcessMessage.getParams()[0])){
+    if (ProcessMessage.getParams().empty()){
         _serverReactor.sendNumericReply_FixLater(clientSocket, ERR_NONICKNAMEGIVEN());
         throw std::exception();
     }
     map<int, ClientData>::iterator it;
     string nickName = ProcessMessage.getParams()[0];
-		if (isdigit(nickName[0])) {
+		if (isdigit(nickName[0]) || !NickNameValidation(nickName)) {
 			_serverReactor.sendNumericReply_FixLater(clientSocket, ERR_ERRONEUSNICKNAME(nickName));
 			throw std::exception();
 		}
@@ -70,7 +70,7 @@ void ExecuteCommands::nick(ServerReactor &_serverReactor, Message &ProcessMessag
                 _serverReactor.sendMsg(clientSocket, client.getClientInfo(), "NICK", nickName);
         }
         client.setRegisteration(true, 2);
-        if (client.getRegistration()[0] && client.getRegistration()[1]){
+        if (client.isRegistered() && oldNick == "*"){
             _serverReactor.sendNumericReply_FixLater(clientSocket, RPL_WELCOME(nickName));
         }
     }

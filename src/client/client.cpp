@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 10:02:23 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/23 11:18:16 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/23 13:04:05 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ ClientData::ClientData( void )
 ClientData::ClientData( int clientSocket) : _clientSocket(clientSocket)
 {
 	_realname = "";
-	_nickname = "";
+	_nickname = "*";
 	_username = "";
 	for (unsigned int i = 0; i < 3; i++){
 		this->_Registration.push_back(false);
