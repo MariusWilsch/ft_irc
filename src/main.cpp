@@ -27,9 +27,10 @@
 */
 
 // ! The user list creation is not working correctly if a user left the channel and tries to join multiple channels again
-
-
 // TODO if user1 joins "join #ch1,#ch2" and then parts from #ch1 and then tries to join again #ch1,#ch2 then it doesn't work
+
+	// ! If the channel creator leaves he lives his creator status which needs to represented in the user list creation (FIXED)
+
 // * Fix the trailing message issue in part issue with multiple channels
 // * Check all the mode command successful cases and numeric replies from RFC2812
 // * Check all the PRIVMSG command successful cases and numeric replies from RFC2812
@@ -97,6 +98,160 @@
 
  // Other problems
 	// In Mode when I write some bullshit after the correct parameters it's also sending that to the Client
+
+
+
+
+// * Testing all Commands again! Mainly with LimeChat
+
+// TODO 
+	// Numeric Replies
+		// 461 is missing the nickname in the message or * if nickname is not known //! :YourServerName 461 <YourNick> PASS :Not enough parameters
+		// 462 is missing the nickname in the message or * if nickname is not known //! :YourServerName 461 <YourNick> PASS :Not enough parameters
+	// Inform Members in MODE (Possibly others as well)
+			// For example when one writes // mode #ch1 +i hallo it sends the "hallo" to the channel members as well // !Not Good!
+
+	//* Authentication
+
+	// PASS
+		// NUMERIC REPLIES
+			// 1.0 ERR_NEEDMOREPARAMS | Good! //! (Kind of missing nickname in the message)
+			// 1.1 ERR_ALREADYREGISTRED | Good! //! (Kind of missing nickname in the message)
+		// Correct Input
+			// 1.0 PASS <password> | Good!
+			// 1.1 PASS <password> bullshitValue | Good!
+
+	// NICK
+		// NUMERIC REPLIES
+			// 1.0 ERR_NONICKNAMEGIVEN | Good!
+			// 1.1 ERR_ERRONEUSNICKNAME | Not Good! //TODO (Works with non alphanumerical characters)
+			// 1.2 ERR_NICKNAMEINUSE | Not Good! //TODO It RPL_WELCOME (001) again && I think server confirmation message is wrong
+		// Correct Input
+			// 1.0 NICK <nickname> | Not Good | It's not sending this in limechat: "You are now known as changedNick"
+				//* Our: hallo!~user@127.0.0.1 NICK :hallo // Expected: :hallo!~user@127.0.0.1 NICK hallo
+			// 1.1 NICK <nickname> bullshitValue | Good!
+
+	// USER
+		// NUMERIC REPLIES
+			// 1.0 ERR_NEEDMOREPARAMS | Good! //! (Kind of missing nickname in the message)
+			// 1.1 ERR_ALREADYREGISTRED | Good!
+
+	// * Channel commands
+
+		// JOIN
+			// NUMERIC REPLIES
+				// 1.0 ERR_NEEDMOREPARAMS  Good! //* In other servers it even join without a channel name as well
+				// 1.1 ERR_BANNEDFROMCHAN | Not required!
+				// 1.2 ERR_INVITEONLYCHAN | Good!
+				// 1.3 ERR_BADCHANNELKEY | Good! //? The input: "mode #ch1 +k" is working | Should throw 696 or ignore the input
+				// 1.4 ERR_CHANNELISFULL | Good!
+				// 1.5 ERR_BADCHANMASK | Not required!
+				// 1.6 ERR_NOSUCHCHANNEL | Then it creates a channel with that name and joins it
+				// 1.7 ERR_TOOMANYCHANNELS | Not required!
+				// 1.8 ERR_TOOMANYTARGETS | Not required!
+				// 1.9 ERR_UNAVAILRESOURCE | Not required!
+			
+			// Correct Input
+				// 1.0 JOIN <channel> | Good!
+				// 1.1 JOIN <channel> bullshitValue | Good! (Also when the channel already exits)
+				// 1.2 JOIN <channel1>,<channel2> | Good!
+			
+		// PART
+			// NUMERIC REPLIES
+				// 1.0 ERR_NEEDMOREPARAMS | Good!
+				// 1.1 ERR_NOSUCHCHANNEL | Not Good! //TODO If the client input ommits the # then it does not throw 403 | e.g "part abc"
+				// 1.2 ERR_NOTONCHANNEL | Good! 
+			
+			// Correct Input
+				// 1.0 PART <channel> | Good!
+				// 1.1 Boradcast the part message to all the channel members | Good!
+				// 1.2 PART <channel1>,<channel2> | Good!
+				// 1.3 PART <channel1> partMessage | Good!
+				// 1.4 PART <channel1>,<channel2> partMessage | Good!
+		
+		// MODE
+			// NUMERIC REPLIES
+				// 1.0 ERR_NEEDMOREPARAMS | Good!
+				// 1.1 ERR_KEYSET | Not required! //? IS THIS REALLY NOT REQUIRED?
+				// 1.2 ERR_NOCHANMODES | Not required!
+				// 1.3 ERR_CHANOPRIVSNEEDED | Good! //TODO Missing the nickname in the message
+				// 1.4 ERR_USERNOTINCHANNEL | Good!
+				// 1.5 ERR_UNKNOWNMODE | Good!
+			// RPL_...
+				// 1.0 RPL_CHANNELMODEIS | Not implemented! //? IS THIS REQUIRED?
+				// 1.1 RPL_BANLIST | Not required! // * mode channel +b (+b is not required)
+				// 1.2 RPL_ENDOFBANLIST | Not required! // * mode channel +b (+b is not required)
+				// 1.3 RPL_EXCEPTLIST | Not required! // * mode channel +e (+e is not required)
+				// 1.4 RPL_ENDOFEXCEPTLIST | Not required! // * mode channel +e (+e is not required)
+				// 1.5 RPL_INVITELIST | Not required! // * mode channel +I (+I is not required)
+				// 1.6 RPL_ENDOFINVITELIST | Not required! 
+				// 1.7 RPL_UNIQOPIS | Not required! //* mode channel +O (+O is not required)
+			// Correct Input
+				// 1.0 MODE <channel> | Good!
+				// 1.1 MODE <channel> <mode> bullshitValue | //! Not Good!
+				// 1.2 MODE <channel> +o <nickname> | Good!
+			
+		// TOPIC
+			// NUMERIC REPLIES
+				// 1.0 ERR_NEEDMOREPARAMS | Good!
+				// 1.1 ERR_NOTONCHANNEL | Good!
+				// 1.2 ERR_CHANOPRIVSNEEDED | Good!
+				// 1.3 ERR_NOSUCHCHANNEL | Good! //* Works here even when # is missing unlike in PART
+			// Correct 
+				// 1.0 TOPIC <channel> | Good!
+					// NO_TOPIC | Good!
+					// RPL_TOPIC | Good!
+				// Broadcase the topic to all the channel members | Good!
+			
+		// INVITE
+			// NUMERIC REPLIES
+				// 1.0 ERR_NEEDMOREPARAMS | Good!
+				// 1.1 ERR_NOSUCHNICK | Good! 
+				// 1.2 ERR_NOTONCHANNEL | Good!
+				// 1.3 ERR_USERONCHANNEL | Good!
+				// 1.4 ERR_CHANOPRIVSNEEDED | Good!
+				// 1.5 RPL_INVITING | Good!
+				// 1.6 RPL_AWAY | Not required!
+			// Correct
+				// 1.0 INVITE <nickname> <channel> | Good!
+				// 1.1 INVITE <nickname> <channel> bullshitValue | Good!
+
+		// KICK
+			// NUMERIC REPLIES
+				// 1.0 ERR_NEEDMOREPARAMS | Good!
+				// 1.1 ERR_NOSUCHCHANNEL | Good!
+				// 1.2 ERR_BADCHANMASK | Not required!
+				// 1.3 ERR_CHANOPRIVSNEEDED | Good!
+				// 1.4 ERR_USERNOTINCHANNEL | //! Not Good! Throws 401 instead of 441 | e.g kick #channelThatExists notInChannelNickname
+				// 1.5 ERR_NOTONCHANNEL | Good!
+			// Correct
+				// 1.0 KICK <channel> <nickname> | Good!
+				// 1.1 KICK <channel> <nickname> kickMessage | Good!
+				// 1.2 KICK <channel1>,<channel2> <nickname><nickname> | Good!
+				// 1.2 KICK <channel1>,<channel2> <nickname><nickname> Message | Good! //? Accoriding to RFC2812 we do not need to implement kickMessage with multiple channels/users, but it works in LimeChat
+				// 1.3 Broadcast the kick message to all the channel members | Good!
+	
+
+
+
+		// PRIVMSG
+			// NUMERIC REPLIES
+				// 1.0 ERR_NORECIPIENT | Good!
+				// 1.1 ERR_NOTEXTTOSEND | Good!
+				// 1.2 ERR_CANNOTSENDTOCHAN | not required!
+				// 1.3 ERR_NOTOPLEVEL | not required!
+				// 1.4 ERR_WILDTOPLEVEL | not required!
+				// 1.5 ERR_TOOMANYTARGETS | not required!
+				// 1.6 ERR_NOSUCHNICKCHANNEL | Good!
+			
+			// Correct
+				// Sends message to channel even if the user left the channel | //! Not Good!
+
+
+
+
+
+
 
 int	main( int argc, char **argv )
 {

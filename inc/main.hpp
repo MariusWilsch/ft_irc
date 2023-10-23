@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 15:07:18 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/23 11:16:17 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/23 12:17:39 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ using std::endl;
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ERRORS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
 #define ERR_INVITEONLYCHAN(nick, channel) "473 " + nick + " " + channel + " :Cannot join channel (+i)\r\n"
 #define ERR_BADCHANNELKEY(nick, channel) "475 " + nick + " " + channel + " : Cannot join channel (+k)\r\n"
-#define ERR_CHANNELISFULL(channel) "471: " + channel + " :Cannot join channel (+l)\r\n"
+#define ERR_CHANNELISFULL(nick, channel) "471 " + nick + " " + channel + " :Cannot join channel (+l)\r\n"
 
 #define ERR_NEEDMOREPARAMS(nick, command) "461: " + nick + " " + command + " : Not enough parameters\r\n"
 #define ERR_UNKNOWNCOMMAND(nickname, wrongCommand) "421 " + nickname + " " + wrongCommand + " :Unknown command\r\n"
@@ -64,6 +64,6 @@ using std::endl;
 #define ERR_NOTEXTTOSEND(target) "412 " + target + " :No text to send\r\n"
 #define ERR_NOSUCHNICKCHANNEL(nickSender, nickTarget) "401 " + nickSender + " " + nickTarget + " :No such nick/channel\r\n"
 
-
+#define ERR_CANNOTSENDTOCHAN(nick, channel) "404 " + nick + " " + channel + " :Cannot send to channel\r\n"
 
 // PRIVMSG Numeric replies to add here.

@@ -94,5 +94,5 @@ class ClientManager {
 		void		removeClient( int clientSocket );
 		int			MatchNickName(set <int> ChannelMembers, string nickname);
 		int			getClientSocketByNick(string& nickname);
-		string		createUserList(set<int> channelMembers);
+		// string		createUserList(set<int> channelMembers);
 };

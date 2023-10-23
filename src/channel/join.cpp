@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/24 12:13:30 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/23 11:24:26 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/23 12:16:48 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ bool	createNewChannel(ServerReactor &_serverReactor, int clientSocket, string Ch
 	ChannelData    NewChannel(ChannelName, clientSocket);
 
 	_serverReactor.getChannelManager().addChannel(ChannelName, NewChannel);
+	
 	string nickname = _serverReactor.getClientManager().getClientData(clientSocket).getNickname();
 	string channelKey = "=";
 	_serverReactor.sendMsg(clientSocket, _serverReactor.getClientManager().getClientData(clientSocket).getClientInfo(), "JOIN", NewChannel.getName());
@@ -122,7 +123,9 @@ void ExecuteCommands::join(ServerReactor &_server, Message &ProcessMessage, int 
 		leaveChannels(_server, clientSocket);
 		throw std::exception();
 	}
-	for (unsigned int i = 0; i < ChannelNames.size(); i++) {
+	const string &nick = _server.getClientDataFast(clientSocket).getNickname();
+	for (unsigned int i = 0; i < ChannelNames.size(); i++)
+	{
 		bool Joined = false;
 		if (!_server.getChannelManager().channelExistence(ChannelNames[i])) {
 			Joined = createNewChannel(_server, clientSocket, ChannelNames[i]);
@@ -133,7 +136,7 @@ void ExecuteCommands::join(ServerReactor &_server, Message &ProcessMessage, int 
 		if (Channel.isCLient(clientSocket))
 			continue;
 		if (Channel.getLimitFlag() && Channel.getClientSockets().size() >= Channel.getLimit()) {
-			_server.sendNumericReply_FixLater(clientSocket, ERR_CHANNELISFULL(ChannelName));
+			_server.sendNumericReply_FixLater(clientSocket, ERR_CHANNELISFULL(nick, ChannelName));
 			continue;
 		}
 		if (Channel.getInviteFlag() && !Channel.isInvited(client.getNickname())) {
@@ -143,19 +146,18 @@ void ExecuteCommands::join(ServerReactor &_server, Message &ProcessMessage, int 
 		Joined = (Channel.getSecurity()) ? 
 			joinPrivateChannel(_server, clientSocket, Channel, ChannelKeys[i]) : 
 			joinPublicChannel(clientSocket, Channel);
-		string nickname = _server.getClientManager().getClientData(clientSocket).getNickname();
-
+	
 		if (Joined) {
 			if (Channel.getTopicFlag())
-				_server.sendNumericReply_FixLater(clientSocket, RPL_TOPIC(nickname, ChannelName, Channel.getTopic()));
+				_server.sendNumericReply_FixLater(clientSocket, RPL_TOPIC(nick, ChannelName, Channel.getTopic()));
 			else
-				_server.sendNumericReply_FixLater(clientSocket, RPL_NOTOPIC(nickname, ChannelName));
+				_server.sendNumericReply_FixLater(clientSocket, RPL_NOTOPIC(nick, ChannelName));
 			std::vector<string> params;
 			params.push_back(ChannelName);
 			informMembers(Channel.getClientSockets(), _server.createMsg(client, "JOIN", params));
 			string channelKey = "=";
-			_server.sendNumericReply_FixLater(clientSocket, RPL_NAMREPLY(nickname , channelKey, ChannelName, _server.getChannelManager().createUserList(ChannelName, _server, clientSocket)));
-			_server.sendNumericReply_FixLater(clientSocket, RPL_ENDOFNAMES(nickname, ChannelName));
+			_server.sendNumericReply_FixLater(clientSocket, RPL_NAMREPLY(nick , channelKey, ChannelName, _server.getChannelManager().createUserList(ChannelName, _server, clientSocket)));
+			_server.sendNumericReply_FixLater(clientSocket, RPL_ENDOFNAMES(nick, ChannelName));
 		}
 	}
 	_server.printUserInformation();

@@ -70,9 +70,9 @@ Message::Message( string rawMessage, map <string, CommandProperties> properties 
 				if (token != ":")
 					_params.push_back(token);
 		}
-
 		// Print extracted data
-		// printData();
+		cout << "Printing data" << endl;
+		printData();
 }
 
 /*			GETTERS			*/

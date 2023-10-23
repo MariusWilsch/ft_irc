@@ -38,7 +38,7 @@ class ChannelData {
 		string			_topic;
 		string			_key;
 		size_t			_limit;
-		int				_creatorBySocket;
+		// int				_creatorBySocket;
 		set <int> 		_clientSockets;
 		set <int> 		_operators;
 		set <string> 	_inviteList;
@@ -71,7 +71,7 @@ class ChannelData {
 		void			setInviteFlag( bool stat );
 		void			setTopicFlag( bool stat );
 		void			setLimitFlag( bool stat );
-		void			setCreatorBySocket( int socketID );
+		// void			setCreatorBySocket( int socketID );
 		void			addClient( int clientSocket);
 		void			addOperator( int clientSocket);
 		void			addGuest( string nickName);
