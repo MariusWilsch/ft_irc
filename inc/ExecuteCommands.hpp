@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ExecuteCommands.hpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwilsch <mwilsch@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 19:05:52 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/15 12:46:24 by mwilsch          ###   ########.fr       */
+/*   Updated: 2023/10/23 12:11:05 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ class ExecuteCommands
     static void     kick(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket);
     static void     mode(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket);
     static void     invite(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket);
-    static void     topic(ServerReactor &_ServerReactor, Message &ProcessMessage, int clientSocket);
+    static void     topic(ServerReactor &_server, Message &Message, int clientSocket);
     static void     privmsg(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket);
     
     //****************************************** UTILS METHODS ***************************************//

@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 15:07:18 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/17 18:37:18 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/23 11:16:17 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,11 +46,11 @@ using std::endl;
 #define ERR_BADCHANNELKEY(nick, channel) "475 " + nick + " " + channel + " : Cannot join channel (+k)\r\n"
 #define ERR_CHANNELISFULL(channel) "471: " + channel + " :Cannot join channel (+l)\r\n"
 
+#define ERR_NEEDMOREPARAMS(nick, command) "461: " + nick + " " + command + " : Not enough parameters\r\n"
 #define ERR_UNKNOWNCOMMAND(nickname, wrongCommand) "421 " + nickname + " " + wrongCommand + " :Unknown command\r\n"
 #define ERR_NONICKNAMEGIVEN() "431: * No nickname given\r\n"
 #define ERR_ERRONEUSNICKNAME(nick) "432: * " + nick + " :Erroneous nickname\r\n"
 #define ERR_NICKNAMEINUSE(nick) "433: " + nick + " :Nickname is already in use\r\n"
-#define ERR_NEEDMOREPARAMS(command) "461: " + command + " : Not enough parameters\r\n"
 #define ERR_ALREADYREGISTRED() "462: You may not reregister\r\n"
 #define ERR_USERNOTINCHANNEL(nickSender, nickTarget, channel) "441 " +  nickSender + " " + nickTarget + " " + channel + " : They aren't on that channel\r\n"
 #define ERR_NOTONCHANNEL(nick, channel) "442 " + nick + " " + channel + " : You're not on that channel\r\n"

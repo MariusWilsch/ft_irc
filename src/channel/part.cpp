@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/04 22:01:31 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/21 23:40:19 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/23 11:28:30 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,24 +23,22 @@ bool    partParser(std::vector<string> &ChannelNames, std::vector<string> &partM
 		else if (!ExecuteCommands::whiteCheck(param))
 			partMessage.push_back(param);
 	}
-	// using the trailing inside ProcessMessage object.
 	if (partMessage.size() > 0)
 		ProcessMessage.setTrailing(partMessage[0]);
 	return (true);
 }
 
-// :Archer123!~Aissam@5c8c-aff4-7127-3c3-1c20.230.197.ip PART #chTest111 : I don't like those kind of random channels
 void     ExecuteCommands::part(ServerReactor &_server, Message &ProcessMessage, int clientSocket) {
-	
+	ClientData  &client = _server.getClientDataFast(clientSocket);
 	std::vector<string> ChannelNames;
 	std::vector<string> partMessage;
 
 	int stat = partParser(ChannelNames, partMessage, ProcessMessage);
 	if (stat == false){
-		_server.sendNumericReply_FixLater(clientSocket, ERR_NEEDMOREPARAMS(ProcessMessage.getCommand()));
+		_server.sendNumericReply_FixLater(clientSocket, ERR_NEEDMOREPARAMS(client.getNickname(), ProcessMessage.getCommand()));
 		throw std::exception();
 	}
-	const string &nick = _server.getClientDataFast(clientSocket).getNickname();
+	const string &nick = client.getNickname();
 	for (unsigned int i = 0; i < ChannelNames.size(); i++)
 	{
 		if (!_server.doesChannelExist(ChannelNames[i])){
@@ -56,7 +54,7 @@ void     ExecuteCommands::part(ServerReactor &_server, Message &ProcessMessage, 
 		params.push_back(ProcessMessage.getParams()[i]);
 		if (!ProcessMessage.getTrailing().empty())
 			params.push_back(ProcessMessage.getTrailing());
-		informMembers(channel.getClientSockets(), _server.createMsg(_server.getClientDataFast(clientSocket), "PART", params));
+		informMembers(channel.getClientSockets(), _server.createMsg(client, "PART", params));
 		channel.removeClient(clientSocket);
 		if (channel.isOperator(clientSocket))
 			channel.removeOperator(clientSocket);

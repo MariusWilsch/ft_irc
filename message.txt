@@ -1,0 +1,130 @@
+Certainly! Here's the formatted version of your content using headers and sub-headers for clearer organization:
+
+---
+
+### **Testing Commands with LimeChat**
+
+---
+
+#### **TODOs**
+
+- **Numeric Replies**
+  - `461` is missing the nickname in the message or `*` if nickname is not known.
+    - `:YourServerName 461 <YourNick> PASS :Not enough parameters`
+  - `462` is missing the nickname in the message or `*` if nickname is not known. 
+    - `:YourServerName 461 <YourNick> PASS :Not enough parameters`
+
+- Inform Members in `MODE` (and possibly other commands)
+  - Example: when one writes `// mode #ch1 +i hallo`, it sends the "hallo" to the channel members as well. This is not desirable.
+
+---
+
+#### **Authentication**
+
+- **PASS**
+  - *Numeric Replies*
+    - `1.0 ERR_NEEDMOREPARAMS` | Good! (However, the nickname in the message is kind of missing.)
+    - `1.1 ERR_ALREADYREGISTRED` | Good! (However, the nickname in the message is kind of missing.)
+  - *Correct Input*
+    - `1.0 PASS <password>` | Good!
+    - `1.1 PASS <password> bullshitValue` | Good!
+
+- **NICK**
+  - *Numeric Replies*
+    - `1.0 ERR_NONICKNAMEGIVEN` | Good!
+    - `1.1 ERR_ERRONEUSNICKNAME` | Not Good! (Works with non-alphanumerical characters.)
+    - `1.2 ERR_NICKNAMEINUSE` | Not Good! (Issues with `RPL_WELCOME (001)` and potential wrong server confirmation message.)
+  - *Correct Input*
+    - `1.0 NICK <nickname>` | Not Good (Issues with LimeChat message.)
+    - `1.1 NICK <nickname> bullshitValue` | Good!
+
+- **USER**
+  - *Numeric Replies*
+    - `1.0 ERR_NEEDMOREPARAMS` | Good! (However, the nickname in the message is kind of missing.)
+    - `1.1 ERR_ALREADYREGISTRED` | Good!
+
+---
+
+#### **Channel Commands**
+
+- **JOIN**
+  - *Numeric Replies*
+    - `1.0 ERR_NEEDMOREPARAMS` | Good!
+    - `1.1 ERR_BANNEDFROMCHAN` | Not required.
+    - `1.2 ERR_INVITEONLYCHAN` | Good!
+    - `1.3 ERR_BADCHANNELKEY` | Good! (But there are potential issues with input.)
+    - `1.4 ERR_CHANNELISFULL` | Good!
+    - `1.5 ERR_BADCHANMASK` | Not required.
+    - `1.6 ERR_NOSUCHCHANNEL` | Behavior: creates a channel with that name and joins it.
+    - `1.7 ERR_TOOMANYCHANNELS` | Not required.
+    - `1.8 ERR_TOOMANYTARGETS` | Not required.
+    - `1.9 ERR_UNAVAILRESOURCE` | Not required.
+  - *Correct Input*
+    - `1.0 JOIN <channel>` | Good!
+    - `1.1 JOIN <channel> bullshitValue` | Good!
+    - `1.2 JOIN <channel1>,<channel2>` | Good!
+
+- **PART**
+  - *Numeric Replies*
+    - `1.0 ERR_NEEDMOREPARAMS` | Good!
+    - `1.1 ERR_NOSUCHCHANNEL` | Not Good (Issues when `#` is missing.)
+    - `1.2 ERR_NOTONCHANNEL` | Good!
+  - *Correct Input*
+    - `1.0 PART <channel>` | Good!
+    - `1.1` Broadcast the part message to all the channel members | Good!
+    - `1.2 PART <channel1>,<channel2>` | Good!
+    - `1.3 PART <channel1> partMessage` | Good!
+    - `1.4 PART <channel1>,<channel2> partMessage` | Good!
+
+- **MODE**
+  - *Numeric Replies*
+    - `1.0 ERR_NEEDMOREPARAMS` | Good!
+    - `1.1 ERR_KEYSET` | Not required.
+    - `1.2 ERR_NOCHANMODES` | Not required.
+    - `1.3 ERR_CHANOPRIVSNEEDED` | Good! (Missing nickname in the message.)
+    - `1.4 ERR_USERNOTINCHANNEL` | Good!
+    - `1.5 ERR_UNKNOWNMODE` | Good!
+  - *RPL...*
+    - `1.0 RPL_CHANNELMODEIS` | Not implemented.
+    - `1.1 RPL_BANLIST` | Not required.
+    - `1.2 RPL_ENDOFBANLIST` | Not required.
+    - `1.3 RPL_EXCEPTLIST` | Not required.
+    - `1.4 RPL_ENDOFEXCEPTLIST` | Not required.
+    - `1.5 RPL_INVITELIST` | Not required.
+    - `1.6 RPL_ENDOFINVITELIST` | Not required.
+    - `1.7 RPL_UNIQOPIS` | Not required.
+  - *Correct Input*
+    - `1.0 MODE <channel>` | Good!
+    - `1.1 MODE <channel> <mode> bullshitValue` | Not Good!
+    - `1.2 MODE <channel> +o <nickname>` | Good!
+
+- **TOPIC**
+  - *Numeric Replies*
+    - `1.0 ERR_NEEDMOREPARAMS` | Good!
+    - `1.1 ERR_NOTONCHANNEL` | Good!
+    - `1.2 ERR_CHANOPRIVSNEEDED` | Good!
+    - `1.3 ERR_NOSUCHCHANNEL` | Good!
+  - *Correct Input*
+    - `1.0 TOPIC <channel>` | Good!
+    - Broadcast the topic to all the channel members | Good!
+
+- **INVITE**
+  - *Numeric Replies*
+    - `1.0 ERR_NEEDMOREPARAMS` | Good!
+    - `1.1 ERR_NOSUCHNICK` | Good!
+    - `1.2 ERR_NOTONCHANNEL` | Good!
+    - `1.3 ERR_USERONCHANNEL` | Good!
+    - `1.4 ERR_CHANOPRIVSNEEDED` | Good!
+    - `1.5 RPL_INVITING` | Good!
+    - `1.6 RPL_AWAY` | Not required.
+  - *Correct Input*
+    - `1.0 INVITE <nickname> <channel>` | Good!
+    - `1.1 INVITE <nickname> <channel> bullshitValue` | Good!
+
+- **KICK**
+  - *Numeric Replies*
+    - `1.0 ERR_NEEDMOREPARAMS` | Good!
+    - `1.1 ERR_NOSUCHCHANNEL` | Good!
+    - `1.2 ERR_BADCHANMASK` | Not required.
+    - `1.3 ERR_CHANOPRIVSNEEDED` | Good!
+    - `1.4 ERR_USERNOTINCHANNEL` | Not

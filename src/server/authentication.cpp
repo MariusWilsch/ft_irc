@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   authentication.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: verdant <verdant@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 00:53:10 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/15 15:18:06 by verdant          ###   ########.fr       */
+/*   Updated: 2023/10/23 11:19:11 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ void     ExecuteCommands::user(ServerReactor &_serverReactor, Message &ProcessMe
         throw std::exception();
     }
     if (ProcessMessage.getParams().size() < 4){
-        _serverReactor.sendNumericReply_FixLater(clientSocket, ERR_NEEDMOREPARAMS(ProcessMessage.getCommand()));
+        _serverReactor.sendNumericReply_FixLater(clientSocket, ERR_NEEDMOREPARAMS(client.getNickname(), ProcessMessage.getCommand()));
         throw std::exception();
     }
     client.setUsername(ProcessMessage.getParams()[0]);
@@ -100,7 +100,7 @@ void     ExecuteCommands::user(ServerReactor &_serverReactor, Message &ProcessMe
 void ExecuteCommands::pass(ServerReactor &_serverReactor, Message &ProcessMessage, int clientSocket) {
     ClientData  &client = _serverReactor.getClientDataFast(clientSocket);
     if (ProcessMessage.getParams().size() < 1 || ProcessMessage.getParams()[0].empty()){
-        _serverReactor.sendNumericReply_FixLater(clientSocket, ERR_NEEDMOREPARAMS(ProcessMessage.getCommand()));
+        _serverReactor.sendNumericReply_FixLater(clientSocket, ERR_NEEDMOREPARAMS(client.getNickname(), ProcessMessage.getCommand()));
         throw std::exception();
     }
     if (client.getRegistration()[1] && client.getRegistration()[2]){

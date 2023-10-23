@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/24 12:13:30 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/21 23:19:15 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/23 11:24:26 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ int joinParser(std::vector<string> &ChannelNames, std::vector<string> &ChannelKe
 // }
 
 void    leaveChannels(ServerReactor &_serverReactor, int clientSocket){
+	ClientData  &client = _serverReactor.getClientDataFast(clientSocket);
 	map<string, ChannelData>::iterator  it;
 	map<string, ChannelData> &m = _serverReactor.getChannelManager().getChannels();
 	for (it = m.begin(); it != m.end(); it++)
@@ -74,7 +75,7 @@ void    leaveChannels(ServerReactor &_serverReactor, int clientSocket){
 			it->second.removeOperator(*RemoveIt);
 		std::vector<string> params;
 		params.push_back(channel.getName());
-		ExecuteCommands::informMembers(channel.getClientSockets(), _serverReactor.createMsg(_serverReactor.getClientDataFast(clientSocket), "PART", params));
+		ExecuteCommands::informMembers(channel.getClientSockets(), _serverReactor.createMsg(client, "PART", params));
 	}
 	_serverReactor.getChannelManager().removeGarbageChannels();
 
@@ -108,12 +109,13 @@ bool	joinPublicChannel(int clientSocket, ChannelData& Channel){
 }
 
 void ExecuteCommands::join(ServerReactor &_server, Message &ProcessMessage, int clientSocket){
+	ClientData  &client = _server.getClientDataFast(clientSocket);
 	std::vector<string> ChannelNames;
 	std::vector<string> ChannelKeys;
 
 	int stat = joinParser(ChannelNames, ChannelKeys, ProcessMessage);
 	if (stat == -1) {
-		_server.sendNumericReply_FixLater(clientSocket, ERR_NEEDMOREPARAMS(ProcessMessage.getCommand()));
+		_server.sendNumericReply_FixLater(clientSocket, ERR_NEEDMOREPARAMS(client.getNickname(), ProcessMessage.getCommand()));
 		return;
 	}
 	if (stat == 0) {
@@ -134,8 +136,8 @@ void ExecuteCommands::join(ServerReactor &_server, Message &ProcessMessage, int 
 			_server.sendNumericReply_FixLater(clientSocket, ERR_CHANNELISFULL(ChannelName));
 			continue;
 		}
-		if (Channel.getInviteFlag() && !Channel.isInvited(_server.getClientDataFast(clientSocket).getNickname())) {
-			_server.sendNumericReply_FixLater(clientSocket, ERR_INVITEONLYCHAN(_server.getClientDataFast(clientSocket).getNickname(), ChannelName));
+		if (Channel.getInviteFlag() && !Channel.isInvited(client.getNickname())) {
+			_server.sendNumericReply_FixLater(clientSocket, ERR_INVITEONLYCHAN(client.getNickname(), ChannelName));
 			continue;
 		}
 		Joined = (Channel.getSecurity()) ? 
@@ -150,7 +152,7 @@ void ExecuteCommands::join(ServerReactor &_server, Message &ProcessMessage, int 
 				_server.sendNumericReply_FixLater(clientSocket, RPL_NOTOPIC(nickname, ChannelName));
 			std::vector<string> params;
 			params.push_back(ChannelName);
-			informMembers(Channel.getClientSockets(), _server.createMsg(_server.getClientDataFast(clientSocket), "JOIN", params));
+			informMembers(Channel.getClientSockets(), _server.createMsg(client, "JOIN", params));
 			string channelKey = "=";
 			_server.sendNumericReply_FixLater(clientSocket, RPL_NAMREPLY(nickname , channelKey, ChannelName, _server.getChannelManager().createUserList(ChannelName, _server, clientSocket)));
 			_server.sendNumericReply_FixLater(clientSocket, RPL_ENDOFNAMES(nickname, ChannelName));
