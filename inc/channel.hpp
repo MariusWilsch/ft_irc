@@ -104,6 +104,6 @@ class ChannelManager {
 		bool		itsChannel( string name );
 		void		removeFromChannels(int _clientSocket);
 		void    	removeGarbageChannels();
-		string		createUserList(string channelName, ServerReactor &serverReactor, int senderSocket);
+		string		createUserList(string channelName, ServerReactor &serverReactor);
 		// void			joinSequence()
 };
