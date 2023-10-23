@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/04 22:01:31 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/23 11:28:30 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/23 17:21:13 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,11 @@ void     ExecuteCommands::part(ServerReactor &_server, Message &ProcessMessage, 
 		throw std::exception();
 	}
 	const string &nick = client.getNickname();
+	if (ChannelNames.size() == 0 && partMessage.size() >= 1){
+		_server.sendNumericReply_FixLater(clientSocket, ERR_NOSUCHCHANNEL(nick, partMessage[0]));
+	}
 	for (unsigned int i = 0; i < ChannelNames.size(); i++)
 	{
-		cout << std::boolalpha << _server.doesChannelExist(ChannelNames[i]) << endl;
 		if (!_server.doesChannelExist(ChannelNames[i])) {
 			_server.sendNumericReply_FixLater(clientSocket, ERR_NOSUCHCHANNEL(nick, ChannelNames[i]));
 			continue ;
