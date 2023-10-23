@@ -243,14 +243,12 @@ void    ChannelManager::removeChannel(string channelName){
 		this->_channels.erase(channelName);
 }
 
-string ChannelManager::createUserList(string channelName, ServerReactor &serverReactor, int senderSocket) {
+string ChannelManager::createUserList(string channelName, ServerReactor &serverReactor) {
     string userList;
     const ChannelData& currentChannel = getChannelByName(channelName);
     const set<int>& clientSockets = currentChannel.getClientSockets();
     const set<int>& operators = currentChannel.getOperators();
     ClientManager& clientManager = serverReactor.getClientManager();
-
-		senderSocket = 0;
 
     cout << "operators: " << operators.size() << endl;
 

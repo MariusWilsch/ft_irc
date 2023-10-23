@@ -32,19 +32,15 @@ void	ExecuteCommands::privmsg(ServerReactor &_server, Message &ProcessMessage, i
 	if (params.size () < 2)
 		return _server.sendNumericReply_FixLater(clientSocket, ERR_NOTEXTTOSEND(nickSender));
 		
-	cout << "targetFD = " << targetFD << endl;
-
-
-	//! FIXME : check if the user is in the channel
-
-	// if ( _server.doesChannelExist(params[0]) && _server.getClientManager().MatchNickName(_server.getChannelManager().getChannelByName(params[0]).getClientSockets(), nickSender))
-	// 	return _server.sendNumericReply_FixLater(clientSocket, ERR_CANNOTSENDTOCHAN(nickSender, params[0]));
+	if (_server.doesChannelExist(params[0])) {
+    if (_server.getClientManager().MatchNickName(_server.getChannelManager().getChannelByName(params[0]).getClientSockets(), nickSender) == -1)
+        return _server.sendNumericReply_FixLater(clientSocket, ERR_CANNOTSENDTOCHAN(nickSender, params[0]));
+}
 	
 	if (isUser) 
 		return _server.sendMsg(targetFD, _server.getClientDataFast(clientSocket).getClientInfo(), "PRIVMSG", params[0], params[1]);
 	// If Channel
 	set<int> channelMembers = _server.getChannelManager().getChannelByName(params[0]).getClientSockets();
-	cout << "channelMembers.size() = " << channelMembers.size() << endl;
 	for (set<int>::iterator it = channelMembers.begin(); it != channelMembers.end(); it++) {
 		if (*it == clientSocket)
 				continue ;

@@ -89,7 +89,7 @@ bool	createNewChannel(ServerReactor &_serverReactor, int clientSocket, string Ch
 	string nickname = _serverReactor.getClientManager().getClientData(clientSocket).getNickname();
 	string channelKey = "=";
 	_serverReactor.sendMsg(clientSocket, _serverReactor.getClientManager().getClientData(clientSocket).getClientInfo(), "JOIN", NewChannel.getName());
-	_serverReactor.sendNumericReply_FixLater(clientSocket, RPL_NAMREPLY(nickname , channelKey, NewChannel.getName(), _serverReactor.getChannelManager().createUserList(NewChannel.getName(), _serverReactor, clientSocket)));
+	_serverReactor.sendNumericReply_FixLater(clientSocket, RPL_NAMREPLY(nickname , channelKey, NewChannel.getName(), _serverReactor.getChannelManager().createUserList(NewChannel.getName(), _serverReactor)));
 	_serverReactor.sendNumericReply_FixLater(clientSocket, RPL_ENDOFNAMES(nickname, NewChannel.getName()));
 
 	return (true);
@@ -156,7 +156,7 @@ void ExecuteCommands::join(ServerReactor &_server, Message &ProcessMessage, int 
 			params.push_back(ChannelName);
 			informMembers(Channel.getClientSockets(), _server.createMsg(client, "JOIN", params));
 			string channelKey = "=";
-			_server.sendNumericReply_FixLater(clientSocket, RPL_NAMREPLY(nick , channelKey, ChannelName, _server.getChannelManager().createUserList(ChannelName, _server, clientSocket)));
+			_server.sendNumericReply_FixLater(clientSocket, RPL_NAMREPLY(nick , channelKey, ChannelName, _server.getChannelManager().createUserList(ChannelName, _server)));
 			_server.sendNumericReply_FixLater(clientSocket, RPL_ENDOFNAMES(nick, ChannelName));
 		}
 	}
