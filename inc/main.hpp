@@ -20,14 +20,12 @@
 #include <map>
 #include <string>
 #include <vector>
-// #include <array>
 #include <netdb.h>
 
 using std::string;
 using std::map;
 using std::set;
 using std::vector;
-// usign std::array;
 using std::cout;
 using std::endl;
 

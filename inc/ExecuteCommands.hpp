@@ -23,11 +23,8 @@ class Message;
 class ServerReactor;
 class ExecuteCommands
 {
-		private:
-			ServerReactor&		_serverReactor; // FIXME: Call the parameterised constructor instead default constructor
     public:
     ExecuteCommands();
-		ExecuteCommands(ServerReactor& reactor) : _serverReactor(reactor) {};
     ~ExecuteCommands();
 
     //*********************************** AUTHENTICATION COMMANDS ***********************************//

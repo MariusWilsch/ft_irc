@@ -59,49 +59,6 @@ int ServerReactor::sendMsg_FixLater(int socket, const string& reply) {
 		return (0);
 }
 
-/**
- * @brief 
- * 
- * @param clientSocket The socket of the client
- * @param command The command to send
- * @param params The parameters to send
- * @return string 
- */
-// string ServerReactor::
-// createMsg(ClientData& clientData, const string& command, const vector <string>& params, int paramCnt, const string& trailing) {
-// 		string message;
-
-// 		// Append client info
-// 		message += ":" + clientData.getClientInfo() + " ";
-
-// 		// Append command
-// 		message += command;
-
-// 		// Append nickname
-// 		// message += " " + clientData.getNickname();
-
-// 		// Append Channel name
-// 		message += " " + params[0];
-
-// 		// Append parameters
-// 		if (command == "INVITE" || command == "PART") {
-// 			for (size_t i = 1; i < paramCnt; ++i)
-// 					message += " :" + params[i];
-// 		} else {
-// 			for (size_t i = 1; i < paramCnt; ++i)
-// 					message += " " + params[i];
-// 		}
-
-// 		// Append trailing message if it exists
-// 		if (!trailing.empty()) {
-// 				message += " :" + trailing;
-// 		}
-
-// 		message += "\r\n";  // IRC messages end with \r\n
-
-// 		return (message);
-// }
-
 string ServerReactor::
 createMsg(ClientData& clientData, const string& command, const vector <string>& params, const string& trailing) {
 		string message;

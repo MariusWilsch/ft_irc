@@ -13,13 +13,6 @@
 #include "ExecuteCommands.hpp"
 #include "ManBot.hpp"
 
-
-// ExecuteCommands::~ExecuteCommands() {};
-
-// ExecuteCommands::ExecuteCommands() {};
-
-// ExecuteCommands::ExecuteCommands(ServerReactor& reactor) : _serverReactor(reactor) {};
-
 bool    ExecuteCommands::whiteCheck(string str)
 {
 	for (unsigned int i = 0; i < str.length(); i++) {

@@ -137,7 +137,7 @@ std::vector<string>    ChannelTopicMode(ServerReactor &_server, Message &msg, in
 	return (params);
 }
 
-std::vector<string>    ChannelSecureMode(ServerReactor &_server, Message &msg, int clientSocket){
+std::vector<string>	ChannelSecureMode(ServerReactor &_server, Message &msg, int clientSocket){
 	ClientData  &client = _server.getClientDataFast(clientSocket);
 	ChannelData &channel = _server.getChannelManager().getChannelByName(msg.getParams()[0]);
 
@@ -156,7 +156,10 @@ std::vector<string>    ChannelSecureMode(ServerReactor &_server, Message &msg, i
 	string  key;
 	if (msg.getParams().size() == 3)
 			key = msg.getParams()[2];
-	if (msg.getParams()[1].compare("+k") == 0 && !key.empty()){
+	if (msg.getParams()[1].compare("+k") == 0 && key.empty())
+			throw std::exception();
+	if (msg.getParams()[1].compare("+k") == 0 && !key.empty())
+	{
 			channel.setSecurity(true);
 			channel.setKey(key);
 	}

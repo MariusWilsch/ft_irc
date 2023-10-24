@@ -71,7 +71,6 @@ class ChannelData {
 		void			setInviteFlag( bool stat );
 		void			setTopicFlag( bool stat );
 		void			setLimitFlag( bool stat );
-		// void			setCreatorBySocket( int socketID );
 		void			addClient( int clientSocket);
 		void			addOperator( int clientSocket);
 		void			addGuest( string nickName);
@@ -105,5 +104,4 @@ class ChannelManager {
 		void		removeFromChannels(int _clientSocket);
 		void    	removeGarbageChannels();
 		string		createUserList(string channelName, ServerReactor &serverReactor);
-		// void			joinSequence()
 };

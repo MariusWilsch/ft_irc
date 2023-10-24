@@ -54,9 +54,6 @@ Message::Message( string rawMessage, map <string, CommandProperties> properties 
     					_params.push_back(trailing);
     					break;
 						}
-						// TODO : Refactor idea
-						// string trailing = _rawMessage.substr(_rawMessage.find(':') + 1);
-						// (trailing.empty()) ? : _params.push_back(trailing);
 				}
 				if (token.find(',') != string::npos) {
 						std::istringstream iss2(token);

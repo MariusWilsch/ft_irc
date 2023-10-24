@@ -30,24 +30,6 @@ struct CommandProperties {
 };
 
 
-class ServerException : public std::exception {
-private:
-    std::string errorMsg;
-
-public:
-
-		virtual ~ServerException() throw() {}  // Add this line
-
-    ServerException(const std::string &msg) : errorMsg(msg) {}
-    
-    const char* what() const throw() {
-        return errorMsg.c_str();
-    }
-};
-
-
-
-
 
 /**
  * @brief Class to handle server-level operations
@@ -93,7 +75,6 @@ class ServerReactor {
 		
 		void	acceptNewClient();
 		void	recieveIncomingMessage( int clientSocket );
-		//void	sendMessageToClient(int clientSocket, string message);
 		 
 		/*			SERVER T0 CLIENT COMMUICATION			*/
 

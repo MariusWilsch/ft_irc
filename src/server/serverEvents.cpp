@@ -14,7 +14,6 @@
 
 /*			EVENTS			*/
 
-// TODO: Refactor this to be more readable and use more member variables
 void	ServerReactor::recieveIncomingMessage( int clientSocket )
 {
 	int			bytesRead;
@@ -42,8 +41,6 @@ void	ServerReactor::recieveIncomingMessage( int clientSocket )
 		return ;
 	Message processMessage(message, _properties);
 
-	//****************************************************************************************/
-	// initialize all the clients by giving them a default authentication.
 	ExecuteCommands::execute(*this, processMessage, clientSocket);
 }
 
@@ -64,7 +61,6 @@ void	ServerReactor::acceptNewClient( void )
 
 	if (clientSocket == -1)
 		writeServerError("accept", "Failed to accept new client", errno);
-	// TODO: Check if above max clients
 	setToNonBlocking(clientSocket);
 	updateMoinitoring(clientSocket, EVFILT_READ, EV_ADD);
 

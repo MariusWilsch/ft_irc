@@ -21,8 +21,7 @@
 #include <cctype>
 
 
-class	ClientData;
-// TODO: Figure out a better way to include this
+class		ClientData;
 struct	CommandProperties;
 
 /**

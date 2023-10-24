@@ -12,12 +12,6 @@
 
 #include "ExecuteCommands.hpp"
 
-// Inform when the registration is completed,
-    // + the pass command needs to be the first command. or the registration can't be done.
-    // The index[0]: PASS
-    // The index[1]: USER
-    // The index[2]: NICK
-
 bool    NickNameValidation(string param)
 {
     int a = 0;

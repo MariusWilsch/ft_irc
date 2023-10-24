@@ -245,13 +245,7 @@
 				// 1.6 ERR_NOSUCHNICKCHANNEL | Good!
 			
 			// Correct
-				// Sends message to channel even if the user left the channel | //! Not Good!
-
-
-
-
-
-
+				// Sends message to channel even if the user left the channel | //* Fixed
 
 int	main( int argc, char **argv )
 {
