@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 10:02:23 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/23 13:04:05 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/24 17:46:05 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,14 +81,6 @@ string ClientData::getClientIP() const{
 	return (this->_clientIP);
 }
 
-// std::string get_hosname()
-// {
-// 	char hostbuffer[256];
-
-// 	gethostname(hostbuffer, sizeof(hostbuffer));
-// 	return (hostbuffer);
-// }
-
 string ClientData::getClientInfo() const {
 	return (getNickname() + "!~" + getUsername() + "@" + getClientIP());
 }
@@ -132,7 +124,7 @@ void	ClientData::setPassword(string pass){
 }
 
 void	ClientData::setClientIP(string clientIP){
-		this->_clientIP = clientIP;
+	this->_clientIP = clientIP;
 }
 
 /*					CLIENT MANAGER						*/
@@ -193,4 +185,3 @@ int	ClientManager::getClientSocketByNick(string& nickname) {
 	cout << "Couldn't find the nickname within the map" << endl;
 	return (-1);
 }
-

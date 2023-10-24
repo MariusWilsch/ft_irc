@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/16 22:52:24 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/16 22:55:38 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/24 17:06:00 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,12 @@
 
 #include "ManBot.hpp"
 
-/* The BOT will be called /HELP
+/* The BOT will be called /MAN
     + this bot will give the manual of all the used command in ft_irc by order of The peaky blinder "The user"!
-        + The bot command is: /HELP;
-        - /HELP without parameters:
+        + The bot command is: /MAN;
+        - /MAN without parameters:
             + give the usage of the bot command
-        - /HELP Parameters are:
+        - /MAN Parameters are:
             + PASS
             + NICK
             + USER
@@ -35,7 +35,7 @@
 string ManBot::BotManual(){
     string manual;
 
-    manual = " * HELP SUPPORT BOT *** FT_IRC  COMMANDS: ";
+    manual = " * MAN SUPPORT BOT *** FT_IRC  COMMANDS: ";
     manual.append("| * PASS * NICK * USER * JOIN * PRIVMSG * KICK * INVITE * TOPIC * MODE * PART |");
     manual.append("> * 'ANY OTHER FORMAT WILL NOT BE ACCEPTABLE SO YOU NEED TO ONE FROM THE SUPPORTED COMMANDS'.");
     return (manual);
@@ -119,7 +119,7 @@ string  strToupper(string str){
 void    ManBot::man(ServerReactor &_server, Message &ProcessMessage, int clientSocket){
     std::string commands[10] = {"PASS", "NICK", "USER", "JOIN", "PRIVMSG", "KICK", "INVITE", "TOPIC", "MODE"  , "PART"};
     string    (*FunctionPointers[10])() = {ManBot::PassManual, ManBot::NickManual, ManBot::UserManual, ManBot::JoinManual, ManBot::PrivmsgManual, ManBot::KickManual, ManBot::InviteManual, ManBot::TopicManual, ManBot::ModeManual, ManBot::PartManual};
-    string message = ":" + _server.getClientDataFast(clientSocket).getClientInfo() + " HelperBot: ";
+    string message = ":" + _server.getClientDataFast(clientSocket).getClientInfo() + " ManBot: ";
     if (ProcessMessage.getParams().size() == 0)
         _server.sendMsg(clientSocket, _server.getClientDataFast(clientSocket).getClientInfo(), "PRIVMSG", "BOT", ManBot::BotManual().c_str());
     else{

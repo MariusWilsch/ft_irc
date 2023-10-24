@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 12:20:25 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/23 12:20:27 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/24 17:12:51 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,13 +35,13 @@ void     ExecuteCommands::invite(ServerReactor &_server, Message &Message, int c
         return ;
     }
 	if (_server.getClientManager().MatchNickName(channel.getClientSockets(), params[0]) != -1) { 
-			_server.sendNumericReply_FixLater(clientSocket, ERR_USERONCHANNEL(params[0], channelName));
+		_server.sendNumericReply_FixLater(clientSocket, ERR_USERONCHANNEL(params[0], channelName));
 	return ;
 	}
 	int targetFD = _server.getClientManager().getClientSocketByNick(params[0]);
 	if (targetFD == -1) {
-			_server.sendNumericReply_FixLater(clientSocket, ERR_NOSUCHNICKCHANNEL(params[0], channelName));
-			return ;
+		_server.sendNumericReply_FixLater(clientSocket, ERR_NOSUCHNICKCHANNEL(params[0], channelName));
+		return ;
 	}
 	channel.addGuest(params[0]);
 	_server.sendMsg_FixLater(targetFD, _server.createMsg(client, Message.getCommand(), params));

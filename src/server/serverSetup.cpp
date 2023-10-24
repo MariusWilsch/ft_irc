@@ -6,26 +6,17 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 10:00:19 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/16 22:54:48 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/24 18:22:55 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "server.hpp"
-
-/*
-	Replace in code:
-		+ The number of parameters
-			+ Join: infinite params: you can join many channels at the same time, using the command join with multiple parameters.
-*/
-
-// TODO: Place this appropriately as soon as I fixed the bug
 
 CommandProperties::CommandProperties() : mandatoryParams(0), ignoreTrailing(false) {};
 
 CommandProperties::CommandProperties(int m, bool i) : mandatoryParams(m), ignoreTrailing(i) {};
 
 /*			CLASS DEFAULT FUNCTIONS			*/
-
 ServerReactor::ServerReactor( int port, std::string password ) {
 	_serverName = "Ft_irc-server";
 	_serverSocket = -1;
@@ -48,25 +39,20 @@ ServerReactor::~ServerReactor( void ) {
 	close(_serverSocket);
 }
 
-// TODO: Put this into a utils file
-
-
-// How to add a command to _properties, 
 void	ServerReactor::createPropertiesMap( void ) {
 	_properties["PASS"] = CommandProperties(1, true);
 	_properties["NICK"] = CommandProperties(1, true);
 	_properties["USER"] = CommandProperties(3, false);
-	_properties["JOIN"] = CommandProperties(1, true); // Unlimited
+	_properties["JOIN"] = CommandProperties(1, true);
 	_properties["PRIVMSG"] = CommandProperties(1, false);
-	_properties["KICK"] = CommandProperties(1, false); // Unlimited
+	_properties["KICK"] = CommandProperties(1, false);
 	_properties["INVITE"] = CommandProperties(2, true); 
 	_properties["TOPIC"] = CommandProperties(1, false);
 	_properties["MODE"] = CommandProperties(2, true);
-	_properties["PART"] = CommandProperties(2, true); // Unlimited
+	_properties["PART"] = CommandProperties(2, true);
 	_properties["QUIT"] = CommandProperties(1, false);
 	_properties["MAN"] = CommandProperties(1, true);
 }
-
 
 /*			SOCKET & MULTIPLEXING			*/
 
@@ -94,16 +80,13 @@ void	ServerReactor::setupServerSocket( int port ) {
 	serverAddressSize = sizeof(serverAddress);
 	if (bind(_serverSocket, (struct sockaddr *)&serverAddress, serverAddressSize) == -1)
 		writeServerError("bind", "Failed to bind socket", errno);
-
 	struct hostent *he = gethostbyname("localhost");
 	if (he == NULL) {
-			writeServerError("gethostbyname", hstrerror(h_errno), errno);
-			return;
+		writeServerError("gethostbyname", hstrerror(h_errno), errno);
+		return;
 	}
-	
 	char* localIP = inet_ntoa(*(struct in_addr *)he->h_addr);
 	cout << "Localhost IP Address: " << localIP << endl;
-		
 	if (listen(_serverSocket, 10) == -1)
 		writeServerError("listen", "Failed to listen on socket", errno);
 	setToNonBlocking(_serverSocket);

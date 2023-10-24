@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/30 13:41:28 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/23 11:50:21 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/24 17:20:02 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,10 @@ void     ExecuteCommands::topic(ServerReactor &_server, Message &ProcessMessage,
     ClientData  &client = _server.getClientDataFast(clientSocket);
 	const vector<string>& params = ProcessMessage.getParams();
 
-	if (params.empty())
-	{
+	if (params.empty()) {
 		_server.sendNumericReply_FixLater(clientSocket, ERR_NEEDMOREPARAMS(client.getNickname(), ProcessMessage.getCommand()));
 		throw std::exception();
-  }
+    }
     string channelName = params[0];
     if (!_server.doesChannelExist(channelName)){
         _server.sendNumericReply_FixLater(clientSocket, ERR_NOSUCHCHANNEL(client.getNickname(), channelName));

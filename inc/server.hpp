@@ -16,9 +16,6 @@
 #include "channel.hpp"
 #include "message.hpp"
 
-// for "NI_MAXHOST"
-#include <netdb.h>
-
 #include "ExecuteCommands.hpp"
 
 struct CommandProperties {
@@ -32,16 +29,16 @@ struct CommandProperties {
 
 
 /**
- * @brief Class to handle server-level operations
- * 
- * @details This class is responsible for handling the server socket, multiplexing and events.
- * @param _serverSocket The server socket
- * @param _kq The kqueue
- * @param _isShutdown A boolean to know if the server is shutdown
- * @param _connectionPassword The password to connect to the server
- * @param _clientManager The client manager where all the clients are stored
- * @param _channelManager The channel manager where all the channels are stored
- * @param _serverName The name of the server.
+	 * @brief Class to handle server-level operations
+	 * 
+	 * @details This class is responsible for handling the server socket, multiplexing and events.
+	 * @param _serverSocket The server socket
+	 * @param _kq The kqueue
+	 * @param _isShutdown A boolean to know if the server is shutdown
+	 * @param _connectionPassword The password to connect to the server
+	 * @param _clientManager The client manager where all the clients are stored
+	 * @param _channelManager The channel manager where all the channels are stored
+	 * @param _serverName The name of the server.
  */
 
 class ServerReactor {
@@ -55,8 +52,6 @@ class ServerReactor {
 		ClientManager					_clientManager;
 		ChannelManager					_channelManager;
 		map <string, CommandProperties> _properties;
-		// ading a host buffer
-		char buffer[NI_MAXHOST];
 	public:
 		/*			Class Default Functions			*/
 		
@@ -79,11 +74,9 @@ class ServerReactor {
 		/*			SERVER T0 CLIENT COMMUICATION			*/
 
 		// string	createMsg(ClientData& clientData, const string &command, const vector <string> &params, int paramCnt, const string &trailing = "");
-		string	createMsg(ClientData& clientData, const string &command, const vector <string> &params, const string &trailing = "");
-	
+		string		createMsg(ClientData& clientData, const string &command, const vector <string> &params, const string &trailing = "");
 		void		sendMsg(int socket, const string& clientInfo ,const string &command, string param, const string &trailing = "");
 		void		sendNumericReply(int socket, const string &param, const string &trailing = "");
-
 		int 		sendMsg_FixLater(int socket, const string &message);
 		void		sendNumericReply_FixLater(int socket, const string& reply);
 
@@ -94,18 +87,15 @@ class ServerReactor {
 		string					getServerPassword( void );
 
 		/*			SMART GETTERS			*/
-		bool				doesChannelExist( string& channelName );
+		bool		doesChannelExist( string& channelName );
 		ClientData& getClientDataFast( int clientSocket );
 
 		/*			MAIN			*/
-
 		void	run();
-		
-			/*			UTILS			*/
+
+		/*			UTILS			*/
 			
 		void	writeServerError(string functionName, string errorMessage, int errorNumber);
 		void	createPropertiesMap( void );
-
-
-		void			printUserInformation();
+		// void	printUserInformation();
 };

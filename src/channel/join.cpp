@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/24 12:13:30 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/23 12:16:48 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/24 18:34:58 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,6 @@ int joinParser(std::vector<string> &ChannelNames, std::vector<string> &ChannelKe
 	return (1);
 }
 
-
-
 void    leaveChannels(ServerReactor &_serverReactor, int clientSocket){
 	ClientData  &client = _serverReactor.getClientDataFast(clientSocket);
 	map<string, ChannelData>::iterator  it;
@@ -57,14 +55,12 @@ void    leaveChannels(ServerReactor &_serverReactor, int clientSocket){
 		ExecuteCommands::informMembers(channel.getClientSockets(), _serverReactor.createMsg(client, "PART", params));
 	}
 	_serverReactor.getChannelManager().removeGarbageChannels();
-
 }
 
 bool	createNewChannel(ServerReactor &_serverReactor, int clientSocket, string ChannelName){
 	ChannelData    NewChannel(ChannelName, clientSocket);
 
 	_serverReactor.getChannelManager().addChannel(ChannelName, NewChannel);
-	
 	string nickname = _serverReactor.getClientManager().getClientData(clientSocket).getNickname();
 	string channelKey = "=";
 	_serverReactor.sendMsg(clientSocket, _serverReactor.getClientManager().getClientData(clientSocket).getClientInfo(), "JOIN", NewChannel.getName());
@@ -139,5 +135,5 @@ void ExecuteCommands::join(ServerReactor &_server, Message &ProcessMessage, int 
 			_server.sendNumericReply_FixLater(clientSocket, RPL_ENDOFNAMES(nick, ChannelName));
 		}
 	}
-	_server.printUserInformation();
+	// _server.printUserInformation();
 }

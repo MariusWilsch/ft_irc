@@ -6,13 +6,11 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 15:07:18 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/23 12:17:39 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/24 16:57:16 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
-
-// This header is used to include all the headers in the project which are used in multiple files
 
 #include <iostream>
 #include <string>
@@ -29,8 +27,6 @@ using std::vector;
 using std::cout;
 using std::endl;
 
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ NUMERIC REPLIES ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
-
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ REPLIES ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
 #define RPL_WELCOME(nickname) "001 "  + nickname + " :Welcome to the IRC Network, " + nickname + "\r\n"
 #define RPL_NAMREPLY(nickname, channelType, channel, users) "353 " + nickname + " " + channelType + " " + channel + " :" + users + "\r\n"
@@ -43,7 +39,6 @@ using std::endl;
 #define ERR_INVITEONLYCHAN(nick, channel) "473 " + nick + " " + channel + " :Cannot join channel (+i)\r\n"
 #define ERR_BADCHANNELKEY(nick, channel) "475 " + nick + " " + channel + " : Cannot join channel (+k)\r\n"
 #define ERR_CHANNELISFULL(nick, channel) "471 " + nick + " " + channel + " :Cannot join channel (+l)\r\n"
-
 #define ERR_NEEDMOREPARAMS(nick, command) "461: " + nick + " " + command + " : Not enough parameters\r\n"
 #define ERR_UNKNOWNCOMMAND(nickname, wrongCommand) "421 " + nickname + " " + wrongCommand + " :Unknown command\r\n"
 #define ERR_NONICKNAMEGIVEN() "431: * No nickname given\r\n"
@@ -61,7 +56,4 @@ using std::endl;
 #define ERR_NORECIPIENT(target) "411 " + target + " :No recipient given (PRIVMSG)\r\n"
 #define ERR_NOTEXTTOSEND(target) "412 " + target + " :No text to send\r\n"
 #define ERR_NOSUCHNICKCHANNEL(nickSender, nickTarget) "401 " + nickSender + " " + nickTarget + " :No such nick/channel\r\n"
-
 #define ERR_CANNOTSENDTOCHAN(nick, channel) "404 " + nick + " " + channel + " :Cannot send to channel\r\n"
-
-// PRIVMSG Numeric replies to add here.

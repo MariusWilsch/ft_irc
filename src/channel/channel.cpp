@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 10:02:20 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/17 15:32:14 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/24 17:12:26 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,31 +16,30 @@
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ CLIENT DATA	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~/
 
 ChannelData::ChannelData( void ){
-		_name = "";
-		_topic = "";
-		_key = "";
-		_limit = -1;
-		_securityFlag = false;
-		_inviteOnlyFlag = false;
-		_topicFlag = false;
-		_limitFlag = false;
-		_clientSockets = set<int>();
-		_operators = set<int>();
+	_name = "";
+	_topic = "";
+	_key = "";
+	_limit = -1;
+	_securityFlag = false;
+	_inviteOnlyFlag = false;
+	_topicFlag = false;
+	_limitFlag = false;
+	_clientSockets = set<int>();
+	_operators = set<int>();
 }
 
 ChannelData::ChannelData( const string& channelName, const int socketFD ) {
-		this->_name = channelName;
-		// this->_creatorBySocket = socketFD;
-		this->_operators.insert(socketFD);
-		this->_clientSockets.insert(socketFD);
-		this->_inviteList = set<string>();
-		this->_topic = "";
-		this->_key = "";
-		this->_limit = -1;
-		this->_securityFlag = false;
-		this->_inviteOnlyFlag = false;
-		this->_topicFlag = false;
-		this->_limitFlag = false;
+	this->_name = channelName;
+	this->_operators.insert(socketFD);
+	this->_clientSockets.insert(socketFD);
+	this->_inviteList = set<string>();
+	this->_topic = "";
+	this->_key = "";
+	this->_limit = -1;
+	this->_securityFlag = false;
+	this->_inviteOnlyFlag = false;
+	this->_topicFlag = false;
+	this->_limitFlag = false;
 }
 
 ChannelData::~ChannelData( void ){}
@@ -48,199 +47,188 @@ ChannelData::~ChannelData( void ){}
 /********************** GETTERS	***********************/
 
 string  ChannelData::getName( void ) const{
-		return (this->_name);
+	return (this->_name);
 }
 
 string  ChannelData::getTopic( void ) const{
-		return (this->_topic );
+	return (this->_topic );
 }
 
 string  ChannelData::getKey( void ) const{
-		return (this->_key);
+	return (this->_key);
 }
 
 size_t  ChannelData::getLimit( void ) const{
-		return (this->_limit);
+	return (this->_limit);
 }
 
 bool    ChannelData::getSecurity(void) const{
-		return (this->_securityFlag);
+	return (this->_securityFlag);
 }
 
 bool    ChannelData::getTopicFlag ( void ) const{
-		return (this->_topicFlag);
+	return (this->_topicFlag);
 }
 
 bool    ChannelData::getInviteFlag ( void )  const{
-		return (this->_inviteOnlyFlag);
+	return (this->_inviteOnlyFlag);
 }
 
 bool    ChannelData::getLimitFlag( void ) const{
-		return (this->_limitFlag);
+	return (this->_limitFlag);
 }
 
 set <int>   ChannelData::getClientSockets( void ) const{
-		return (this->_clientSockets);
+	return (this->_clientSockets);
 }
 
 set <int>   ChannelData::getOperators( void ) const{
-		return (this->_operators);
+	return (this->_operators);
 }
 
 set <string>	ChannelData::getInviteList( void ) const{
-		return (this->_inviteList);
+	return (this->_inviteList);
 }
-
-// int ChannelData::getCreatorBySocket( void ) const{
-// 	return (this->_creatorBySocket);
-// }
 
 /********************** SETTERS	***********************/
 
 void    ChannelData::setName(string name){
-		this->_name = name;
+	this->_name = name;
 }
 
 void    ChannelData::setTopic(string topic){
-		this->_topic = topic;
+	this->_topic = topic;
 }
 
 void	ChannelData::setKey (string key){
-		this->_key = key;
+	this->_key = key;
 }
 
 void    ChannelData::setLimit(size_t limit){
-		this->_limit = limit;
+	this->_limit = limit;
 }
 
 void    ChannelData::setSecurity( bool stat){
-		this->_securityFlag = stat;
+	this->_securityFlag = stat;
 }
 
 void    ChannelData::setInviteFlag(bool stat){
-		this->_inviteOnlyFlag = stat;
+	this->_inviteOnlyFlag = stat;
 }
 
 void    ChannelData::setTopicFlag(bool stat){
-		this->_topicFlag = stat;
+	this->_topicFlag = stat;
 }
 
 void    ChannelData::setLimitFlag(bool stat){
-		this->_limitFlag = stat;
+	this->_limitFlag = stat;
 }
 
 void    ChannelData::addClient(int clientSocket){
-		this->_clientSockets.insert(clientSocket);
+	this->_clientSockets.insert(clientSocket);
 }
 
 void    ChannelData::addOperator(int clientSocket){
-		this->_operators.insert(clientSocket);
+	this->_operators.insert(clientSocket);
 }
 
 void	ChannelData::addGuest( string nickName){
-		this->_inviteList.insert(nickName);
+	this->_inviteList.insert(nickName);
 }
 
 void    ChannelData::removeClient(int SocketID){
-		this->_clientSockets.erase(SocketID);
+	this->_clientSockets.erase(SocketID);
 }
 
 void    ChannelData::removeOperator(int SocketID){
-		this->_operators.erase(SocketID);
+	this->_operators.erase(SocketID);
 }
 
 /************************* ClientData methods ***************************/
 
 bool    ChannelData::isOperator(int clientSocket){
-		if (_operators.find(clientSocket) != _operators.end())
-				return (true);
-		return (false);
+	if (_operators.find(clientSocket) != _operators.end())
+		return (true);
+	return (false);
 }
 
 bool    ChannelData::isCLient(int clientSocket){
-		if (_clientSockets.find(clientSocket) != _clientSockets.end())
-				return (true);
-		return (false);
+	if (_clientSockets.find(clientSocket) != _clientSockets.end())
+		return (true);
+	return (false);
 }
 
 bool    ChannelData::isInvited(string nickName){
-		if (_inviteList.find(nickName) != _inviteList.end())
-				return (true);
-		return (false);
+	if (_inviteList.find(nickName) != _inviteList.end())
+		return (true);
+	return (false);
 }
 
-// void	ChannelData::setCreatorBySocket( int socketID ){
-// 		this->_creatorBySocket = socketID;
-// }
-
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ CHANNEL MANAGER	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~/
-
 ChannelManager::ChannelManager(){
-		_channels = map<string, ChannelData>();
+	_channels = map<string, ChannelData>();
 };
 
 ChannelManager::~ChannelManager(){};
 
 ChannelData& ChannelManager::getChannelByName(string name){
-		map<string, ChannelData>::iterator it = _channels.find(name);
-		return (it->second);
+	map<string, ChannelData>::iterator it = _channels.find(name);
+	return (it->second);
 }
 
 map<string, ChannelData>&	ChannelManager::getChannels( void ){
-		return (this->_channels);
+	return (this->_channels);
 }
 
 bool    ChannelManager::channelExistence(string name){
-		map<string, ChannelData>::iterator it = _channels.find(name);
-		if (it == _channels.end())
-				return (false);
-		return (true);
+	map<string, ChannelData>::iterator it = _channels.find(name);
+	if (it == _channels.end())
+		return (false);
+	return (true);
 }
 
 void    ChannelManager::addChannel(string name, ChannelData &channelData){
-		_channels.insert(std::pair<string, ChannelData>(name, channelData));
+	_channels.insert(std::pair<string, ChannelData>(name, channelData));
 }
 
 bool    ChannelManager::itsChannel( string name ){
-		if (name[0] == '#')
-		{
-				name.erase(0, 1);
-				if (this->channelExistence(name))
-						return (true);
-		}
-		return (false);
+	if (name[0] == '#'){
+		name.erase(0, 1);
+		if (this->channelExistence(name))
+				return (true);
+	}
+	return (false);
 }
 
 void    ChannelManager::removeGarbageChannels(){
-		map<string, ChannelData>::iterator  it;
-		map<string, ChannelData> &m = getChannels();
-		for (it = m.begin(); it != m.end();)
-		{
-				if (it->second.getOperators().size() == 0 && it->second.getClientSockets().size() == 0){
-						getChannels().erase(it++);
-						if (getChannels().size() == 0)
-								break;
-				}
-				else
-						++it;
+	map<string, ChannelData>::iterator  it;
+	map<string, ChannelData> &m = getChannels();
+	for (it = m.begin(); it != m.end();){
+		if (it->second.getOperators().size() == 0 && it->second.getClientSockets().size() == 0){
+			getChannels().erase(it++);
+			if (getChannels().size() == 0)
+				break;
 		}
+		else
+			++it;
+	}
 }
 
 void    ChannelManager::removeFromChannels(int _clientSocket){
-		map<string, ChannelData>::iterator it;
-		for (it = this->_channels.begin(); it != this->_channels.end(); it++){
-				if (it->second.isCLient(_clientSocket)){
-						it->second.removeClient(_clientSocket);
-						if (it->second.isOperator(_clientSocket)){
-								it->second.removeOperator(_clientSocket);
-						}
-				}
+	map<string, ChannelData>::iterator it;
+	for (it = this->_channels.begin(); it != this->_channels.end(); it++){
+		if (it->second.isCLient(_clientSocket)){
+			it->second.removeClient(_clientSocket);
+			if (it->second.isOperator(_clientSocket)){
+				it->second.removeOperator(_clientSocket);
+			}
 		}
-		removeGarbageChannels();
+	}
+	removeGarbageChannels();
 }
 
 void    ChannelManager::removeChannel(string channelName){
-		this->_channels.erase(channelName);
+	this->_channels.erase(channelName);
 }
 
 string ChannelManager::createUserList(string channelName, ServerReactor &serverReactor) {
@@ -249,18 +237,12 @@ string ChannelManager::createUserList(string channelName, ServerReactor &serverR
     const set<int>& clientSockets = currentChannel.getClientSockets();
     const set<int>& operators = currentChannel.getOperators();
     ClientManager& clientManager = serverReactor.getClientManager();
-
-    cout << "operators: " << operators.size() << endl;
-
-		for (set<int>::const_iterator it = clientSockets.begin(); it != clientSockets.end(); it++) {
-        string prefix = (operators.find(*it) != operators.end()) ? "@" : "";
-        userList.append(prefix + clientManager.getClientData(*it).getNickname() + " ");
-		}
-
-		// Trim the trailing space if needed.
+	for (set<int>::const_iterator it = clientSockets.begin(); it != clientSockets.end(); it++) {
+	string prefix = (operators.find(*it) != operators.end()) ? "@" : "";
+	userList.append(prefix + clientManager.getClientData(*it).getNickname() + " ");
+	}
     if (!userList.empty() && userList.back() == ' ') {
         userList.pop_back();
     }
-
     return userList;
 }

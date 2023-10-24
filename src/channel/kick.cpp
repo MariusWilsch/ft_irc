@@ -6,20 +6,20 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/01 16:47:40 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/23 11:30:46 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/24 19:46:11 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ExecuteCommands.hpp"
 
+// !Fixing the number of paramters issue.
 bool kickParser(std::vector<string> &ChannelNames, std::vector<string> &Users, Message &msg){
-
     if (msg.getParams().size() < 3)
         return (false);
     string param = msg.getParams()[0];
     for (unsigned int i = 0; i < msg.getParams().size(); i++){
         param = msg.getParams()[i];
-        if (param[0] == '#'){
+        if (param.size() > 1 && param[0] == '#'){
             ChannelNames.push_back(param);
         }
         else if (!ExecuteCommands::whiteCheck(param)){
@@ -28,9 +28,10 @@ bool kickParser(std::vector<string> &ChannelNames, std::vector<string> &Users, M
     }
     if (Users.size() > ChannelNames.size() + 1)
             return (false);
-		if (Users.size() == ChannelNames.size() + 1) {
-            msg.setTrailing(Users[Users.size() - 1]);
-    }
+    if (Users.size() == ChannelNames.size() + 1)
+        msg.setTrailing(Users[Users.size() - 1]);
+    
+    // cout << "NameSize: " << ChannelNames.size() << "UsersSize: " << Users.size() << endl;
     return (true);
 }
 
@@ -39,13 +40,14 @@ void     ExecuteCommands::kick(ServerReactor &_server, Message &msg, int clientS
     std::vector<string> ChannelNames;
     std::vector<string> Users;
 
-    
     int stat = kickParser(ChannelNames, Users, msg);
+    // cout << "THE STAT FROM KIK: " << stat << endl;
+    // exit(0);
     if (!stat){
         _server.sendNumericReply_FixLater(clientSocket, ERR_NEEDMOREPARAMS(client.getNickname(), msg.getCommand()));
         throw std::exception();
     }
-		const string &nick = client.getNickname();
+    const string &nick = client.getNickname();
     for (unsigned int i = 0; i < ChannelNames.size(); i++){
         if (!_server.doesChannelExist(ChannelNames[i])){
             _server.sendNumericReply_FixLater(clientSocket, ERR_NOSUCHCHANNEL(nick, ChannelNames[i]));

@@ -6,23 +6,20 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 20:17:01 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/23 11:58:03 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/24 18:42:56 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ExecuteCommands.hpp"
 
-// ~~~~~~~~~~~~~ ONLY THE OPERATORS ARE ALLOWED TO PERFORM SUCH OPERATION ~~~~~~~~~~/ 
-
 bool    isDecimal(string str){
-		for (unsigned int i = 0; i < str.size(); i++){
-				if (!(str[i] >= '0' && str[i] <= '9'))
-						return (false);
-		}
-		return (true);
+	for (unsigned int i = 0; i < str.size(); i++){
+		if (!(str[i] >= '0' && str[i] <= '9'))
+			return (false);
+	}
+	return (true);
 }
 
-// Test the size of parameter with nc punch: server.
 std::vector<string>	ChannelOperatorPrivilege(ServerReactor &_serverReactor, Message &msg, int clientSocket){
 	ClientData  &client = _serverReactor.getClientDataFast(clientSocket);
 	ChannelData &channel = _serverReactor.getChannelManager().getChannelByName(msg.getParams()[0]);
@@ -43,7 +40,6 @@ std::vector<string>	ChannelOperatorPrivilege(ServerReactor &_serverReactor, Mess
 	string nickName = msg.getParams()[2];
 	int ClSocket = _serverReactor.getClientManager().MatchNickName(channel.getClientSockets(), nickName);
 	if (ClSocket == -1){
-		_serverReactor.sendNumericReply_FixLater(clientSocket, ERR_NOSUCHNICKCHANNEL(nickSender, msg.getParams()[0]));
 		_serverReactor.sendNumericReply_FixLater(clientSocket, ERR_USERNOTINCHANNEL(nickSender, nickName, channel.getName()));
 		throw std::exception();
 	}
@@ -142,30 +138,29 @@ std::vector<string>	ChannelSecureMode(ServerReactor &_server, Message &msg, int 
 	ChannelData &channel = _server.getChannelManager().getChannelByName(msg.getParams()[0]);
 
 	if (msg.getParams().size() < 2){
-			_server.sendNumericReply_FixLater(clientSocket, ERR_NEEDMOREPARAMS(client.getNickname(), msg.getCommand()));
-			throw std::exception();
+		_server.sendNumericReply_FixLater(clientSocket, ERR_NEEDMOREPARAMS(client.getNickname(), msg.getCommand()));
+		throw std::exception();
 	}
 	if (!channel.isCLient(clientSocket)){
-			_server.sendNumericReply_FixLater(clientSocket, ERR_NOTONCHANNEL(client.getNickname(), channel.getName()));
-			throw std::exception();
+		_server.sendNumericReply_FixLater(clientSocket, ERR_NOTONCHANNEL(client.getNickname(), channel.getName()));
+		throw std::exception();
 	}
 	if (!channel.isOperator(clientSocket)){
-			_server.sendNumericReply_FixLater(clientSocket, ERR_CHANOPRIVSNEEDED(channel.getName()));
-			throw std::exception();
+		_server.sendNumericReply_FixLater(clientSocket, ERR_CHANOPRIVSNEEDED(channel.getName()));
+		throw std::exception();
 	}
 	string  key;
 	if (msg.getParams().size() == 3)
-			key = msg.getParams()[2];
+		key = msg.getParams()[2];
 	if (msg.getParams()[1].compare("+k") == 0 && key.empty())
-			throw std::exception();
-	if (msg.getParams()[1].compare("+k") == 0 && !key.empty())
-	{
-			channel.setSecurity(true);
-			channel.setKey(key);
+		throw std::exception();
+	if (msg.getParams()[1].compare("+k") == 0 && !key.empty()) {
+		channel.setSecurity(true);
+		channel.setKey(key);
 	}
-	else if (msg.getParams()[1].compare("-k") == 0){
-			channel.setSecurity(false);
-			channel.setKey("");
+	else if (msg.getParams()[1].compare("-k") == 0) {
+		channel.setSecurity(false);
+		channel.setKey("");
 	}
 	std::vector<string> params;
 	params.push_back(msg.getParams()[0]);
@@ -181,16 +176,16 @@ std::vector<string>	inviteOnly(ServerReactor &_server, Message &msg, int clientS
 	ChannelData &channel = _server.getChannelManager().getChannelByName(msg.getParams()[0]);
 
 	if (msg.getParams().size() < 2){
-			_server.sendNumericReply_FixLater(clientSocket, ERR_NEEDMOREPARAMS(client.getNickname(), msg.getCommand()));
-			throw std::exception();
+		_server.sendNumericReply_FixLater(clientSocket, ERR_NEEDMOREPARAMS(client.getNickname(), msg.getCommand()));
+		throw std::exception();
 	}
 	if (!channel.isCLient(clientSocket)){
-			_server.sendNumericReply_FixLater(clientSocket, ERR_NOTONCHANNEL(client.getNickname(), channel.getName()));
-			throw std::exception();
+		_server.sendNumericReply_FixLater(clientSocket, ERR_NOTONCHANNEL(client.getNickname(), channel.getName()));
+		throw std::exception();
 	}
 	if (!channel.isOperator(clientSocket)){
-			_server.sendNumericReply_FixLater(clientSocket, ERR_CHANOPRIVSNEEDED(channel.getName()));
-			throw std::exception();
+		_server.sendNumericReply_FixLater(clientSocket, ERR_CHANOPRIVSNEEDED(channel.getName()));
+		throw std::exception();
 	}
 	if (msg.getParams()[1].compare("+i") == 0)
 		channel.setInviteFlag(true);

@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 16:01:33 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/17 15:54:40 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/24 16:55:44 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ class ChannelData {
 		string			_topic;
 		string			_key;
 		size_t			_limit;
-		// int				_creatorBySocket;
 		set <int> 		_clientSockets;
 		set <int> 		_operators;
 		set <string> 	_inviteList;
@@ -60,7 +59,6 @@ class ChannelData {
 		set <int> 		getClientSockets( void ) const;
 		set <int> 		getOperators( void ) const;
 		set <string>	getInviteList( void ) const;
-		int				getCreatorBySocket( void ) const;
 
 		/*			SETTERS			 */
 		void 			setName( string name );
