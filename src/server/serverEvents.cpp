@@ -22,7 +22,7 @@ void	ServerReactor::recieveIncomingMessage( int clientSocket )
 
 	while (1){
 		bytesRead = recv(clientSocket, &buffer, 1023, 0);
-		if (bytesRead == -1 && errno != EAGAIN && errno != EWOULDBLOCK)
+		if (bytesRead == -1)
 			writeServerError("recv", "Failed to receive message", errno);
 		if (bytesRead == 0){
 			updateMoinitoring(clientSocket, EVFILT_READ, EV_DELETE);
@@ -37,22 +37,28 @@ void	ServerReactor::recieveIncomingMessage( int clientSocket )
 	}
 	if (message == "\n")
 		return ;
+
 	Message processMessage(message, _properties);
+	if (processMessage.getCommand() == "QUIT") {
+		updateMoinitoring(clientSocket, EVFILT_READ, EV_DELETE);
+		_clientManager.removeClient(clientSocket);
+		_channelManager.removeFromChannels(clientSocket);
+		return ;
+	}
 	ExecuteCommands::execute(*this, processMessage, clientSocket);
 }
 
 void	ServerReactor::acceptNewClient( void )
 {
 	struct sockaddr_in	clientAddress;
-	socklen_t			clientAddressSize;
-	int					clientSocket;
+	socklen_t						clientAddressSize;
+	int									clientSocket;
 	
 	std::cout << "Accepting new client" << std::endl;
 	clientAddressSize = sizeof(clientAddress);
 	clientSocket = accept(_serverSocket, (struct sockaddr *)&clientAddress, &clientAddressSize);
 
 	string clientIP = inet_ntoa(clientAddress.sin_addr);
-  	std::cout << "Client IP Address: " << clientIP << std::endl;
 	if (clientSocket == -1)
 		writeServerError("accept", "Failed to accept new client", errno);
 	setToNonBlocking(clientSocket);

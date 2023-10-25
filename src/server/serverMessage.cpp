@@ -23,6 +23,9 @@ Message::Message( string rawMessage, map <string, CommandProperties> properties 
 	_rawMessage.erase(std::remove(_rawMessage.begin(), _rawMessage.end(), '\r'), _rawMessage.end());
 	if (_rawMessage.empty())
 		return ;
+
+	cout << "|" << _rawMessage << "|" << endl;
+
 	if (_rawMessage.at(0) == ':') {
 		_prefix = _rawMessage.substr(1, _rawMessage.find(' ', 0) - 1);
 		_rawMessage.erase(0, _rawMessage.find(' ') + 1);
@@ -58,6 +61,7 @@ Message::Message( string rawMessage, map <string, CommandProperties> properties 
 		if (token != ":")
 			_params.push_back(token);
 	}
+	// printData();
 }
 
 /*			GETTERS			*/
