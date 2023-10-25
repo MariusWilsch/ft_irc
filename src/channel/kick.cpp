@@ -6,13 +6,12 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/01 16:47:40 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/25 11:44:55 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/25 12:19:50 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ExecuteCommands.hpp"
 
-// !Fixing the number of paramters issue.
 bool kickParser(std::vector<string> &ChannelNames, std::vector<string> &Users, Message &msg){
     if (msg.getParams().size() < 3)
         return (false);
@@ -30,7 +29,6 @@ bool kickParser(std::vector<string> &ChannelNames, std::vector<string> &Users, M
             return (false);
     if (Users.size() == ChannelNames.size() + 1)
         msg.setTrailing(Users[Users.size() - 1]);
-
     return (true);
 }
 
@@ -40,8 +38,6 @@ void     ExecuteCommands::kick(ServerReactor &_server, Message &msg, int clientS
     std::vector<string> Users;
 
     int stat = kickParser(ChannelNames, Users, msg);
-    // cout << "THE STAT FROM KIK: " << stat << endl;
-    // exit(0);
     if (!stat){
         _server.sendNumericReply_FixLater(clientSocket, ERR_NEEDMOREPARAMS(client.getNickname(), msg.getCommand()));
         throw std::exception();

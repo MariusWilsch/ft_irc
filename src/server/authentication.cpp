@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 00:53:10 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/24 18:36:04 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/25 15:54:43 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ void     ExecuteCommands::user(ServerReactor &_serverReactor, Message &ProcessMe
     client.setmode(atoi(ProcessMessage.getParams()[1].c_str()));
     client.setUnused(ProcessMessage.getParams()[2]);
     client.setRealname(ProcessMessage.getParams()[3]);
-    _serverReactor.getClientManager().getClientData(clientSocket).setRegisteration(true, 1);
+    client.setRegisteration(true, 1);
     if (client.isRegistered())
          _serverReactor.sendNumericReply_FixLater(clientSocket, RPL_WELCOME(client.getNickname()));
 }

@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/16 22:52:24 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/24 17:06:00 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/25 12:12:04 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include "ManBot.hpp"
 
 /* The BOT will be called /MAN
-    + this bot will give the manual of all the used command in ft_irc by order of The peaky blinder "The user"!
+    + this bot will give the manual of all the used command in ft_irc by order of The "The user"
         + The bot command is: /MAN;
         - /MAN without parameters:
             + give the usage of the bot command

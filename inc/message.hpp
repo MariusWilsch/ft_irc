@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 16:04:46 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/24 16:59:56 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/25 12:23:39 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,5 +65,5 @@ class Message {
 		/*			SETTERS			*/
 
 		void			setTrailing( const string& trailing );
-		void			printData( void );
+		// void			printData( void );
 };

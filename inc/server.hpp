@@ -73,10 +73,8 @@ class ServerReactor {
 		 
 		/*			SERVER T0 CLIENT COMMUICATION			*/
 
-		// string	createMsg(ClientData& clientData, const string &command, const vector <string> &params, int paramCnt, const string &trailing = "");
 		string		createMsg(ClientData& clientData, const string &command, const vector <string> &params, const string &trailing = "");
 		void		sendMsg(int socket, const string& clientInfo ,const string &command, string param, const string &trailing = "");
-		void		sendNumericReply(int socket, const string &param, const string &trailing = "");
 		int 		sendMsg_FixLater(int socket, const string &message);
 		void		sendNumericReply_FixLater(int socket, const string& reply);
 

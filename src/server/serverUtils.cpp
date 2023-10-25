@@ -64,9 +64,6 @@ createMsg(ClientData& clientData, const string& command, const vector <string>& 
 	// Append command
 	message += command;
 
-	// Append nickname
-	// message += " " + clientData.getNickname();
-
 	// Append Channel name
 	message += " " + params[0];
 
@@ -89,30 +86,7 @@ createMsg(ClientData& clientData, const string& command, const vector <string>& 
 	return (message);
 }
 
-void ServerReactor::sendNumericReply(int socket, const string &param, const string &trailing) {
-		string message;
 
-		// Check if socket is valid
-		if (socket == -1)
-			return ;
-
-		// Append command
-		// message += ":" + _serverName + " " + numericReply;
-
-		// Append parameters
-		if (!param.empty()) {
-				message += " " + param;
-		}
-
-		// Append trailing message if it exists
-		if (!trailing.empty()) {
-				message += " :" + trailing;
-		}
-
-		message += "\r\n";  // IRC messages end with \r\n
-
-		send(socket, message.c_str(), message.length(), 0);
-}
 
 void ServerReactor::sendNumericReply_FixLater(int socket, const string& reply) {
 	// Check if socket is valid
@@ -122,29 +96,3 @@ void ServerReactor::sendNumericReply_FixLater(int socket, const string& reply) {
 	send(socket, reply.c_str(), reply.length(), 0);
 }
 
-// void ServerReactor::printUserInformation(void)
-// {
-//     std::map<string, ChannelData>::iterator it;
-//     std::cout << "Number of channels: " << _channelManager.getChannels().size() << std::endl;
-//     std::map<string, ChannelData> m = _channelManager.getChannels();
-//     for (it = m.begin(); it != m.end(); ++it) {
-//         std::cout << "Channel name: " << it->second.getName() << std::endl;
-//         if (it->second.getSecurity()) {
-//             std::cout << "~~~> Channel is private" << std::endl;
-//         } else {
-//             std::cout << "~~~> Channel is public" << std::endl;
-//         }
-
-//         std::set<int>::iterator cl;
-//         std::set<int> s = it->second.getClientSockets();
-//         for (cl = s.begin(); cl != s.end(); ++cl) {
-//             std::cout << "  >>> Client: " << *cl << std::endl;
-//         }
-
-//         std::set<int>::iterator op;
-//         std::set<int> f = it->second.getOperators();
-//         for (op = f.begin(); op != f.end(); ++op) {
-//             std::cout << "  >>> Operator: " << *op << std::endl;
-//         }
-//     }
-// }

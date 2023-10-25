@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 13:27:34 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/25 11:57:04 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/25 12:23:14 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,17 +85,16 @@ void	Message::setTrailing(const string& trailing ) {
 
 /*			MEMBER FUNCTIONS			*/
 
-void Message::printData( void )
-{
-	std::cout << "Size of params vec: " << _params.size() << endl;
-	std::cout << "Prefix: " << _prefix << std::endl;
-	std::cout << "Command: " << _command << std::endl;
-	std::cout << "Params: ";
-	for (std::vector<string>::iterator it = _params.begin(); it != _params.end(); ++it)
-	{
-		std::cout << "|" << *it << "| ";
-	}
-	std::cout << std::endl;
-	// std::cout << "Trailing: " << _trailing << std::endl;
-}
+// void Message::printData( void )
+// {
+// 	std::cout << "Size of params vec: " << _params.size() << endl;
+// 	std::cout << "Prefix: " << _prefix << std::endl;
+// 	std::cout << "Command: " << _command << std::endl;
+// 	std::cout << "Params: ";
+// 	for (std::vector<string>::iterator it = _params.begin(); it != _params.end(); ++it)
+// 	{
+// 		std::cout << "|" << *it << "| ";
+// 	}
+// 	std::cout << std::endl;
+// }
 
