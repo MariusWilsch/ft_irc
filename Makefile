@@ -38,7 +38,6 @@ $(OBJ_DIR):
 run: all
 	@./$(TARGET) 8080 password
 
-
 clean:
 	@rm -rf $(OBJ_DIR)
 	@echo "$(RED)Object files removed.$(RESET)"

@@ -11,14 +11,16 @@
 /* ************************************************************************** */
 
 #include "server.hpp"
+#include <signal.h>
 
-void	f(){
-	system("leaks ircserv");
-}
+// void	f(){
+// 	system("leaks ircserv");
+// }
 
 int	main( int argc, char **argv )
 {
-	atexit(f);
+	// atexit(f);
+	signal(SIGPIPE, SIG_IGN);
 	if (argc != 3)
 	{
 		std::cout << "Usage: ./server <port> <password>" << std::endl;

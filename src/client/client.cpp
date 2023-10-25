@@ -179,10 +179,8 @@ int	ClientManager::getClientSocketByNick(string& nickname) {
 
 	for (it = _ClientsBySocket.begin(); it != _ClientsBySocket.end(); ++it) {
 		if (getClientData(it->first).getNickname().compare(nickname) == 0) {
-			cout << "Nickname was found inside of map container" << endl;
 			return (it->first);
 		}
 	}
-	cout << "Couldn't find the nickname within the map" << endl;
 	return (-1);
 }

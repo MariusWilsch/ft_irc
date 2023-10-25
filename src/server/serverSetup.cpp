@@ -67,7 +67,7 @@ void	ServerReactor::updateMoinitoring( int fd, int filter, int flags ) {
 void	ServerReactor::setupServerSocket( int port ) {
 	struct sockaddr_in	serverAddress;
 	socklen_t						serverAddressSize;
-	int					yes;
+	int									yes;
 
 	_serverSocket = socket(AF_INET, SOCK_STREAM, 0);
 	if (_serverSocket == -1)
