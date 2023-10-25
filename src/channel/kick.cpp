@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/01 16:47:40 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/24 19:46:11 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/25 11:44:55 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,7 @@ bool kickParser(std::vector<string> &ChannelNames, std::vector<string> &Users, M
             return (false);
     if (Users.size() == ChannelNames.size() + 1)
         msg.setTrailing(Users[Users.size() - 1]);
-    
-    // cout << "NameSize: " << ChannelNames.size() << "UsersSize: " << Users.size() << endl;
+
     return (true);
 }
 
