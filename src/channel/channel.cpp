@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 10:02:20 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/24 17:12:26 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/25 17:06:46 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ ChannelData::ChannelData( void ){
 	_inviteOnlyFlag = false;
 	_topicFlag = false;
 	_limitFlag = false;
+	_topicRestriction = true;
 	_clientSockets = set<int>();
 	_operators = set<int>();
 }
@@ -40,6 +41,7 @@ ChannelData::ChannelData( const string& channelName, const int socketFD ) {
 	this->_inviteOnlyFlag = false;
 	this->_topicFlag = false;
 	this->_limitFlag = false;
+	this->_topicRestriction = true;
 }
 
 ChannelData::~ChannelData( void ){}
@@ -76,6 +78,10 @@ bool    ChannelData::getInviteFlag ( void )  const{
 
 bool    ChannelData::getLimitFlag( void ) const{
 	return (this->_limitFlag);
+}
+
+bool    ChannelData::getTopicRestriction( void ) const{
+	return (this->_topicRestriction);
 }
 
 set <int>   ChannelData::getClientSockets( void ) const{
@@ -122,6 +128,12 @@ void    ChannelData::setTopicFlag(bool stat){
 
 void    ChannelData::setLimitFlag(bool stat){
 	this->_limitFlag = stat;
+}
+
+
+
+void	ChannelData::setTopicRestriction(bool stat){
+	this->_topicRestriction = stat;
 }
 
 void    ChannelData::addClient(int clientSocket){

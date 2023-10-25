@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/30 13:41:28 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/24 17:20:02 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/25 17:06:18 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,12 @@ void     ExecuteCommands::topic(ServerReactor &_server, Message &ProcessMessage,
             _server.sendNumericReply_FixLater(clientSocket, RPL_NOTOPIC(client.getNickname(), channelName));
         return ;
     }
-    if (!Channel.isOperator(clientSocket)){
-        _server.sendNumericReply_FixLater(clientSocket, ERR_CHANOPRIVSNEEDED(channelName));
-        return ;
+    cout << "Restriction flag: " << Channel.getTopicRestriction() << endl;
+    if (Channel.getTopicRestriction() == true){
+        if (!Channel.isOperator(clientSocket)){
+            _server.sendNumericReply_FixLater(clientSocket, ERR_CHANOPRIVSNEEDED(channelName));
+            return ;
+        }
     }
     if (params.size() == 2 && whiteCheck(params[1])){
         Channel.setTopic("");

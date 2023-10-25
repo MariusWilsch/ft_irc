@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 20:17:01 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/24 18:42:56 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/25 17:12:25 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,42 +97,6 @@ std::vector<string>	ChanneLimitMode(ServerReactor &_server, Message &msg, int cl
 	return (params);
 }
 
-std::vector<string>    ChannelTopicMode(ServerReactor &_server, Message &msg, int clientSocket){
-	ClientData  &client = _server.getClientDataFast(clientSocket);
-	ChannelData &channel = _server.getChannelManager().getChannelByName(msg.getParams()[0]);
-
-	if (msg.getParams().size() < 2){
-		_server.sendNumericReply_FixLater(clientSocket, ERR_NEEDMOREPARAMS(client.getNickname() ,msg.getCommand()));
-		throw std::exception();
-	}
-	if (!channel.isCLient(clientSocket)){
-		_server.sendNumericReply_FixLater(clientSocket, ERR_NOTONCHANNEL(client.getNickname(), channel.getName()));
-		throw std::exception();
-	}
-	if (!channel.isOperator(clientSocket)){
-		_server.sendNumericReply_FixLater(clientSocket, ERR_CHANOPRIVSNEEDED(channel.getName()));
-		throw std::exception();
-	}
-	string channelName = msg.getParams()[0];
-	string topic;
-	if (msg.getParams().size() > 2)
-		topic = msg.getParams()[2];
-	if (msg.getParams()[1].compare("+t") == 0 && !topic.empty()){
-		channel.setTopicFlag(true);
-		channel.setTopic(topic);
-	}
-	else if (msg.getParams()[1].compare("-t") == 0){
-		channel.setTopicFlag(false);
-		channel.setTopic("");
-	}
-	std::vector<string> params;
-	params.push_back(msg.getParams()[0]);
-	params.push_back(msg.getParams()[1]);
-	if (msg.getParams().size() > 2)
-		params.push_back(msg.getParams()[2]);
-	return (params);
-}
-
 std::vector<string>	ChannelSecureMode(ServerReactor &_server, Message &msg, int clientSocket){
 	ClientData  &client = _server.getClientDataFast(clientSocket);
 	ChannelData &channel = _server.getChannelManager().getChannelByName(msg.getParams()[0]);
@@ -170,6 +134,38 @@ std::vector<string>	ChannelSecureMode(ServerReactor &_server, Message &msg, int 
 	return (params);
 }
 
+std::vector<string>    ChannelTopicMode(ServerReactor &_server, Message &msg, int clientSocket){
+	ClientData  &client = _server.getClientDataFast(clientSocket);
+	ChannelData &channel = _server.getChannelManager().getChannelByName(msg.getParams()[0]);
+
+	if (msg.getParams().size() < 2){
+		_server.sendNumericReply_FixLater(clientSocket, ERR_NEEDMOREPARAMS(client.getNickname() ,msg.getCommand()));
+		throw std::exception();
+	}
+	if (!channel.isCLient(clientSocket)){
+		_server.sendNumericReply_FixLater(clientSocket, ERR_NOTONCHANNEL(client.getNickname(), channel.getName()));
+		throw std::exception();
+	}
+	if (!channel.isOperator(clientSocket)){
+		_server.sendNumericReply_FixLater(clientSocket, ERR_CHANOPRIVSNEEDED(channel.getName()));
+		throw std::exception();
+	}
+	string channelName = msg.getParams()[0];
+
+	if (msg.getParams()[1].compare("+t") == 0){
+		// restrict regular members from changing the topic of the channel. 
+		channel.setTopicRestriction(true);
+	}
+
+	else if (msg.getParams()[1].compare("-t") == 0){
+		// Allow all the channel member to change the topic.
+		channel.setTopicRestriction(false);
+	}
+	std::vector<string> params;
+	params.push_back(msg.getParams()[0]);
+	params.push_back(msg.getParams()[1]);
+	return (params);
+}
 
 std::vector<string>	inviteOnly(ServerReactor &_server, Message &msg, int clientSocket){
 	ClientData  &client = _server.getClientDataFast(clientSocket);

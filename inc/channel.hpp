@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 16:01:33 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/24 16:55:44 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/25 16:52:00 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ class ChannelData {
 		bool			_inviteOnlyFlag;
 		bool			_topicFlag;
 		bool			_limitFlag;
+		bool			_topicRestriction;
+	
 		string			_name;
 		string			_topic;
 		string			_key;
@@ -52,6 +54,7 @@ class ChannelData {
 		bool			getTopicFlag ( void ) const;
 		bool			getInviteFlag ( void )  const;
 		bool			getLimitFlag ( void ) const;
+		bool    		getTopicRestriction( void ) const;
 		string 			getName( void ) const;
 		string 			getTopic( void ) const;
 		string			getKey( void ) const;
@@ -69,6 +72,7 @@ class ChannelData {
 		void			setInviteFlag( bool stat );
 		void			setTopicFlag( bool stat );
 		void			setLimitFlag( bool stat );
+		void			setTopicRestriction(bool stat);
 		void			addClient( int clientSocket);
 		void			addOperator( int clientSocket);
 		void			addGuest( string nickName);
