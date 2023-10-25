@@ -147,6 +147,7 @@ void	ClientManager::removeClient( int clientSocket )
 {
 	std::cout << "Removing client from map container" << std::endl;
 	_ClientsBySocket.erase(clientSocket);
+	close(clientSocket);
 }
 
 ClientData& ClientManager::getClientData( int clientSocket )

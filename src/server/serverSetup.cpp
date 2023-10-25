@@ -92,14 +92,9 @@ void	ServerReactor::setupServerSocket( int port ) {
 	setToNonBlocking(_serverSocket);
 }
 
-void	ServerReactor::setToNonBlocking( int fd ) {
-	int	flags;
-	
-	flags = fcntl(fd, F_GETFL, 0);
-	if (flags == -1)
-		writeServerError("fcntl", "Failed to get socket flags", errno);
-	if (fcntl(fd, F_SETFL, flags & ~O_NONBLOCK) == -1)
-		writeServerError("fcntl", "Failed to set socket flags", errno);
+void ServerReactor::setToNonBlocking(int fd) {
+		if (fcntl(fd, F_SETFL, O_NONBLOCK) == -1)
+				writeServerError("fcntl", "Failed to set socket to non-blocking mode", errno);
 }
 
 
