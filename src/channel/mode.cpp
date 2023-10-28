@@ -126,15 +126,11 @@ void   ChannelTopicMode(std::vector<string> params, ServerReactor &_server, Mess
 	}
 	string channelName = params[0];
 
-	if (params[1].compare("+t") == 0){
-		// restrict regular members from changing the topic of the channel. 
+	if (params[1].compare("+t") == 0)
 		channel.setTopicRestriction(true);
-	}
 
-	else if (params[1].compare("-t") == 0){
-		// Allow all the channel member to change the topic.
+	else if (params[1].compare("-t") == 0)
 		channel.setTopicRestriction(false);
-	}
 }
 
 void	inviteOnly(std::vector<string> params, ServerReactor &_server, Message &msg, int clientSocket){
@@ -172,10 +168,6 @@ std::vector<string>	modeParser(string param){
 		mode.push_back(param[i]);
 		modes.push_back(mode);
 	}
-	cout << "Displaying modes vector: " << endl;
-	for (std::vector<string>::iterator it = modes.begin(); it != modes.end(); it++){
-		cout << *it << "   " << endl;
-	}
 	return (modes);
 }
 
@@ -203,16 +195,6 @@ void	ExecuteCommands::mode(ServerReactor &_server, Message &ProccessMessage, int
 		_server.sendNumericReply_FixLater(clientSocket, ERR_UNKNOWNMODE(ProccessMessage.getParams()[1]));
 		throw std::exception();
 	}
-
-	cout << "Display paraemters vector: " << endl;
-	std::vector<string>::iterator it;
-	for (it = ProccessMessage.getParams().begin(); it != ProccessMessage.getParams().end(); it++){
-			cout << *it << "   " << endl;
-	}
-	// ! handle this: Note that there is a maximum limit of three (3) changes per command for modes that take a parameter.
-
-	if (modes.size() > 3)
-		throw std::exception();
 	size_t p = 2;
 	for (std::vector<string>::iterator it = modes.begin(); it != modes.end(); it++){
 		std::vector<string>	params;
@@ -245,11 +227,9 @@ void	ExecuteCommands::mode(ServerReactor &_server, Message &ProccessMessage, int
 			ChannelOperatorPrivilege(params, _server, ProccessMessage, clientSocket);
 		}
 		else {
-			// Unknown mode passed between modes.
 			_server.sendNumericReply_FixLater(clientSocket, ERR_UNKNOWNMODE(*it));
 			throw std::exception();
 		}
-		// Informing message> 
 		ChannelData &channel = _server.getChannelManager().getChannelByName(ProccessMessage.getParams()[0]);
 		informMembers(channel.getClientSockets(), _server.createMsg(client, "MODE", params));
 	}
