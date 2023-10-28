@@ -183,14 +183,9 @@ void	ExecuteCommands::mode(ServerReactor &_server, Message &ProccessMessage, int
 		_server.sendNumericReply_FixLater(clientSocket, ERR_NOSUCHCHANNEL(client.getNickname(), ProccessMessage.getParams()[0]));
 		throw std::exception();
 	}
-
 	if (ProccessMessage.getParams()[1].compare("+sn") == 0)
 		return ;
 	std::vector<string> modes = modeParser(ProccessMessage.getParams()[1]);
-	// Erasing the second element from params vector.
-	std::vector<string>::iterator remove = std::find(ProccessMessage.getParams().begin(), ProccessMessage.getParams().end(), ProccessMessage.getParams()[1]);
-	ProccessMessage.getParams().erase(remove);
-	// if the parser failed to parse the parameter will throw ERR_UNKNOWNMODE & exception.
 	if (modes.empty()){
 		_server.sendNumericReply_FixLater(clientSocket, ERR_UNKNOWNMODE(ProccessMessage.getParams()[1]));
 		throw std::exception();

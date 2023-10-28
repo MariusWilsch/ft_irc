@@ -6,14 +6,14 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/01 16:47:40 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/25 12:19:50 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/28 18:00:22 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ExecuteCommands.hpp"
 
 bool kickParser(std::vector<string> &ChannelNames, std::vector<string> &Users, Message &msg){
-    if (msg.getParams().size() < 3)
+    if (msg.getParams().size() < 2)
         return (false);
     string param = msg.getParams()[0];
     for (unsigned int i = 0; i < msg.getParams().size(); i++){
@@ -25,10 +25,14 @@ bool kickParser(std::vector<string> &ChannelNames, std::vector<string> &Users, M
             Users.push_back(param);
         }
     }
-    if (Users.size() > ChannelNames.size() + 1)
-            return (false);
+    if (Users.empty() || Users.size() > ChannelNames.size() + 1)
+        return (false);
     if (Users.size() == ChannelNames.size() + 1)
         msg.setTrailing(Users[Users.size() - 1]);
+    for (size_t i = Users.size(); i < ChannelNames.size(); i++){
+        Users[i] = "";
+    }
+    
     return (true);
 }
 
@@ -49,6 +53,7 @@ void     ExecuteCommands::kick(ServerReactor &_server, Message &msg, int clientS
             continue;
         }
         ChannelData &Channel = _server.getChannelManager().getChannelByName(ChannelNames[i]);
+        cout << "Is client out:> " << Channel.isCLient(clientSocket) << endl;
         if (!Channel.isCLient(clientSocket)){
             _server.sendNumericReply_FixLater(clientSocket, ERR_NOTONCHANNEL(nick, ChannelNames[i]));
             continue;
@@ -57,12 +62,10 @@ void     ExecuteCommands::kick(ServerReactor &_server, Message &msg, int clientS
             _server.sendNumericReply_FixLater(clientSocket, ERR_CHANOPRIVSNEEDED(ChannelNames[i]));
             continue;
         }
-        if (Users[i].c_str() == NULL){
-            _server.sendNumericReply_FixLater(clientSocket, ERR_NEEDMOREPARAMS(client.getNickname(), msg.getCommand()));
-            continue;
-        }
-        set<int> ChannelMembers = _server.getChannelManager().getChannelByName(ChannelNames[i]).getClientSockets();
-        int kickedID = _server.getClientManager().MatchNickName(ChannelMembers, Users[i]);
+        // cout << "is op result: " << Channel.isOperator(clientSocket) << endl;
+        // exit(0);
+        // set<int> ChannelMembers = Channel.getClientSockets();
+        int kickedID = _server.getClientManager().MatchNickName(Channel.getClientSockets(), Users[i]);
         if (kickedID == -1){
 			_server.sendNumericReply_FixLater(clientSocket, ERR_NOSUCHNICKCHANNEL(client.getNickname(), Users[i]));
             continue;
