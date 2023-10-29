@@ -24,13 +24,16 @@ void ExecuteCommands::kick(ServerReactor &_server, Message &msg, int clientSocke
         throw std::exception();
     }
 
+					
+
     const string &channelName = params[0];
     const string &userToKick = params[1];
     const string &comment = (params.size() > 2) ? params[2] : "You were kicked!";
 
-		if (channelName[0] != '#') 
+		if (channelName[0] != '#')  {
 				_server.sendNumericReply_FixLater(clientSocket, ERR_NOSUCHCHANNEL(client.getNickname(), channelName));
 				return;
+		}
 
     // Check if channel exists
     if (!_server.doesChannelExist(channelName)){
@@ -39,6 +42,8 @@ void ExecuteCommands::kick(ServerReactor &_server, Message &msg, int clientSocke
     }
 
     ChannelData &channel = _server.getChannelManager().getChannelByName(channelName);
+
+
 
     // Check if sender is in the channel
     if (!channel.isCLient(clientSocket)){
@@ -58,8 +63,6 @@ void ExecuteCommands::kick(ServerReactor &_server, Message &msg, int clientSocke
         _server.sendNumericReply_FixLater(clientSocket, ERR_NOSUCHNICKCHANNEL(client.getNickname(), userToKick));
         return;
     }
-
-		cout << "Kicking ..." << endl;
 
     // Inform members of the channel about the kick
     vector<string> kickParams;

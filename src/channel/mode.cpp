@@ -173,33 +173,33 @@ std::vector<string>	modeParser(string param){
 
 void	ExecuteCommands::mode(ServerReactor &_server, Message &ProccessMessage, int clientSocket){
 	ClientData  &client = _server.getClientDataFast(clientSocket);
-	vector<string> param = ProccessMessage.getParams();
-	if (param.size() == 1)
+	vector<string> orginalParams = ProccessMessage.getParams();
+	if (orginalParams.size() == 1)
 		throw std::exception();
-	if (param.size() < 2) {
+	if (orginalParams.size() < 2) {
 		_server.sendNumericReply_FixLater(clientSocket, ERR_NEEDMOREPARAMS(client.getNickname(), ProccessMessage.getCommand()));
 		throw std::exception();
 	}
-	if (param[0][0] != '#') {
-		_server.sendNumericReply_FixLater(clientSocket, ERR_NOSUCHCHANNEL(client.getNickname(), param[0]));
+	if (orginalParams[0][0] != '#') {
+		_server.sendNumericReply_FixLater(clientSocket, ERR_NOSUCHCHANNEL(client.getNickname(), orginalParams[0]));
 		throw std::exception();
 	}
-	if (!_server.doesChannelExist(param[0])){
-		_server.sendNumericReply_FixLater(clientSocket, ERR_NOSUCHCHANNEL(client.getNickname(), param[0]));
+	if (!_server.doesChannelExist(orginalParams[0])){
+		_server.sendNumericReply_FixLater(clientSocket, ERR_NOSUCHCHANNEL(client.getNickname(), orginalParams[0]));
 		throw std::exception();
 	}
-	if (param[1].compare("+sn") == 0)
+	if (orginalParams[1].compare("+sn") == 0)
 		return ;
-	std::vector<string> modes = modeParser(param[1]);
+	std::vector<string> modes = modeParser(orginalParams[1]);
 	if (modes.empty()){
-		_server.sendNumericReply_FixLater(clientSocket, ERR_UNKNOWNMODE(param[1]));
+		_server.sendNumericReply_FixLater(clientSocket, ERR_UNKNOWNMODE(orginalParams[1]));
 		throw std::exception();
 	}
 
 	size_t p = 2;
 	for (std::vector<string>::iterator it = modes.begin(); it != modes.end(); it++){
 		std::vector<string>	params;
-		params.push_back(params[0]);
+		params.push_back(orginalParams[0]);
 		if (it->compare("+i") == 0 || it->compare("-i") == 0) {
 			params.push_back(*it);
 			inviteOnly(params, _server, ProccessMessage, clientSocket);
