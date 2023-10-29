@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 15:07:18 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/24 16:57:16 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/29 14:12:59 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ using std::endl;
 #define RPL_NOTOPIC(nick, channel) "331 " + nick + " " + channel + " : No topic is set\r\n"
 #define RPL_TOPIC(nick, channel, topic) "332 " + nick + " " + channel + " :" + topic + "\r\n"
 #define RPL_INVITING(nickSender, channel, nickReciever) "341 " + nickSender + " " + nickReciever + " " + channel + "\r\n"
+#define RPL_CHANNELMODEIS(channel, modeParams) "324 " + channel + " " + modeParams + " " + "\r\n"
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ERRORS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
 #define ERR_INVITEONLYCHAN(nick, channel) "473 " + nick + " " + channel + " :Cannot join channel (+i)\r\n"

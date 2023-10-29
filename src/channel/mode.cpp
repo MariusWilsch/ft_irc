@@ -171,12 +171,31 @@ std::vector<string>	modeParser(string param){
 	return (modes);
 }
 
+string	getChannelModes(ChannelData &channel){
+	string modes;
+	string params;
+
+	modes = "+";
+	params = "";
+	if (channel.getInviteFlag())
+		modes.append("i");
+	if (channel.getTopicRestriction())
+		modes.append("t");
+	if (channel.getSecurity()){
+		modes.append("k");
+		params.append(channel.getKey());
+	}
+	if (channel.getLimitFlag()){
+		modes.append("l");
+		params.append(std::to_string(channel.getLimit()));
+	}
+	return (modes + " " + params);
+}
+
 void	ExecuteCommands::mode(ServerReactor &_server, Message &ProccessMessage, int clientSocket){
 	ClientData  &client = _server.getClientDataFast(clientSocket);
 	vector<string> orginalParams = ProccessMessage.getParams();
-	if (orginalParams.size() == 1)
-		throw std::exception();
-	if (orginalParams.size() < 2) {
+	if (orginalParams.size() < 1) {
 		_server.sendNumericReply_FixLater(clientSocket, ERR_NEEDMOREPARAMS(client.getNickname(), ProccessMessage.getCommand()));
 		throw std::exception();
 	}
@@ -187,6 +206,12 @@ void	ExecuteCommands::mode(ServerReactor &_server, Message &ProccessMessage, int
 	if (!_server.doesChannelExist(orginalParams[0])){
 		_server.sendNumericReply_FixLater(clientSocket, ERR_NOSUCHCHANNEL(client.getNickname(), orginalParams[0]));
 		throw std::exception();
+	}
+	ChannelData &channel = _server.getChannelManager().getChannelByName(ProccessMessage.getParams()[0]);
+	if (orginalParams.size() == 1){
+		string ChannelModes = getChannelModes(channel);
+		_server.sendNumericReply_FixLater(clientSocket, RPL_CHANNELMODEIS(channel.getName(), ChannelModes));
+		return ;
 	}
 	if (orginalParams[1].compare("+sn") == 0)
 		return ;
@@ -230,7 +255,6 @@ void	ExecuteCommands::mode(ServerReactor &_server, Message &ProccessMessage, int
 			_server.sendNumericReply_FixLater(clientSocket, ERR_UNKNOWNMODE(*it));
 			throw std::exception();
 		}
-		ChannelData &channel = _server.getChannelManager().getChannelByName(ProccessMessage.getParams()[0]);
 		informMembers(channel.getClientSockets(), _server.createMsg(client, "MODE", params));
 	}
 }
