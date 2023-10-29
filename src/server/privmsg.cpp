@@ -26,7 +26,6 @@ void	ExecuteCommands::privmsg(ServerReactor &_server, Message &ProcessMessage, i
 	vector<string> targets = splitReceivers(params[0]);
 
 	for (uint64_t i = 0; i < targets.size(); i++) {
-
 		int		targetFD = _server.getClientManager().getClientSocketByNick(targets[i]);
 		bool	isUser = (targetFD != -1);
 

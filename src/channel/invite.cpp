@@ -40,7 +40,7 @@ void     ExecuteCommands::invite(ServerReactor &_server, Message &Message, int c
     }
 	if (_server.getClientManager().MatchNickName(channel.getClientSockets(), params[0]) != -1) { 
 		_server.sendNumericReply_FixLater(clientSocket, ERR_USERONCHANNEL(params[0], channelName));
-	return ;
+		return ;
 	}
 	int targetFD = _server.getClientManager().getClientSocketByNick(params[0]);
 	if (targetFD == -1) {
