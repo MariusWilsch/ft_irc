@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/24 12:13:30 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/24 18:34:58 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/29 20:42:21 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,5 +143,4 @@ void ExecuteCommands::join(ServerReactor &_server, Message &ProcessMessage, int 
 			_server.sendNumericReply_FixLater(clientSocket, RPL_ENDOFNAMES(nick, ChannelName));
 		}
 	}
-	// _server.printUserInformation();
 }

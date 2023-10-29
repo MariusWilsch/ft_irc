@@ -6,20 +6,15 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 09:59:41 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/29 15:42:39 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/29 20:44:42 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "server.hpp"
 #include <signal.h>
 
-// void	f(){
-// 	system("leaks ircserv");
-// }
-
 int	main( int argc, char **argv )
 {
-	// atexit(f);
 	if (argc != 3)
 	{
 		std::cout << "Usage: ./server <port> <password>" << std::endl;

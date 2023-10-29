@@ -96,5 +96,4 @@ class ServerReactor {
 			
 		void	writeServerError(string functionName, string errorMessage, int errorNumber);
 		void	createPropertiesMap( void );
-		// void	printUserInformation();
 };

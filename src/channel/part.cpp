@@ -6,23 +6,20 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/04 22:01:31 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/29 15:14:49 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/29 20:42:54 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ExecuteCommands.hpp"
 
 bool ExecuteCommands::partParser(std::vector<string> &ChannelNames, string &partMessage, Message &ProcessMessage) {
-		vector<string> params = ProcessMessage.getParams();
-		if (params.empty())
-				return false;
-
-		ChannelNames = splitReceivers(params[0]);  // Split channels using splitReceivers
-
-		if (params.size() > 1)
-				partMessage = params[1];
-
-		return true;
+	vector<string> params = ProcessMessage.getParams();
+	if (params.empty())
+		return false;
+	ChannelNames = splitReceivers(params[0]);  // Split channels using splitReceivers
+	if (params.size() > 1)
+		partMessage = params[1];
+	return true;
 }
 
 void     ExecuteCommands::part(ServerReactor &_server, Message &ProcessMessage, int clientSocket) {

@@ -7,12 +7,10 @@ TARGET := ircserv
 SRC_DIR := src/
 OBJ_DIR := obj/
 
-
 ## Debugging ##
 ifdef DEBUG
 		CXXFLAGS += -fsanitize=address
 endif
-
 
 SRC := $(wildcard $(SRC_DIR)*/*.cpp) $(SRC_DIR)main.cpp
 OBJ := $(patsubst $(SRC_DIR)%.cpp,$(OBJ_DIR)%.o, $(SRC))
@@ -20,7 +18,6 @@ OBJ := $(patsubst $(SRC_DIR)%.cpp,$(OBJ_DIR)%.o, $(SRC))
 GREEN = \033[0;32m
 RED = \033[0;31m
 RESET = \033[0m
-
 
 all: $(TARGET)
 

@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/16 22:52:24 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/29 15:34:42 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/29 20:42:01 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,7 @@ string  strToupper(string str){
     return (str);
 }
 
-void    ManBot::man(ServerReactor &_server, Message &ProcessMessage, int clientSocket){
+void    ManBot::man(ServerReactor &_server, Message &ProcessMessage, int clientSocket) {
     std::string commands[10] = {"PASS", "NICK", "USER", "JOIN", "PRIVMSG", "KICK", "INVITE", "TOPIC", "MODE"  , "PART"};
     string    (*FunctionPointers[10])() = {ManBot::PassManual, ManBot::NickManual, ManBot::UserManual, ManBot::JoinManual, ManBot::PrivmsgManual, ManBot::KickManual, ManBot::InviteManual, ManBot::TopicManual, ManBot::ModeManual, ManBot::PartManual};
     string message = ":" + _server.getClientDataFast(clientSocket).getClientInfo() + " ManBot: ";

@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 15:30:13 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/24 16:56:34 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/29 20:41:40 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 	 * @param _unused Set to '*' per RFC 2812
 	 * @param _userType The type of user (USER, SERVER_OP, CHANNEL_OP)
  */
+
 class ClientData {
 	private:
 		int				_clientSocket;
