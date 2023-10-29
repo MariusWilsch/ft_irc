@@ -173,28 +173,33 @@ std::vector<string>	modeParser(string param){
 
 void	ExecuteCommands::mode(ServerReactor &_server, Message &ProccessMessage, int clientSocket){
 	ClientData  &client = _server.getClientDataFast(clientSocket);
-	if (ProccessMessage.getParams().size() == 1)
+	vector<string> param = ProccessMessage.getParams();
+	if (param.size() == 1)
 		throw std::exception();
-	if (ProccessMessage.getParams().size() < 2) {
+	if (param.size() < 2) {
 		_server.sendNumericReply_FixLater(clientSocket, ERR_NEEDMOREPARAMS(client.getNickname(), ProccessMessage.getCommand()));
 		throw std::exception();
 	}
-	if (!_server.doesChannelExist(ProccessMessage.getParams()[0])){
-		_server.sendNumericReply_FixLater(clientSocket, ERR_NOSUCHCHANNEL(client.getNickname(), ProccessMessage.getParams()[0]));
+	if (param[0][0] != '#') {
+		_server.sendNumericReply_FixLater(clientSocket, ERR_NOSUCHCHANNEL(client.getNickname(), param[0]));
 		throw std::exception();
 	}
-	if (ProccessMessage.getParams()[1].compare("+sn") == 0)
+	if (!_server.doesChannelExist(param[0])){
+		_server.sendNumericReply_FixLater(clientSocket, ERR_NOSUCHCHANNEL(client.getNickname(), param[0]));
+		throw std::exception();
+	}
+	if (param[1].compare("+sn") == 0)
 		return ;
-	std::vector<string> modes = modeParser(ProccessMessage.getParams()[1]);
+	std::vector<string> modes = modeParser(param[1]);
 	if (modes.empty()){
-		_server.sendNumericReply_FixLater(clientSocket, ERR_UNKNOWNMODE(ProccessMessage.getParams()[1]));
+		_server.sendNumericReply_FixLater(clientSocket, ERR_UNKNOWNMODE(param[1]));
 		throw std::exception();
 	}
+
 	size_t p = 2;
 	for (std::vector<string>::iterator it = modes.begin(); it != modes.end(); it++){
 		std::vector<string>	params;
-		params.push_back(ProccessMessage.getParams()[0]);
-
+		params.push_back(params[0]);
 		if (it->compare("+i") == 0 || it->compare("-i") == 0) {
 			params.push_back(*it);
 			inviteOnly(params, _server, ProccessMessage, clientSocket);

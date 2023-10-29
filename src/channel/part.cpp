@@ -42,6 +42,10 @@ void     ExecuteCommands::part(ServerReactor &_server, Message &ProcessMessage, 
 	}
 	for (unsigned int i = 0; i < ChannelNames.size(); i++)
 	{
+		if (ChannelNames[i][0] != '#') {
+			_server.sendNumericReply_FixLater(clientSocket, ERR_NOSUCHCHANNEL(nick, ChannelNames[i]));
+			continue;
+		}
 		if (!_server.doesChannelExist(ChannelNames[i])) {
 			_server.sendNumericReply_FixLater(clientSocket, ERR_NOSUCHCHANNEL(nick, ChannelNames[i]));
 			continue ;

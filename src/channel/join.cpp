@@ -107,6 +107,10 @@ void ExecuteCommands::join(ServerReactor &_server, Message &ProcessMessage, int 
 	for (unsigned int i = 0; i < ChannelNames.size(); i++)
 	{
 		bool Joined = false;
+		if (ChannelNames[i][0] != '#') {
+			_server.sendNumericReply_FixLater(clientSocket, ERR_NOSUCHCHANNEL(nick, ChannelNames[i]));
+			continue;
+		}
 		if (!_server.getChannelManager().channelExistence(ChannelNames[i])) {
 			Joined = createNewChannel(_server, clientSocket, ChannelNames[i]);
 			continue;

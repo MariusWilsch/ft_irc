@@ -13,9 +13,6 @@
 #include "ExecuteCommands.hpp"
 #include "ManBot.hpp"
 
-
-
-//TODO add a remove white space from str so it even works wtih space in the middle of the string
 vector<string> ExecuteCommands::splitReceivers(const string& str) {
     vector<string> result;
     std::istringstream iss(str);

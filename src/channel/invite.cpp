@@ -22,6 +22,10 @@ void     ExecuteCommands::invite(ServerReactor &_server, Message &Message, int c
     string			channelName = params[1];
 	ChannelData&	channel = _server.getChannelManager().getChannelByName(channelName);
 	const string &nick = client.getNickname();
+	if (channelName[0] != '#') {
+		_server.sendNumericReply_FixLater(clientSocket, ERR_NOSUCHCHANNEL(nick, channelName));
+		return ;
+	}
 	if (!_server.doesChannelExist(params[1])){
 		_server.sendNumericReply_FixLater(clientSocket, ERR_NOSUCHCHANNEL(nick, channelName));
 		return ;

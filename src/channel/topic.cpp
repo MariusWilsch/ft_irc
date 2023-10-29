@@ -21,6 +21,10 @@ void     ExecuteCommands::topic(ServerReactor &_server, Message &ProcessMessage,
 		throw std::exception();
     }
     string channelName = params[0];
+		if (channelName[0] != '#') {
+				_server.sendNumericReply_FixLater(clientSocket, ERR_NOSUCHCHANNEL(client.getNickname(), channelName));
+				throw std::exception();
+		}
     if (!_server.doesChannelExist(channelName)){
         _server.sendNumericReply_FixLater(clientSocket, ERR_NOSUCHCHANNEL(client.getNickname(), channelName));
         throw std::exception();
@@ -37,7 +41,6 @@ void     ExecuteCommands::topic(ServerReactor &_server, Message &ProcessMessage,
             _server.sendNumericReply_FixLater(clientSocket, RPL_NOTOPIC(client.getNickname(), channelName));
         return ;
     }
-    cout << "Restriction flag: " << Channel.getTopicRestriction() << endl;
     if (Channel.getTopicRestriction() == true){
         if (!Channel.isOperator(clientSocket)){
             _server.sendNumericReply_FixLater(clientSocket, ERR_CHANOPRIVSNEEDED(channelName));
