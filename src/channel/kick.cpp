@@ -23,9 +23,7 @@ void ExecuteCommands::kick(ServerReactor &_server, Message &msg, int clientSocke
         _server.sendNumericReply_FixLater(clientSocket, ERR_NEEDMOREPARAMS(client.getNickname(), msg.getCommand()));
         throw std::exception();
     }
-
-					
-
+		
     const string &channelName = params[0];
     const string &userToKick = params[1];
     const string &comment = (params.size() > 2) ? params[2] : "You were kicked!";
