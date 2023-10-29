@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 13:27:34 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/25 12:23:14 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/29 15:40:51 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,6 @@ Message::Message( string rawMessage, map <string, CommandProperties> properties 
 	rawMessage.erase(std::remove(rawMessage.begin(), rawMessage.end(), '\r'), rawMessage.end());
 	if (rawMessage.empty())
 		return ;
-
-	cout << "|" << rawMessage << "|" << endl;
 
 	if (rawMessage[0] == ':') {
 		_prefix = rawMessage.substr(1, rawMessage.find(' ', 0) - 1);

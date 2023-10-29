@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/04 22:01:31 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/23 17:21:13 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/29 15:14:49 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ bool ExecuteCommands::partParser(std::vector<string> &ChannelNames, string &part
 
 		return true;
 }
-
 
 void     ExecuteCommands::part(ServerReactor &_server, Message &ProcessMessage, int clientSocket) {
 	ClientData  &client = _server.getClientDataFast(clientSocket);

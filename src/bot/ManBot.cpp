@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/16 22:52:24 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/25 12:12:04 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/29 15:34:42 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,13 +72,13 @@ string ManBot::JoinManual(){
 }
 
 string ManBot::PrivmsgManual(){
-    string manual = " * PRIVMSG COMMAND MANUAL >> SYNOPSIS: PRIVMSG [msgtarget] :[text to be sent]: ";
+    string manual = " * PRIVMSG COMMAND MANUAL >> SYNOPSIS: PRIVMSG [msgtarget, msgtarget, msgtarget, ...] :[text to be sent]: ";
     manual.append(" DESCRIPTION: PRIVMSG is used to send private messages between users, as well as to send messages to channels.");
     return (manual);
 }
 
 string ManBot::KickManual(){
-    string manual = " * KICK COMMAND MANUAL >> SYNOPSIS: KICK [#channel, #channel, #channel, ...] [user, user, user, ...] [comment]: ";
+    string manual = " * KICK COMMAND MANUAL >> SYNOPSIS: KICK [#channel] [user] [comment]: ";
     manual.append(" DESCRIPTION: The JOIN command is used by a user to request to start listening to the specific channel.");
     return (manual);
 }

@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/01 16:47:40 by ahammout          #+#    #+#             */
-/*   Updated: 2023/10/28 18:00:22 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/29 15:40:06 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,6 @@
 void ExecuteCommands::kick(ServerReactor &_server, Message &msg, int clientSocket){
     ClientData &client = _server.getClientDataFast(clientSocket);
     const std::vector<string>& params = msg.getParams();
-
-		cout << "Kick command" << endl;
 
     // Check if parameters are sufficient
     if (params.size() < 2) {
@@ -40,8 +38,6 @@ void ExecuteCommands::kick(ServerReactor &_server, Message &msg, int clientSocke
     }
 
     ChannelData &channel = _server.getChannelManager().getChannelByName(channelName);
-
-
 
     // Check if sender is in the channel
     if (!channel.isCLient(clientSocket)){

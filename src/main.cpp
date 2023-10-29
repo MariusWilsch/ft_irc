@@ -6,7 +6,7 @@
 /*   By: ahammout <ahammout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 09:59:41 by mwilsch           #+#    #+#             */
-/*   Updated: 2023/10/25 16:36:10 by ahammout         ###   ########.fr       */
+/*   Updated: 2023/10/29 15:42:39 by ahammout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@
 int	main( int argc, char **argv )
 {
 	// atexit(f);
-	signal(SIGPIPE, SIG_IGN);
 	if (argc != 3)
 	{
 		std::cout << "Usage: ./server <port> <password>" << std::endl;
