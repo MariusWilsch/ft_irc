@@ -43,7 +43,6 @@ struct	CommandProperties;
 class Message {
 	private:
 		bool							_isFatal;
-		string							_rawMessage;
 		string							_prefix;
 		string							_command;
 		vector<string>					_params;
@@ -57,13 +56,9 @@ class Message {
 		
 
 		/*			GETTERS			*/
-		string			getCommand( void );
-		vector<string>	getParams( void );
-		bool			getFatal( void );
-		string			getTrailing( void );
+		string			getCommand( void ) const;
+		vector<string>	getParams( void ) const;
+		bool			getFatal( void ) const;
+		string			getTrailing( void ) const;
 	
-		/*			SETTERS			*/
-
-		void			setTrailing( const string& trailing );
-		// void			printData( void );
 };

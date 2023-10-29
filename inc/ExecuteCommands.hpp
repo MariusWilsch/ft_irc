@@ -45,6 +45,9 @@ class ExecuteCommands
     //****************************************** UTILS METHODS ***************************************//
     static void     informMembers(set <int> clientSockets, string message);
     static bool     whiteCheck(string str);
+		static vector<string> splitReceivers(const string& str);
+		static int	joinParser(std::vector<string> &ChannelNames, std::vector<string> &ChannelKeys, Message &ProcessMessage);
+		static bool partParser(std::vector<string> &ChannelNames, string &partMessage, Message &ProcessMessage);
 };
 
 #endif

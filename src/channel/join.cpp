@@ -12,29 +12,35 @@
 
 #include "ExecuteCommands.hpp"
 
-int joinParser(std::vector<string> &ChannelNames, std::vector<string> &ChannelKeys, Message &ProcessMessage){
-	if (ProcessMessage.getParams().size() == 0 || ProcessMessage.getParams()[0].empty())
-		return (-1);
-	string param = ProcessMessage.getParams()[0];
-	if (ProcessMessage.getParams().size() == 1 && param.compare("0") == 0){
-		return (0);
-	}
-	if (ProcessMessage.getParams().size() < 1 || ExecuteCommands::whiteCheck(ProcessMessage.getParams()[0]))
-		return (-1);
-	for (size_t i = 0; i < ProcessMessage.getParams().size(); i++) {
-		param = ProcessMessage.getParams()[i];
-		if (param[0] == '#')
-			ChannelNames.push_back(param);
-		else if (!ExecuteCommands::whiteCheck(param))
-			ChannelKeys.push_back(param);
-	}
-	if (ChannelKeys.size() > ChannelNames.size())
-		return (-1);
-	for (unsigned int i = ChannelKeys.size(); i < ChannelNames.size(); i++){
-		ChannelKeys.push_back("");
-	}
-	return (1);
+int ExecuteCommands::joinParser(std::vector<string> &ChannelNames, std::vector<string> &ChannelKeys, Message &ProcessMessage){
+    const vector<string>& params = ProcessMessage.getParams();
+		
+		if (params.size() == 0 || params[0].empty())
+        return (-1);
+
+    // If the only parameter is "0", return 0
+    if (params.size() == 1 && params[0] == "0"){
+        return (0);
+    }
+
+    ChannelNames = splitReceivers(params[0]);  // Split channels using splitReceivers
+
+    if (params.size() > 1)
+        ChannelKeys = splitReceivers(params[1]);  // Split keys using splitReceivers
+
+
+    // If there are more keys than channel names, it's an error
+    if (ChannelKeys.size() > ChannelNames.size())
+        return (-1);
+
+    // If there are fewer keys than channels, fill the rest with empty keys
+    while (ChannelKeys.size() < ChannelNames.size()) {
+        ChannelKeys.push_back("");
+    }
+
+    return (1);
 }
+
 
 void    leaveChannels(ServerReactor &_serverReactor, int clientSocket){
 	ClientData  &client = _serverReactor.getClientDataFast(clientSocket);
@@ -62,9 +68,8 @@ bool	createNewChannel(ServerReactor &_serverReactor, int clientSocket, string Ch
 
 	_serverReactor.getChannelManager().addChannel(ChannelName, NewChannel);
 	string nickname = _serverReactor.getClientManager().getClientData(clientSocket).getNickname();
-	string channelKey = "=";
 	_serverReactor.sendMsg(clientSocket, _serverReactor.getClientManager().getClientData(clientSocket).getClientInfo(), "JOIN", NewChannel.getName());
-	_serverReactor.sendNumericReply_FixLater(clientSocket, RPL_NAMREPLY(nickname , channelKey, NewChannel.getName(), _serverReactor.getChannelManager().createUserList(NewChannel.getName(), _serverReactor)));
+	_serverReactor.sendNumericReply_FixLater(clientSocket, RPL_NAMREPLY(nickname , "=", NewChannel.getName(), _serverReactor.getChannelManager().createUserList(NewChannel.getName(), _serverReactor)));
 	_serverReactor.sendNumericReply_FixLater(clientSocket, RPL_ENDOFNAMES(nickname, NewChannel.getName()));
 
 	return (true);
@@ -130,8 +135,7 @@ void ExecuteCommands::join(ServerReactor &_server, Message &ProcessMessage, int 
 			std::vector<string> params;
 			params.push_back(ChannelName);
 			informMembers(Channel.getClientSockets(), _server.createMsg(client, "JOIN", params));
-			string channelKey = "=";
-			_server.sendNumericReply_FixLater(clientSocket, RPL_NAMREPLY(nick , channelKey, ChannelName, _server.getChannelManager().createUserList(ChannelName, _server)));
+			_server.sendNumericReply_FixLater(clientSocket, RPL_NAMREPLY(nick , "=", ChannelName, _server.getChannelManager().createUserList(ChannelName, _server)));
 			_server.sendNumericReply_FixLater(clientSocket, RPL_ENDOFNAMES(nick, ChannelName));
 		}
 	}

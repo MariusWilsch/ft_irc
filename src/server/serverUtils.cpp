@@ -1,6 +1,6 @@
 #include "server.hpp"
 
-bool	ServerReactor::doesChannelExist(string& channelName) {
+bool	ServerReactor::doesChannelExist(const string& channelName) {
 	if (channelName[0] != '#') // For NC because LimeChat always sends a channel name with a # in front
 		return (false);
 	return (_channelManager.getChannels().count(channelName));
@@ -8,6 +8,10 @@ bool	ServerReactor::doesChannelExist(string& channelName) {
 
 ClientData& ServerReactor::getClientDataFast(int clientSocket) {
 	return (_clientManager.getClientData(clientSocket));
+}
+
+ChannelData& ServerReactor::getChannelDataFast(string& channelName) {
+	return (_channelManager.getChannelByName(channelName));
 }
 
 

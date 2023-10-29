@@ -96,7 +96,7 @@ class ChannelManager {
 
 		/*			GETTERS			*/
 		map<string, ChannelData>&	getChannels( void );
-		ChannelData&				getChannelByName( string name );
+		ChannelData&							getChannelByName( string name );
 
 		/*			METHODS			*/
 		void		addChannel( string name, ChannelData &channelData );

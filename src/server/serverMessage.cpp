@@ -16,21 +16,21 @@
 
 Message::~Message( void ) {};
 
-Message::Message( string rawMessage, map <string, CommandProperties> properties ) : _rawMessage(rawMessage), _properties(properties) {
+Message::Message( string rawMessage, map <string, CommandProperties> properties ) : _properties(properties) {
 
 	_isFatal = false;
-	_rawMessage.erase(std::remove(_rawMessage.begin(), _rawMessage.end(), '\n'), _rawMessage.end());
-	_rawMessage.erase(std::remove(_rawMessage.begin(), _rawMessage.end(), '\r'), _rawMessage.end());
-	if (_rawMessage.empty())
+	rawMessage.erase(std::remove(rawMessage.begin(), rawMessage.end(), '\n'), rawMessage.end());
+	rawMessage.erase(std::remove(rawMessage.begin(), rawMessage.end(), '\r'), rawMessage.end());
+	if (rawMessage.empty())
 		return ;
 
-	cout << "|" << _rawMessage << "|" << endl;
+	cout << "|" << rawMessage << "|" << endl;
 
-	if (_rawMessage.at(0) == ':') {
-		_prefix = _rawMessage.substr(1, _rawMessage.find(' ', 0) - 1);
-		_rawMessage.erase(0, _rawMessage.find(' ') + 1);
-	}		
-	std::istringstream iss(_rawMessage);
+	if (rawMessage[0] == ':') {
+		_prefix = rawMessage.substr(1, rawMessage.find(' ', 0) - 1);
+		rawMessage.erase(0, rawMessage.find(' ') + 1);
+	}	
+	std::istringstream iss(rawMessage);
 	string token;
 	if (std::getline(iss, token, ' ') && !token.empty())
 		_command = token;
@@ -39,24 +39,16 @@ Message::Message( string rawMessage, map <string, CommandProperties> properties 
 		_isFatal = true;
 		return ;
 	}
+
 	while (std::getline(iss, token, ' ')) {
 		if (token.empty())
 			continue;
 		if (token.find(':') != string::npos) {
-			string trailing = _rawMessage.substr(_rawMessage.find(':') + 1);
+			string trailing = rawMessage.substr(rawMessage.find(':') + 1);
 			if (!trailing.empty()) {
-			_params.push_back(trailing);
+				_params.push_back(trailing);
 				break;
 			}
-		}
-		if (token.find(',') != string::npos) {
-			std::istringstream iss2(token);
-			string token2;
-			while (std::getline(iss2, token2, ',')) {
-				if (!token2.empty())
-					_params.push_back(token2);
-			}
-			continue;
 		}
 		if (token != ":")
 			_params.push_back(token);
@@ -66,26 +58,18 @@ Message::Message( string rawMessage, map <string, CommandProperties> properties 
 
 /*			GETTERS			*/
 
-string Message::getCommand( void ) { 
+string Message::getCommand( void ) const { 
 	return _command; 
 }
 
-std::vector <string> Message::getParams( void ) {
+std::vector <string> Message::getParams( void ) const {
 	return _params;
 }
 
-bool	Message::getFatal( void ){
+bool	Message::getFatal( void ) const {
 	return (this->_isFatal);
 }
 
-string Message::getTrailing( void ){
-	return (this->_trailing);
-}
-
-/*			SETTERS			*/
-void	Message::setTrailing(const string& trailing ) {
-	this->_trailing = trailing;
-}
 
 /*			MEMBER FUNCTIONS			*/
 

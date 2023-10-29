@@ -12,26 +12,24 @@
 
 #include "ExecuteCommands.hpp"
 
-bool    partParser(std::vector<string> &ChannelNames, std::vector<string> &partMessage, Message &ProcessMessage){
-	vector<string> params = ProcessMessage.getParams();
-	if (params.empty())
-		return (false);
-	for (unsigned int i = 0; i < params.size(); i++) {
-		string param = params[i];
-		if (param[0] == '#')
-			ChannelNames.push_back(param);
-		else if (!ExecuteCommands::whiteCheck(param))
-			partMessage.push_back(param);
-	}
-	if (partMessage.size() > 0)
-		ProcessMessage.setTrailing(partMessage[0]);
-	return (true);
+bool ExecuteCommands::partParser(std::vector<string> &ChannelNames, string &partMessage, Message &ProcessMessage) {
+		vector<string> params = ProcessMessage.getParams();
+		if (params.empty())
+				return false;
+
+		ChannelNames = splitReceivers(params[0]);  // Split channels using splitReceivers
+
+		if (params.size() > 1)
+				partMessage = params[1];
+
+		return true;
 }
+
 
 void     ExecuteCommands::part(ServerReactor &_server, Message &ProcessMessage, int clientSocket) {
 	ClientData  &client = _server.getClientDataFast(clientSocket);
-	std::vector<string> ChannelNames;
-	std::vector<string> partMessage;
+	vector<string> ChannelNames;
+	string 				partMessage;
 
 	int stat = partParser(ChannelNames, partMessage, ProcessMessage);
 	if (stat == false){
@@ -53,11 +51,13 @@ void     ExecuteCommands::part(ServerReactor &_server, Message &ProcessMessage, 
 			_server.sendNumericReply_FixLater(clientSocket, ERR_NOTONCHANNEL(nick, ChannelNames[i]));
 			continue ;
 		}
+
 		std::vector<string> params;
-		params.push_back(ProcessMessage.getParams()[i]);
-		if (!ProcessMessage.getTrailing().empty())
-			params.push_back(ProcessMessage.getTrailing());
+		params.push_back(ChannelNames[i]);
+		params.push_back(partMessage);
 		informMembers(channel.getClientSockets(), _server.createMsg(client, "PART", params));
+
+
 		channel.removeClient(clientSocket);
 		if (channel.isOperator(clientSocket))
 			channel.removeOperator(clientSocket);

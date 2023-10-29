@@ -85,8 +85,9 @@ class ServerReactor {
 		string					getServerPassword( void );
 
 		/*			SMART GETTERS			*/
-		bool		doesChannelExist( string& channelName );
+		bool				doesChannelExist(const string& channelName );
 		ClientData& getClientDataFast( int clientSocket );
+		ChannelData& getChannelDataFast( string& channelName );
 
 		/*			MAIN			*/
 		void	run();
